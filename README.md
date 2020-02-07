@@ -1,2 +1,18 @@
-# app-sagra-pesto
-A project to build an app to handle orders during 'Sagra del Pesto'
+## English Below
+
+# App - Sagra del pesto
+Un'app per gestire gli ordini della Sagra del Pesto di Genova 
+
+
+# Struttura DB Firestore
+
+
+
+# Ruoli Utente
+
+
+
+# Interfacce
+
+
+# Funzioalità server
