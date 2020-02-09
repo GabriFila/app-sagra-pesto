@@ -1,5 +1,5 @@
 # App - Sagra del pesto
-Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pesto di Genova. La prima parte descrive il comportamento dell'app, la seconda ne descrive il funzionamento
+Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pesto di Genova. La prima parte descrive il comportamento dell'app, la seconda ne descrive il funzionamento.****
 
 # Oggetti base
 - servizio: sessione per pasto
@@ -9,14 +9,14 @@ Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pes
 - piatti: elementi di ogni portata
 
 # Ruoli Utente 
-- super admin
-- admin
-- cassiere
-- cameriere
-- bar
-- primi
-- secondi
-- smazzo
+- Super Admin
+- Admin
+- Cassiere
+- Cameriere
+- Bar
+- Primi
+- Secondi
+- Smazzo
 
 # Compiti di ciascun ruolo
 ## Super admin
@@ -35,7 +35,7 @@ Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pes
 - mandare una portata di un ordine in preparazione
 - concludere una portata di un ordine
 - modificare l'ordine
-- _LAST_ Ricevere modifica quando un ordine è pronto
+- _LAST_ ricevere modifica quando un ordine è pronto
 ## Bar
 - visualizzare il bere e i dolci degli ordini che sono in preparazione
 - cambiare lo stato del bere e dei dolci quando sono pronti (notificare smazzo e camerieri)
@@ -88,13 +88,13 @@ Ogni interfaccia ha una top bar con:
   - un tasto per fare il login o registrarsi
 
 ## Home
-contiene i link che portano alle altre interfacce
+Contiene i link che portano alle altre interfacce
 ## DashBoard
 - una sezione per vedere e modificare il menu e le quantità in magazzino
 - un tasto per iniziare/concludere il servizio (verde per aprilo e rosso per chiuderlo)
 - una sezione per le info su ordini e incassi del servizio corrente e quelli passati
 ## Cassa istantanea
-una sezione per ogni portata con i piatti istantanei nel menu. Ogni piatto è una riga con:
+Una sezione per ogni portata con i piatti istantanei nel menu. Ogni piatto è una riga con:
 - la quantità rimanente in magazzino
 - un tasto '-' per decrementare le quantità richieste dal cliente
 - un tasto '+' per incrementare le quantità richieste dal cliente
@@ -147,6 +147,14 @@ bar = base/bar
 cassa = base/cassa
 cassa istantanea = base/cassaBar
 camerieri = base/cameriere
+
+# Codice interfacce
+## Appbar
+  
+
+
+## Dashboard
+- 
 
 # Funzoni server (da eseguire in ambiente sicuro)
 ### creazione nuovo ordine (unica transazione)
