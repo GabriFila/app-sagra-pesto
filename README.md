@@ -2,8 +2,11 @@
 Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pesto di Genova. La prima parte descrive il comportamento dell'app, la seconda ne descrive il funzionamento
 
 # Oggetti base
+- servizio: sessione per pasto
 - ordini: ordine normale fatto dalla cassa che deve passare attraverso cameriere -> cucina -> smazzo
 - ordini istantanei: ordine fatto dal bar che viene consegnato al cliente direttamente
+- portate: elementi dell'ordine elaborati da una singola cucina
+- piatti: elementi di ogni portata
 
 # Ruoli Utente 
 - super admin
@@ -83,6 +86,9 @@ Ogni interfaccia ha una top bar con:
     - un tasto cerca per modificare un ordine già fatto
 - se non loggato:
   - un tasto per fare il login o registrarsi
+
+## Home
+contiene i link che portano alle altre interfacce
 ## DashBoard
 - una sezione per vedere e modificare il menu e le quantità in magazzino
 - un tasto per iniziare/concludere il servizio (verde per aprilo e rosso per chiuderlo)
@@ -129,9 +135,18 @@ Loggare update degli ordini per avere dati statistici
 
 
 -----
------
 
+# URL interfacce
 
+base = url di default (sagra.genova.cngei.it)
+home = base
+dashboard = base/dashboard
+cucina primi = base/primi
+cucina secondi = base/secondi
+bar = base/bar
+cassa = base/cassa
+cassa istantanea = base/cassaBar
+camerieri = base/cameriere
 
 # Funzoni server (da eseguire in ambiente sicuro)
 ### creazione nuovo ordine (unica transazione)
