@@ -1,8 +1,8 @@
 # App - Sagra del pesto
-Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pesto di Genova. La prima parte descrive il comportamento dell'app, la seconda ne descrive il funzionamento.****
+Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pesto di Genova. La prima parte descrive il comportamento dell'app, la seconda ne descrive il funzionamento.
 
-# Oggetti base
-- servizio: sessione per pasto
+# Nozioni base
+- servizio: sessione di pasto (pranzo, cena)
 - ordini: ordine normale fatto dalla cassa che deve passare attraverso cameriere -> cucina -> smazzo
 - ordini istantanei: ordine fatto dal bar che viene consegnato al cliente direttamente
 - portate: elementi dell'ordine elaborati da una singola cucina
@@ -27,9 +27,9 @@ Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pes
 - iniziare e concludere il servizio
 - vedere info su incassi e ordini
 ## Cassiere
-- creare ordini
+- creare l'ordine
 - stampare l'ordine
-- modificare ordine già fatto
+- modificare un ordine già creato
 ## Cameriere
 - associare ordine e tavolo
 - mandare una portata di un ordine in preparazione
@@ -42,18 +42,18 @@ Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pes
 - creare ordini istantanei
 ## Primi
 - visualizzare i primi degli ordini che sono in preparazione
-- cambiare lo stato dei prime quando sono pronti (notificare smazzo e camerieri) 
+- cambiare lo stato dei primi quando sono pronti (notificare smazzo e camerieri)
 ## Secondi
 - visualizzare i secondi degli ordini che sono in preparazione
-- cambiare lo stato dei secondi quando sono pronti (notificare smazzo e camerieri) 
+- cambiare lo stato dei secondi quando sono pronti (notificare smazzo e camerieri)
 
 ## Smazzo
-- vedere gli ordini non assegnati
+- vedere gli ordini non collegati a cemerieri
 - vedere gli ordini in corso e il loro stato (preparazione, pronto)
-- concludere la portata di un ordine
+- concludere una portata di un ordine
 - recuperare vecchie portate di ordini già conclusi per eventuali modifiche
 
-# Permessi ruoli
+# Permessi dei ruoli
 
 ### creazione ordine
 - cassa solo ordini 'normali'
@@ -61,10 +61,10 @@ Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pes
 ### modifica ordini selettiva 
 - cassa modifica solo portate e stato
 - smazzo modifica stato
-- cameriere modiica solo suoi ordini
-- bar modifica solo la parte bar
-- cucina primi modifica solo la parte primi
-- secondi modifica solo la parte secondi
+- cameriere modifica solo suoi ordini
+- bar modifica solo portate di bere e dolci
+- cucina primi modifica solo portate di primi
+- secondi modifica solo portate di secondi
 ### modifica menu
 - admin
 ### inizio/fine servizio
@@ -79,9 +79,9 @@ Ogni interfaccia ha una top bar con:
 - se loggato:
   - il nome dell'utente e il tipo di interfaccia (es: Furio-dashboard)
   - un tasto per fare il logout
-  - se ruolo è smazzo
+  - se ruolo è 'smazzo'
     - una sezione con gli ordini pendenti
-    - un tasto cerca per modificare un ordine già fatto
+    - un tasto cerca per visualizzare un ordine già fatto
   - se ruolo è cassa:
     - un tasto cerca per modificare un ordine già fatto
 - se non loggato:
@@ -90,30 +90,36 @@ Ogni interfaccia ha una top bar con:
 ## Home
 Contiene i link che portano alle altre interfacce
 ## DashBoard
-- una sezione per vedere e modificare il menu e le quantità in magazzino
-- un tasto per iniziare/concludere il servizio (verde per aprilo e rosso per chiuderlo)
-- una sezione per le info su ordini e incassi del servizio corrente e quelli passati
+una sezione per:
+ - modificare il menu
+ - modificare le quantità in magazzino
+ - aggiungere e modificare piatti
+
+Un tasto per iniziare/concludere il servizio (verde per aprilo e rosso per chiuderlo)
+
+Una sezione per le info su ordini e incassi del servizio corrente e i totali passati
 ## Cassa istantanea
 Una sezione per ogni portata con i piatti istantanei nel menu. Ogni piatto è una riga con:
 - la quantità rimanente in magazzino
+- un numero per indicare la quantità richiesta dal cliente
 - un tasto '-' per decrementare le quantità richieste dal cliente
 - un tasto '+' per incrementare le quantità richieste dal cliente
 ## Cassa
-una sezione per ogni portata con i piatti nel menu. Ogni piatto è una riga con:
+Una sezione per ogni portata con i piatti nel menu. Ogni piatto è una riga con:
 - la quantità rimanente in magazzino
+- un numero per indicare la quantità richiesta dal cliente
 - un tasto '-' per decrementare le quantità richieste dal cliente
 - un tasto '+' per incrementare le quantità richieste dal cliente
 
-una sezione contente:
+Una sezione contente:
 - il totale dell'ordine
-- un tasto per  inviarlo al sistema
-- un tasto per vedere il numero dell'ordine
+- un tasto per inviarlo al sistema
+- una box per vedere il numero dell'ordine
 - un tasto per stampare l'ordine
-
-Un tasto cerca per trovare un ordine passato e modificarlo
 ## Cameriere
 Un tasto '+' per collegare ordine-cameriere-tavolo
-un tab per ogni ordine con:
+
+Un tab per ogni ordine con:
 - il numero dell'ordine 
 - il numero del tavolo
 - le portate dell'ordine, contenente:
@@ -131,22 +137,22 @@ Una mini sezione con il totale dei piatti da preparare attualmente
  - tasto per concludere la portata
 
 # Logging
-Loggare update degli ordini per avere dati statistici
+Loggare l'evoluzioni degli ordini per avere dati statistici
 
 
 -----
 
 # URL interfacce
 
-base = url di default (sagra.genova.cngei.it)
-home = base
-dashboard = base/dashboard
-cucina primi = base/primi
-cucina secondi = base/secondi
-bar = base/bar
-cassa = base/cassa
-cassa istantanea = base/cassaBar
-camerieri = base/cameriere
+base = url di default (es sagra.genova.cngei.it)
+- home = base
+- dashboard = base/admin
+- cucina primi = base/primi
+- cucina secondi = base/secondi
+- bar = base/bar
+- cassa = base/cassa
+- cassa istantanea = base/cassaBar
+- camerieri = base/cameriere
 
 # Codice interfacce
 ## Appbar
@@ -154,7 +160,7 @@ camerieri = base/cameriere
 
 
 ## Dashboard
-- 
+
 
 # Funzoni server (da eseguire in ambiente sicuro)
 ### creazione nuovo ordine (unica transazione)
@@ -178,8 +184,8 @@ camerieri = base/cameriere
 
 # Struttura Firestore DB
 
-### coursesInMenu
-Ogni documento corrisponde a una [portataMenu](##portataMenu)
+### storage
+Un documento con tutto lo storage
 ### services
 Ogni documento corrisponde a un [servizio](##servizio) nel tempo. Ogni servizio ha tre sottocollezioni: 
 -  orders
@@ -222,24 +228,24 @@ interface IInstantOrder
 ``` typescript
 interface IOrder
 {
-    id: number,
-    status: string,     // (pending, accepted, completed, cancelled)
-    waiterName: string, // display name of waiter
-    waiterId: string,   // id of waiter to link
-    table: number,
-    revenue: number,
-    createdAt: Date
+  id: number,
+  status: string,     // (pending, accepted, completed, cancelled)
+  waiterName: string, // display name of waiter
+  waiterId: string,   // id of waiter to link
+  table: number,
+  revenue: number,
+  createdAt: Date
 }
 ```
 ## portata
 ``` typescript
 interface ICourse
 {
-    orderId: number,
-    name: string,
-    kitchen: string,
-    status: string,      // (waiting,prep,ready,delivered)
-    dishes: IDish[],
+  orderId: number,
+  name: string,
+  kitchen: string,
+  status: string,      // (waiting,prep,ready,delivered)
+  dishes: IDish[],
 }
 ```
 
@@ -247,20 +253,26 @@ interface ICourse
 ``` typescript
 interface IDish
 {
-    shortName: string,
-    qt: number
+  shortName: string,
+  qt: number
 }
 ```
-
+## storage
+``` typescript
+interface IStorage
+{
+  storage : ICourseMenu[]
+}
+```
 
 ## portataMenu
 ``` typescript
 interface ICourseMenu
 {
-    name: string,
-    kitchen: string,
-    dishes: IDishMenu[],
-    isInstant: boolean
+  name: string,
+  kitchen: string,
+  dishes: IDishMenu[],
+  isInstant: boolean
 }
 ```
 
@@ -268,14 +280,81 @@ interface ICourseMenu
 ``` typescript
 interface IDishMenu
 {
-    name: string,
-    shortName: string,
-    storage: number,
-    price: number,
-    inMenu: boolean
-
+  name: string,
+  shortName: string,
+  storage: number,
+  price: number,
+  inMenu: boolean
 }
 ```
 
 # Note 
 Avere dati sull'evoluzione delle quantità in magazzino
+
+
+
+# Letture/scritture ordine
+
+### Condizioni e ipotesi
+- Prezzi: 0,06/100000r & 0,18/100000w
+- n = # portate per ordine ~ 4
+- c = # casse collegate ~ 2
+- a = # cucine per stessa portata  ~ 1,3
+- b smazzi collegati ~ 1
+- il cameriere conclude l'ordine, non lo smazzo
+
+### creazione: c+2 r & n+3 w
+|  qt   | tipo  | desc                                                   |
+| :---: | :---: | ------------------------------------------------------ |
+|   1   |   r   | service/current per sapere lastOrderID                 |
+|   1   |   w   | service/current per aggiornare lastOrderID e prezzo    |
+|   1   |   w   | in service/current/orders per creare un nuovo ordine   |
+|   n   |   w   | in service/current/courses per creare le nuove portate |
+|   1   |   w   | per aggiornare le quantità in storage                  |
+|   c   |   r   | per aggiornare le quantità sulle UI della cassa        |
+|   1   |   r   | per aggiornare l'ordine pendente allo smazzo           |
+
+
+### legame cameriere: n+1 r & 1 w     
+|  qt   | tipo  | desc                                    |
+| :---: | :---: | --------------------------------------- |
+|   1   |   r   | per collegamento cameriere ordine       |
+|   1   |   w   | per collegamento cameriere ordine       |
+|   n   |   r   | per visualizzare le portate dell'ordine |
+
+
+### ciclo per ordine: n(2a+3b) r & 3n w
+#### ciclo singola portata: 2a+3b r & 3 w 
+|    qt     | tipo  | desc                      |
+| :-------: | :---: | ------------------------- |
+| cameriere |       |
+|     1     |   w   | cambio stato wait->prep   |
+|     1     |   r   | cambio stato prep->ready  |
+|     1     |   w   | cambio stato ready->compl |
+|  cucina   |       |
+|     a     |   r   | cambio stato wait->prep   |
+|     1     |   w   | cambio stato prep->ready  |
+|   (a-1)   |   r   | cambio stato prep->ready  |
+|  smazzo   |       |
+|     b     |   r   | cambio stato wait->prep   |
+|     b     |   r   | cambio stato prep->ready  |
+|     b     |   r   | cambio stato ready->compl |
+
+
+
+### totale
+| qt           |       r        |   w   |
+| :----------- | :------------: | :---: |
+| creazione    |      c+2       |  n+3  |
+| collegamento |      n+1       |   1   |
+| ciclo        |    n(2a+3b)    |  3n   |
+| totale       | n(1+2a+3b)+c+3 | 4n+4  |
+
+### caso reale: 
+n=4 a=2 b=1 c=2 => 37r &  20w
+
+4000 ordini = 148000 r & 80000 w ~ €0.09 & €0.27
+### caso limite assurdo
+ipotesi: 400 r/ordine - 400 w/ordine
+
+4000 ordini = 1600000 r - 1600000 w -> $0,96 + $2,56
