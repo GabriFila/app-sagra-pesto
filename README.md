@@ -146,6 +146,7 @@ Loggare l'evoluzioni degli ordini per avere dati statistici
 
 base = url di default (es sagra.genova.cngei.it)
 - home = base
+- login = base/login
 - dashboard = base/admin
 - cucina primi = base/primi
 - cucina secondi = base/secondi
@@ -155,20 +156,102 @@ base = url di default (es sagra.genova.cngei.it)
 - camerieri = base/cameriere
 
 # Codice interfacce
+
+Components:
+- [App](#App)
+- [PrivateRoute](#PrivateRoute)
+- [AppBar](#AppBar)
+  - [PendingOrders](#PendingOrders)
+  - SearchButton
+- [LoginPage](#LoginPage)
+- [AdminPanel](#AdminPanel)
+  - [Storage](#Storage)
+    - [StorageCourse](#StorageCourse)
+      - [StorageDish](#StorageDish) 
+      - [AddDishButton](#AddDishButton) 
+  - [ServiceStarter](#ServiceStarter) 
+  - [ServiceInfo](#ServiceInfo)
+
+
+## App
+- [ ] material UI theme builder
+- [ ] CSS Baseline
+- [ ] appbar
+- [ ] router with all PrivateRoutes for pages except for login
+- [ ] state is equal to userLoggedIn
+- [ ] in useEffect setup onetime listener for firebase.auth() to change loggeIn state
+
+
+## PrivateRoute
+``` typescript
+const PrivateRoute = ({component: Component, authed, ...rest}) => {
+  return (
+    <Route
+      {...rest}
+      render={(props) => authed === true
+        ? <Component {...props} />
+        : <Redirect to={{pathname: '/login', state: {from: props.location}}} />}
+    />
+  )
+}
+```
 ## Appbar
-  
+``` typescript
+if (generalState.userLoggedIn)
+  // show name, role
+  // show logout button
+  if 'userCustomClaims.smazzo' // show also search and pending orders
+  else if 'userCustomClaims.cassa' // show also cerca
+```
+## PendingOrders
+- [ ] setup firebase snapshot on orders Collection where state='pending'
+- [ ] render if there are more
+- [ ] a div containing the id of each order
+
+## LoginPage
+- [ ] notLoggedIn messagge
+- [ ] Login button
+- [ ] Register button
+
+## AdminPanel
+
+## Storage
+- setup listener for storage collection
+- map courses of storage to StorageCouse
+- useReducer actions:
+  - EDIT_DISH
+  - ADD_DISH
+- StorageStateContext = state part of reducer
+- StorageDispatchContext 
+
+## StorageCourse
+- map dishes in storageCourse to StorageDish
+- _LAST_ plus button to add dish
 
 
-## Dashboard
+## AuthStateContext
+```typescript
+ {
+  userLoggedin: boolean
+}
+```
 
+## AuthDispatchContext
+```typescript
+ {
+  signUp: () => signUp(),
+  signIn: () => signIn(),
+  signOut: () => signOut(),
+}
+```
 
 # Funzoni server (da eseguire in ambiente sicuro)
 ### creazione nuovo ordine (unica transazione)
-- leggere il counter per l'id dell'ultimo ordine
-- creare uno nuovo ordine con l'id incrementato di uno
-- aggiornare il counter per l'id dell'ultimo ordine
-- aggiornare il revenue totale del servizio
-- aggiornare le quantità nello storage
+- [ ] leggere il counter per l'id dell'ultimo ordine
+- [ ] creare uno nuovo ordine con l'id incrementato di uno
+- [ ] aggiornare il counter per l'id dell'ultimo ordine
+- [ ] aggiornare il revenue totale del servizio
+- [ ] aggiornare le quantità nello storage
 
 
 ### trigger dopo creazione ordine istantaneo
@@ -293,7 +376,7 @@ Avere dati sull'evoluzione delle quantità in magazzino
 
 
 
-# Letture/scritture ordine
+# Stima costi per letture/scritture ordine
 
 ### Condizioni e ipotesi
 - Prezzi: 0,06/100000r & 0,18/100000w
@@ -315,10 +398,11 @@ Avere dati sull'evoluzione delle quantità in magazzino
 |   1   |   r   | per aggiornare l'ordine pendente allo smazzo           |
 
 
-### legame cameriere: n+1 r & 1 w     
+### legame cameriere: n+2 r & 1 w     
 |  qt   | tipo  | desc                                    |
 | :---: | :---: | --------------------------------------- |
 |   1   |   r   | per collegamento cameriere ordine       |
+|   1   |   r   | per rimozione ordine pendente da smazzo |
 |   1   |   w   | per collegamento cameriere ordine       |
 |   n   |   r   | per visualizzare le portate dell'ordine |
 
@@ -346,14 +430,14 @@ Avere dati sull'evoluzione delle quantità in magazzino
 | qt           |       r        |   w   |
 | :----------- | :------------: | :---: |
 | creazione    |      c+2       |  n+3  |
-| collegamento |      n+1       |   1   |
+| collegamento |      n+2       |   1   |
 | ciclo        |    n(2a+3b)    |  3n   |
-| totale       | n(1+2a+3b)+c+3 | 4n+4  |
+| totale       | n(1+2a+3b)+c+4 | 4n+4  |
 
 ### caso reale: 
-n=4 a=2 b=1 c=2 => 37r &  20w
+n=4 a=2 b=1 c=2 => 38r &  20w
 
-4000 ordini = 148000 r & 80000 w ~ €0.09 & €0.27
+4000 ordini = 152000 r & 80000 w ~ €0.09 & €0.27
 ### caso limite assurdo
 ipotesi: 400 r/ordine - 400 w/ordine
 
