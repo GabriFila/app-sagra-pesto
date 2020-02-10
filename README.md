@@ -36,35 +36,35 @@ Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pes
 - Smazzo
 
 ## Compiti dei ruoli
-### Super admin
+#### Super admin
 - modifica ruoli utente 
-### Admin
+#### Admin
 - modificare la quantità di cibo rimanente
 - modificare il menu
 - iniziare e concludere il servizio
 - vedere info su incassi e ordini
-### Cassiere
+#### Cassiere
 - creare l'ordine
 - stampare l'ordine
 - modificare un ordine già creato
-### Cameriere
+#### Cameriere
 - associare ordine e tavolo
 - mandare una portata di un ordine in preparazione
 - concludere una portata di un ordine
 - modificare l'ordine
 - _LAST_ ricevere modifica quando un ordine è pronto
-### Bar
+#### Bar
 - visualizzare il bere e i dolci degli ordini che sono in preparazione
 - cambiare lo stato del bere e dei dolci quando sono pronti (notificare smazzo e camerieri)
 - creare ordini istantanei
-### Primi
+#### Primi
 - visualizzare i primi degli ordini che sono in preparazione
 - cambiare lo stato dei primi quando sono pronti (notificare smazzo e camerieri)
-### Secondi
+#### Secondi
 - visualizzare i secondi degli ordini che sono in preparazione
 - cambiare lo stato dei secondi quando sono pronti (notificare smazzo e camerieri)
 
-### Smazzo
+#### Smazzo
 - vedere gli ordini non collegati a cemerieri
 - vedere gli ordini in corso e il loro stato (preparazione, pronto)
 - concludere una portata di un ordine
