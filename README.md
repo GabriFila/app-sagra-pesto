@@ -263,7 +263,7 @@ if (generalState.userLoggedIn)
 - modificare le custom claims di un utente mettendole pari a quelle nel documento
 
 
-## Struttura Firestore DB
+## Collezioni Firestore DB
 
 ### storage
 Un documento con tutto lo storage
