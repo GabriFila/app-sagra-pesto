@@ -72,21 +72,21 @@ Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pes
 
 ## Permessi dei ruoli
 
-### creazione ordine
+#### creazione ordine
 - cassa solo ordini 'normali'
 - bar solo ordini istantanei
-### modifica ordini selettiva 
+#### modifica ordini selettiva 
 - cassa modifica solo portate e stato
 - smazzo modifica stato
 - cameriere modifica solo suoi ordini
 - bar modifica solo portate di bere e dolci
 - cucina primi modifica solo portate di primi
 - secondi modifica solo portate di secondi
-### modifica menu
+#### modifica menu
 - admin
-### inizio/fine servizio
+#### inizio/fine servizio
 - admin
-### modifica ruoli utente
+#### modifica ruoli utente
 -  superAdmin
 
 ## Interfacce
