@@ -103,9 +103,9 @@ Ogni interfaccia ha una top bar con:
 - se non loggato:
   - un tasto per fare il login o registrarsi
 
-### Home
+#### Home
 Contiene i link che portano alle altre interfacce
-### DashBoard
+#### DashBoard
 una sezione per:
  - modificare il menu
  - modificare le quantità in magazzino
@@ -114,13 +114,13 @@ una sezione per:
 Un tasto per iniziare/concludere il servizio (verde per aprilo e rosso per chiuderlo)
 
 Una sezione per le info su ordini e incassi del servizio corrente e i totali passati
-### Cassa istantanea
+#### Cassa istantanea
 Una sezione per ogni portata con i piatti istantanei nel menu. Ogni piatto è una riga con:
 - la quantità rimanente in magazzino
 - un numero per indicare la quantità richiesta dal cliente
 - un tasto '-' per decrementare le quantità richieste dal cliente
 - un tasto '+' per incrementare le quantità richieste dal cliente
-### Cassa
+#### Cassa
 Una sezione per ogni portata con i piatti nel menu. Ogni piatto è una riga con:
 - la quantità rimanente in magazzino
 - un numero per indicare la quantità richiesta dal cliente
@@ -132,7 +132,7 @@ Una sezione contente:
 - un tasto per inviarlo al sistema
 - una box per vedere il numero dell'ordine
 - un tasto per stampare l'ordine
-### Cameriere
+#### Cameriere
 Un tasto '+' per collegare ordine-cameriere-tavolo
 
 Un tab per ogni ordine con:
@@ -142,12 +142,12 @@ Un tab per ogni ordine con:
   - un tasto per completare la portata 
   - un tasto per mandare la portata in preparazione
   - una riga per piatto della portata contente i piattie le quantità
-### Cucine/bar
+#### Cucine/bar
 Una sezione ampia con tutti gli ordini in preparazione della propria cucina, ognuno con un tasto per segnarli completati
 
 Una mini sezione con il totale dei piatti da preparare attualmente
 
-### Smazzo
+#### Smazzo
  3 colonne (bar, primi, secondi), contentti le portate degli ordini in corso e il loro stato (preparazione, pronto). Ogni portata contiene:
  - lista dei piatti
  - tasto per concludere la portata
@@ -187,7 +187,7 @@ Components:
   - [ServiceInfo](#ServiceInfo)
 
 
-### App
+#### App
 - [ ] material UI theme builder
 - [ ] CSS Baseline
 - [ ] appbar
@@ -196,7 +196,7 @@ Components:
 - [ ] in useEffect setup onetime listener for firebase.auth() to change loggeIn state
 
 
-### PrivateRoute
+#### PrivateRoute
 ``` typescript
 const PrivateRoute = ({component: Component, authed, ...rest}) => {
   return (
@@ -209,7 +209,7 @@ const PrivateRoute = ({component: Component, authed, ...rest}) => {
   )
 }
 ```
-### Appbar
+#### Appbar
 ``` typescript
 if (generalState.userLoggedIn)
   // show name, role
@@ -217,19 +217,19 @@ if (generalState.userLoggedIn)
   if 'userCustomClaims.smazzo' // show also search and pending orders
   else if 'userCustomClaims.cassa' // show also cerca
 ```
-### PendingOrders
+#### PendingOrders
 - [ ] setup firebase snapshot on orders Collection where state='pending'
 - [ ] render if there are more
 - [ ] a div containing the id of each order
 
-### LoginPage
+#### LoginPage
 - [ ] notLoggedIn messagge
 - [ ] Login button
 - [ ] Register button
 
-### AdminPanel
+#### AdminPanel
 
-### Storage
+#### Storage
 - setup listener for storage collection
 - map courses of storage to StorageCouse
 - useReducer actions:
@@ -238,19 +238,19 @@ if (generalState.userLoggedIn)
 - StorageStateContext = state part of reducer
 - StorageDispatchContext 
 
-### StorageCourse
+#### StorageCourse
 - map dishes in storageCourse to StorageDish
 - _LAST_ plus button to add dish
 
 
-### AuthStateContext
+#### AuthStateContext
 ```typescript
  {
   userLoggedin: boolean
 }
 ```
 
-### AuthDispatchContext
+#### AuthDispatchContext
 ```typescript
  {
   signUp: () => signUp(),
@@ -260,7 +260,7 @@ if (generalState.userLoggedIn)
 ```
 
 ## Funzoni server
-### creazione nuovo ordine (unica transazione)
+#### creazione nuovo ordine (unica transazione)
 - [ ] leggere il counter per l'id dell'ultimo ordine
 - [ ] creare uno nuovo ordine con l'id incrementato di uno
 - [ ] aggiornare il counter per l'id dell'ultimo ordine
@@ -268,30 +268,30 @@ if (generalState.userLoggedIn)
 - [ ] aggiornare le quantità nello storage
 
 
-### trigger dopo creazione ordine istantaneo
+#### trigger dopo creazione ordine istantaneo
 - aggiornare la revenue del servizio
 
 
-### trigger creazione nuovo utente
+#### trigger creazione nuovo utente
 - creare un nuovo record nella collezione ruoliUtenti con campo ruoli pari a []
 
-### trigger modifica ruoli utenti
+#### trigger modifica ruoli utenti
 - modificare le custom claims di un utente mettendole pari a quelle nel documento
 
 
 ## Collezioni DB Firestore
 
-### storage
+#### storage
 Un documento con tutto lo storage
-### services
+#### services
 Ogni documento corrisponde a un [servizio](##servizio) nel tempo. Ogni servizio ha tre sottocollezioni: 
 -  orders
 -  portate
 -  instantOrders
 
-### users
+#### users
 Ogni documento corrisponde a un utente dell'app e contiene info aggiuntive. Potrebbe essere utile in futuro
-### userRoles
+#### userRoles
 Ogni oggetto contiene una proprietà contenenete i ruoli degli utenti. Modificabili solo dal superAdmin. L'ID di ogni documento è 'r_${uid}'
 
 ## Security rules
@@ -299,7 +299,7 @@ Ogni oggetto contiene una proprietà contenenete i ruoli degli utenti. Modificab
 
 ## Strutture in codice
 
-### servizio
+#### servizio
 ``` typescript
 interface IService
 {
@@ -312,7 +312,7 @@ interface IService
 }
 ```
 
-### ordine istantaneo
+#### ordine istantaneo
 ``` typescript
 interface IInstantOrder
 {
@@ -321,7 +321,7 @@ interface IInstantOrder
 }
 ```
 
-### ordine
+#### ordine
 ``` typescript
 interface IOrder
 {
@@ -334,7 +334,7 @@ interface IOrder
   createdAt: Date
 }
 ```
-### portata
+#### portata
 ``` typescript
 interface ICourse
 {
@@ -346,7 +346,7 @@ interface ICourse
 }
 ```
 
-### piatto
+#### piatto
 ``` typescript
 interface IDish
 {
@@ -354,7 +354,7 @@ interface IDish
   qt: number
 }
 ```
-### storage
+#### storage
 ``` typescript
 interface IStorage
 {
@@ -362,7 +362,7 @@ interface IStorage
 }
 ```
 
-### portataMenu
+#### portataMenu
 ``` typescript
 interface ICourseMenu
 {
@@ -373,7 +373,7 @@ interface ICourseMenu
 }
 ```
 
-### piattoMenu
+#### piattoMenu
 ``` typescript
 interface IDishMenu
 {
@@ -392,7 +392,7 @@ Avere dati sull'evoluzione delle quantità in magazzino
 
 ## Stima costi per letture/scritture ordine
 
-### Condizioni e ipotesi
+#### Condizioni e ipotesi
 - Prezzi: 0,06/100000r & 0,18/100000w
 - n = # portate per ordine ~ 4
 - c = # casse collegate ~ 2
@@ -400,7 +400,7 @@ Avere dati sull'evoluzione delle quantità in magazzino
 - b smazzi collegati ~ 1
 - il cameriere conclude l'ordine, non lo smazzo
 
-### creazione: c+2 r & n+3 w
+#### creazione: c+2 r & n+3 w
 |  qt   | tipo  | desc                                                   |
 | :---: | :---: | ------------------------------------------------------ |
 |   1   |   r   | service/current per sapere lastOrderID                 |
@@ -412,7 +412,7 @@ Avere dati sull'evoluzione delle quantità in magazzino
 |   1   |   r   | per aggiornare l'ordine pendente allo smazzo           |
 
 
-### legame cameriere: n+2 r & 1 w     
+#### legame cameriere: n+2 r & 1 w     
 |  qt   | tipo  | desc                                    |
 | :---: | :---: | --------------------------------------- |
 |   1   |   r   | per collegamento cameriere ordine       |
@@ -421,7 +421,7 @@ Avere dati sull'evoluzione delle quantità in magazzino
 |   n   |   r   | per visualizzare le portate dell'ordine |
 
 
-### ciclo per ordine: n(2a+3b) r & 3n w
+#### ciclo per ordine: n(2a+3b) r & 3n w
 #### ciclo singola portata: 2a+3b r & 3 w 
 |    qt     | tipo  | desc                      |
 | :-------: | :---: | ------------------------- |
@@ -440,7 +440,7 @@ Avere dati sull'evoluzione delle quantità in magazzino
 
 
 
-### totale
+#### totale
 | qt           |       r        |   w   |
 | :----------- | :------------: | :---: |
 | creazione    |      c+2       |  n+3  |
@@ -448,11 +448,11 @@ Avere dati sull'evoluzione delle quantità in magazzino
 | ciclo        |    n(2a+3b)    |  3n   |
 | totale       | n(1+2a+3b)+c+4 | 4n+4  |
 
-### caso reale: 
+#### caso reale: 
 n=4 a=2 b=1 c=2 => 38r &  20w
 
 4000 ordini = 152000 r & 80000 w ~ €0.09 & €0.27
-### caso limite assurdo
+#### caso limite assurdo
 ipotesi: 400 r/ordine - 400 w/ordine
 
 4000 ordini = 1600000 r - 1600000 w -> $0,96 + $2,56
