@@ -1,6 +1,22 @@
 # App - Sagra del pesto
 Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pesto di Genova. La prima parte descrive il comportamento dell'app, la seconda ne descrive il funzionamento.
 
+# Indice
+- [Parte I - comportamento](#parte-i---comportamento)
+  - [Nozioni base](#nozioni-base)
+  - [Ruoli utente](#ruoli-utente)
+  - [Compiti dei ruoli](#compiti-dei-ruoli)
+  - [Permessi dei ruoli](#permessi-dei-ruoli)
+  - [Interfacce](#interfacce)
+  - [Logging](#logging)
+- [Parte II - funzionamento](#parte-ii---funzionamento)
+  - [URLs](#urls)
+  - [Codice interfacce](#codice-interfacce)
+  - [Funzioni server](#funzoni-server)
+  - [Collezioni DB Firestore](#collezioni-db-firestore)
+  - [Security rules](#security-rules)
+  - [Strutture in codice](#strutture-in-codice)
+
 # Parte I - Comportamento
 ## Nozioni base
 - servizio: sessione di pasto (pranzo, cena)
@@ -19,7 +35,7 @@ Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pes
 - Secondi
 - Smazzo
 
-## Compiti di ciascun ruolo
+## Compiti dei ruoli
 ### Super admin
 - modifica ruoli utente 
 ### Admin
@@ -140,7 +156,7 @@ Una mini sezione con il totale dei piatti da preparare attualmente
 Loggare l'evoluzioni degli ordini per avere dati statistici
 
 # Parte II - Funzionamento
-## URL interfacce
+## URLs
 
 base = url di default (es sagra.genova.cngei.it)
 - home = base
@@ -243,7 +259,7 @@ if (generalState.userLoggedIn)
 }
 ```
 
-## Funzoni server (da eseguire in ambiente sicuro)
+## Funzoni server
 ### creazione nuovo ordine (unica transazione)
 - [ ] leggere il counter per l'id dell'ultimo ordine
 - [ ] creare uno nuovo ordine con l'id incrementato di uno
@@ -263,7 +279,7 @@ if (generalState.userLoggedIn)
 - modificare le custom claims di un utente mettendole pari a quelle nel documento
 
 
-## Collezioni Firestore DB
+## Collezioni DB Firestore
 
 ### storage
 Un documento con tutto lo storage
@@ -281,7 +297,7 @@ Ogni oggetto contiene una proprietà contenenete i ruoli degli utenti. Modificab
 ## Security rules
 
 
-# Strutture in codice
+## Strutture in codice
 
 ### servizio
 ``` typescript
