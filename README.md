@@ -1,14 +1,15 @@
 # App - Sagra del pesto
 Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pesto di Genova. La prima parte descrive il comportamento dell'app, la seconda ne descrive il funzionamento.
 
-# Nozioni base
+# Parte I - Comportamento
+## Nozioni base
 - servizio: sessione di pasto (pranzo, cena)
 - ordini: ordine normale fatto dalla cassa che deve passare attraverso cameriere -> cucina -> smazzo
 - ordini istantanei: ordine fatto dal bar che viene consegnato al cliente direttamente
 - portate: elementi dell'ordine elaborati da una singola cucina
 - piatti: elementi di ogni portata
 
-# Ruoli Utente 
+## Ruoli Utente 
 - Super Admin
 - Admin
 - Cassiere
@@ -18,42 +19,42 @@ Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pes
 - Secondi
 - Smazzo
 
-# Compiti di ciascun ruolo
-## Super admin
+## Compiti di ciascun ruolo
+### Super admin
 - modifica ruoli utente 
-## Admin
+### Admin
 - modificare la quantità di cibo rimanente
 - modificare il menu
 - iniziare e concludere il servizio
 - vedere info su incassi e ordini
-## Cassiere
+### Cassiere
 - creare l'ordine
 - stampare l'ordine
 - modificare un ordine già creato
-## Cameriere
+### Cameriere
 - associare ordine e tavolo
 - mandare una portata di un ordine in preparazione
 - concludere una portata di un ordine
 - modificare l'ordine
 - _LAST_ ricevere modifica quando un ordine è pronto
-## Bar
+### Bar
 - visualizzare il bere e i dolci degli ordini che sono in preparazione
 - cambiare lo stato del bere e dei dolci quando sono pronti (notificare smazzo e camerieri)
 - creare ordini istantanei
-## Primi
+### Primi
 - visualizzare i primi degli ordini che sono in preparazione
 - cambiare lo stato dei primi quando sono pronti (notificare smazzo e camerieri)
-## Secondi
+### Secondi
 - visualizzare i secondi degli ordini che sono in preparazione
 - cambiare lo stato dei secondi quando sono pronti (notificare smazzo e camerieri)
 
-## Smazzo
+### Smazzo
 - vedere gli ordini non collegati a cemerieri
 - vedere gli ordini in corso e il loro stato (preparazione, pronto)
 - concludere una portata di un ordine
 - recuperare vecchie portate di ordini già conclusi per eventuali modifiche
 
-# Permessi dei ruoli
+## Permessi dei ruoli
 
 ### creazione ordine
 - cassa solo ordini 'normali'
@@ -72,9 +73,9 @@ Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pes
 ### modifica ruoli utente
 -  superAdmin
 
-# Interfacce
+## Interfacce
 
-## Generale
+### Generale
 Ogni interfaccia ha una top bar con:
 - se loggato:
   - il nome dell'utente e il tipo di interfaccia (es: Furio-dashboard)
@@ -87,9 +88,9 @@ Ogni interfaccia ha una top bar con:
 - se non loggato:
   - un tasto per fare il login o registrarsi
 
-## Home
+### Home
 Contiene i link che portano alle altre interfacce
-## DashBoard
+### DashBoard
 una sezione per:
  - modificare il menu
  - modificare le quantità in magazzino
@@ -98,13 +99,13 @@ una sezione per:
 Un tasto per iniziare/concludere il servizio (verde per aprilo e rosso per chiuderlo)
 
 Una sezione per le info su ordini e incassi del servizio corrente e i totali passati
-## Cassa istantanea
+### Cassa istantanea
 Una sezione per ogni portata con i piatti istantanei nel menu. Ogni piatto è una riga con:
 - la quantità rimanente in magazzino
 - un numero per indicare la quantità richiesta dal cliente
 - un tasto '-' per decrementare le quantità richieste dal cliente
 - un tasto '+' per incrementare le quantità richieste dal cliente
-## Cassa
+### Cassa
 Una sezione per ogni portata con i piatti nel menu. Ogni piatto è una riga con:
 - la quantità rimanente in magazzino
 - un numero per indicare la quantità richiesta dal cliente
@@ -116,7 +117,7 @@ Una sezione contente:
 - un tasto per inviarlo al sistema
 - una box per vedere il numero dell'ordine
 - un tasto per stampare l'ordine
-## Cameriere
+### Cameriere
 Un tasto '+' per collegare ordine-cameriere-tavolo
 
 Un tab per ogni ordine con:
@@ -126,23 +127,21 @@ Un tab per ogni ordine con:
   - un tasto per completare la portata 
   - un tasto per mandare la portata in preparazione
   - una riga per piatto della portata contente i piattie le quantità
-## Cucine/bar
+### Cucine/bar
 Una sezione ampia con tutti gli ordini in preparazione della propria cucina, ognuno con un tasto per segnarli completati
 
 Una mini sezione con il totale dei piatti da preparare attualmente
 
-## Smazzo
+### Smazzo
  3 colonne (bar, primi, secondi), contentti le portate degli ordini in corso e il loro stato (preparazione, pronto). Ogni portata contiene:
  - lista dei piatti
  - tasto per concludere la portata
 
-# Logging
+## Logging
 Loggare l'evoluzioni degli ordini per avere dati statistici
 
-
------
-
-# URL interfacce
+# Parte II - Funzionamento
+## URL interfacce
 
 base = url di default (es sagra.genova.cngei.it)
 - home = base
@@ -155,7 +154,7 @@ base = url di default (es sagra.genova.cngei.it)
 - cassa istantanea = base/cassaBar
 - camerieri = base/cameriere
 
-# Codice interfacce
+## Codice interfacce
 
 Components:
 - [App](#App)
@@ -245,7 +244,7 @@ if (generalState.userLoggedIn)
 }
 ```
 
-# Funzoni server (da eseguire in ambiente sicuro)
+## Funzoni server (da eseguire in ambiente sicuro)
 ### creazione nuovo ordine (unica transazione)
 - [ ] leggere il counter per l'id dell'ultimo ordine
 - [ ] creare uno nuovo ordine con l'id incrementato di uno
@@ -265,7 +264,7 @@ if (generalState.userLoggedIn)
 - modificare le custom claims di un utente mettendole pari a quelle nel documento
 
 
-# Struttura Firestore DB
+## Struttura Firestore DB
 
 ### storage
 Un documento con tutto lo storage
@@ -280,12 +279,12 @@ Ogni documento corrisponde a un utente dell'app e contiene info aggiuntive. Potr
 ### userRoles
 Ogni oggetto contiene una proprietà contenenete i ruoli degli utenti. Modificabili solo dal superAdmin. L'ID di ogni documento è 'r_${uid}'
 
-# Security rules
+## Security rules
 
 
 # Strutture in codice
 
-## servizio
+### servizio
 ``` typescript
 interface IService
 {
@@ -298,7 +297,7 @@ interface IService
 }
 ```
 
-## ordine istantaneo
+### ordine istantaneo
 ``` typescript
 interface IInstantOrder
 {
@@ -307,7 +306,7 @@ interface IInstantOrder
 }
 ```
 
-## ordine
+### ordine
 ``` typescript
 interface IOrder
 {
@@ -320,7 +319,7 @@ interface IOrder
   createdAt: Date
 }
 ```
-## portata
+### portata
 ``` typescript
 interface ICourse
 {
@@ -332,7 +331,7 @@ interface ICourse
 }
 ```
 
-## piatto
+### piatto
 ``` typescript
 interface IDish
 {
@@ -340,7 +339,7 @@ interface IDish
   qt: number
 }
 ```
-## storage
+### storage
 ``` typescript
 interface IStorage
 {
@@ -348,7 +347,7 @@ interface IStorage
 }
 ```
 
-## portataMenu
+### portataMenu
 ``` typescript
 interface ICourseMenu
 {
@@ -359,7 +358,7 @@ interface ICourseMenu
 }
 ```
 
-## piattoMenu
+### piattoMenu
 ``` typescript
 interface IDishMenu
 {
@@ -371,12 +370,12 @@ interface IDishMenu
 }
 ```
 
-# Note 
+## Note 
 Avere dati sull'evoluzione delle quantità in magazzino
 
 
 
-# Stima costi per letture/scritture ordine
+## Stima costi per letture/scritture ordine
 
 ### Condizioni e ipotesi
 - Prezzi: 0,06/100000r & 0,18/100000w
