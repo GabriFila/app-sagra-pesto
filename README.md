@@ -89,9 +89,10 @@ Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pes
 #### modifica ruoli utente
 -  superAdmin
 
-## Interfacce
+## Pagine
 
-Ogni interfaccia ha una top bar con:
+Ogni pagina ha una top bar con:
+- un hamburger per mostrare il menu con le interfacce
 - se loggato:
   - il nome dell'utente e il tipo di interfaccia (es: Furio-dashboard)
   - un tasto per fare il logout
@@ -105,6 +106,8 @@ Ogni interfaccia ha una top bar con:
 
 #### Home
 Contiene i link che portano alle altre interfacce
+#### Login
+Contiene i tasti per registrarsi e loggarsi
 #### DashBoard
 una sezione per:
  - modificare il menu
@@ -175,34 +178,45 @@ Components:
 - [App](#App)
 - [PrivateRoute](#PrivateRoute)
 - [AppBar](#AppBar)
+  - [MenuDrawer](#MenuDrawer)
   - [PendingOrders](#PendingOrders)
   - SearchButton
 - [LoginPage](#LoginPage)
+  - [LoginDialog](#LoginDialog)
+  - [RegisterDialog](#RegisterDialog)
 - [AdminPanel](#AdminPanel)
   - [Storage](#Storage)
     - [StorageCourse](#StorageCourse)
       - [StorageDish](#StorageDish) 
       - [AddDishButton](#AddDishButton) 
-  - [ServiceStarter](#ServiceStarter) 
-  - [ServiceInfo](#ServiceInfo)
+  - [ServiceTab](#ServiceTab) 
+    - [ServiceStarter](#ServiceStarter) 
+    - [ServiceInfo](#ServiceInfo)
 
 
 #### App
 - [ ] material UI theme builder
 - [ ] CSS Baseline
 - [ ] appbar
-- [ ] router with all PrivateRoutes for pages except for login
-- [ ] state is equal to userLoggedIn
-- [ ] in useEffect setup onetime listener for firebase.auth() to change loggeIn state
+- [ ] router with all PrivateRoute for pages except for login
+- [ ] useReducer for userLoggedIn
+- [ ] AuthStateContext for userLoggedIn state
+- [ ] AuthDispatchContext for userLoggedIn reducers
+- [ ] AuthDispatch actions:
+  - [ ] REGISTER
+  - [ ] SIGN_OUT
+  - [ ] SIGN_IN
+- [ ] in useEffect setup onetime listener for firebase.auth() to change auth state
 
 
 #### PrivateRoute
 ``` typescript
-const PrivateRoute = ({component: Component, authed, ...rest}) => {
+const PrivateRoute = ({component: Component, auth, ...rest}) => {
+  // access auth from context not from props
   return (
     <Route
       {...rest}
-      render={(props) => authed === true
+      render={(props) => auth === true
         ? <Component {...props} />
         : <Redirect to={{pathname: '/login', state: {from: props.location}}} />}
     />
@@ -210,13 +224,17 @@ const PrivateRoute = ({component: Component, authed, ...rest}) => {
 }
 ```
 #### Appbar
+- [ ] on logout redirect to login page
 ``` typescript
-if (generalState.userLoggedIn)
+if (userLoggedIn)
   // show name, role
   // show logout button
   if 'userCustomClaims.smazzo' // show also search and pending orders
   else if 'userCustomClaims.cassa' // show also cerca
 ```
+#### MenuDrawer
+- [ ] contains links to possible pages for user
+
 #### PendingOrders
 - [ ] setup firebase snapshot on orders Collection where state='pending'
 - [ ] render if there are more
@@ -224,42 +242,49 @@ if (generalState.userLoggedIn)
 
 #### LoginPage
 - [ ] notLoggedIn messagge
-- [ ] Login button
-- [ ] Register button
+- [ ] Login button to trigger LoginDialog
+- [ ] Register button to trigger RegisterDialog
+
+#### LoginDialog
+- [ ] email and password fields
+- [ ] on login redirect to role page
+
+#### RegisterDialog
+- [ ] email, password, confirm password, name fields
+- [ ] on register redirect to role page
 
 #### AdminPanel
 
 #### Storage
-- setup listener for storage collection
-- map courses of storage to StorageCouse
-- useReducer actions:
-  - EDIT_DISH
-  - ADD_DISH
-- StorageStateContext = state part of reducer
-- StorageDispatchContext 
+- [ ] setup listener for storage collection in which setState to firebase document
+- [ ] map courses of storage to StorageCourse and pass single course via props
+- [ ] StorageState
 
 #### StorageCourse
-- map dishes in storageCourse to StorageDish
-- _LAST_ plus button to add dish
+- [ ] map dishes in storageCourse to StorageDish and single dish via props
+- [ ] _LAST_ plus button to add dish
 
+#### StorageDish
+- [ ] render infos from props
+- [ ] need to edit qt, price
+- [ ] on edit click enter edit mode, dish row grays out and edit icon becomes check icon to finish, text input enables
 
-#### AuthStateContext
-```typescript
- {
-  userLoggedin: boolean
-}
-```
+#### ServiceTab
+- [ ] setup listener to current service in db
+- [ ] pass serviceState as prop to serviceStarter
+- [ ] pass service info as prop to serviceInfo
 
-#### AuthDispatchContext
-```typescript
- {
-  signUp: () => signUp(),
-  signIn: () => signIn(),
-  signOut: () => signOut(),
-}
-```
+#### ServiceStarter
+- [ ] if service is active show red button to end it, i.e. set endDate where endDate is not defined
+- [ ] if service is not active show green button to start it, i.e. create new service with endDate undefined
+
+#### ServiceInfo
+- [ ] display current service info from props
+- [ ] in one-time useEffect get older service info from db
 
 ## Funzoni server
+#### registrazione nuovo utente
+- [ ] mettere registrazione in back-end per maggiore sicurezza
 #### creazione nuovo ordine (unica transazione)
 - [ ] leggere il counter per l'id dell'ultimo ordine
 - [ ] creare uno nuovo ordine con l'id incrementato di uno
@@ -274,6 +299,10 @@ if (generalState.userLoggedIn)
 
 #### trigger creazione nuovo utente
 - creare un nuovo record nella collezione ruoliUtenti con campo ruoli pari a []
+
+#### trigger rimozione utente
+- eliminare il record corrispondente nella collezione ruoliUtenti
+
 
 #### trigger modifica ruoli utenti
 - modificare le custom claims di un utente mettendole pari a quelle nel documento
@@ -401,6 +430,7 @@ Avere dati sull'evoluzione delle quantità in magazzino
 - il cameriere conclude l'ordine, non lo smazzo
 
 #### creazione: c+2 r & n+3 w
+manca la parte di aggiornamento dell'adminPanel
 |  qt   | tipo  | desc                                                   |
 | :---: | :---: | ------------------------------------------------------ |
 |   1   |   r   | service/current per sapere lastOrderID                 |
