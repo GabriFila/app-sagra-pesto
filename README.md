@@ -42,7 +42,7 @@ Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pes
 - modificare la quantità di cibo rimanente
 - modificare il menu
 - iniziare e concludere il servizio
-- vedere info su incassi e ordini
+- vedere info su incassi e ordini correnti
 #### Cassiere
 - creare l'ordine
 - stampare l'ordine
@@ -176,22 +176,28 @@ base = url di default (es sagra.genova.cngei.it)
 
 Components:
 - [App](#App)
-- [PrivateRoute](#PrivateRoute)
-- [AppBar](#AppBar)
-  - [MenuDrawer](#MenuDrawer)
-  - [PendingOrders](#PendingOrders)
-  - SearchButton
-- [LoginPage](#LoginPage)
-  - [LoginDialog](#LoginDialog)
-  - [RegisterDialog](#RegisterDialog)
-- [AdminPanel](#AdminPanel)
-  - [Storage](#Storage)
-    - [StorageCourse](#StorageCourse)
-      - [StorageDish](#StorageDish) 
-      - [AddDishButton](#AddDishButton) 
-  - [ServiceTab](#ServiceTab) 
-    - [ServiceStarter](#ServiceStarter) 
-    - [ServiceInfo](#ServiceInfo)
+  - [PrivateRoute](#PrivateRoute)
+  - [AppBar](#AppBar)
+    - [MenuDrawer](#MenuDrawer)
+    - [PendingOrders](#PendingOrders)
+    - SearchButton
+  - [LoginPage](#LoginPage)
+    - [LoginDialog](#LoginDialog)
+    - [RegisterDialog](#RegisterDialog)
+  - [AdminPage](#AdminPage)
+    - [Storage](#Storage)
+      - [StorageCourse](#StorageCourse)
+        - [StorageDish](#StorageDish) 
+        - [AddDishButton](#AddDishButton) 
+    - [ServiceTab](#ServiceTab) 
+      - [ServiceStarter](#ServiceStarter) 
+      - [ServiceInfo](#ServiceInfo)
+  - [WaiterPage](#WaiterPage)
+    - [WaiterOrder](#WaiterOrder) 
+      - [WaiterOrderCourse](#WaiterOrderCourse)
+        - [WaiterOrderDish](#WaiterOrderDish)
+    - [LinkOrderButton](#LinkOrderButton)
+
 
 
 #### App
@@ -225,13 +231,10 @@ const PrivateRoute = ({component: Component, auth, ...rest}) => {
 ```
 #### Appbar
 - [ ] on logout redirect to login page
-``` typescript
-if (userLoggedIn)
-  // show name, role
-  // show logout button
-  if 'userCustomClaims.smazzo' // show also search and pending orders
-  else if 'userCustomClaims.cassa' // show also cerca
-```
+- [ ] if userLoggedIn show name, role, logout button
+- [ ] if user role is 'smazzo' show also search button and pending orders
+- [ ] if user role is 'cassa' show also cerca
+
 #### MenuDrawer
 - [ ] contains links to possible pages for user
 
@@ -253,7 +256,7 @@ if (userLoggedIn)
 - [ ] email, password, confirm password, name fields
 - [ ] on register redirect to role page
 
-#### AdminPanel
+#### AdminPage
 
 #### Storage
 - [ ] setup listener for storage collection in which setState to firebase document
@@ -280,7 +283,26 @@ if (userLoggedIn)
 
 #### ServiceInfo
 - [ ] display current service info from props
-- [ ] in one-time useEffect get older service info from db
+
+#### WaiterPage
+- [ ] in one-time useEffect listen for orders with waiterId == user.uuid
+- [ ] map orders to WaiterOrders and pass order as prop + docId
+
+
+##### WaiterOrder
+- [ ] in one-time useEffect listen for courses with orderId equal to prop one and pass Course obj as prop + docId
+- [ ] display table# and orderId
+- [ ] diplay close button
+
+#### WaiterCourse
+- [ ] when Course state == waiting, display sendToKitchen button
+- [ ] when Course state == prep, display cancelKitchen button
+- [ ] when Course state == ready, display conclude button
+- [ ] map Dishes to WaiterOrderDish[]
+- [ ] when click a button change state in db appropriately
+
+#### WaiterOrderDish
+- [ ] display dish shortName e qt
 
 ## Funzoni server
 #### registrazione nuovo utente
@@ -288,13 +310,18 @@ if (userLoggedIn)
 #### creazione nuovo ordine (unica transazione)
 - [ ] leggere il counter per l'id dell'ultimo ordine
 - [ ] creare uno nuovo ordine con l'id incrementato di uno
-- [ ] aggiornare il counter per l'id dell'ultimo ordine
+- [ ] aggiornare lastOrderNum
 - [ ] aggiornare il revenue totale del servizio
 - [ ] aggiornare le quantità nello storage
+- [ ] aggiornare le quantità totale di ordini
 
-
-#### trigger dopo creazione ordine istantaneo
+#### trigger creazione ordine istantaneo
 - aggiornare la revenue del servizio
+- aggiornare la quantità totale di ordini
+
+
+#### trigger cancellazione ordine
+- aggiornare la quantità totale di ordini
 
 
 #### trigger creazione nuovo utente
@@ -326,35 +353,35 @@ Ogni oggetto contiene una proprietà contenenete i ruoli degli utenti. Modificab
 ## Security rules
 
 
-## Strutture in codice
+## Strutture in Firestore
 
-#### servizio
+#### services collection
 ``` typescript
 interface IService
 {
-    start: Date,
-    end: Date,
-    totalRevenue: number,   
-    totalCovers: number,    // total number of people
-    lastOrderId : number,   // progressive counter for orders
-    ??? menu: Menu ???,     // could be useful for long term analysis but could change durign service
+  start: Date,
+  end: Date,
+  totalRevenue: number,   
+  totalPeople: number,    // total number of people
+  lastOrderNum : number,   // progressive counter for orders
+  totalInstantOrders: number
+  totalOrders: number
 }
 ```
-
-#### ordine istantaneo
+#### instantOrders subCollection
 ``` typescript
 interface IInstantOrder
 {
-    revenue: number,
-    dishes: Dish[]
+  revenue: number,
+  dishes: Dish[]
 }
 ```
 
-#### ordine
+#### orders subCollection
 ``` typescript
 interface IOrder
 {
-  id: number,
+  orderNum: number,
   status: string,     // (pending, accepted, completed, cancelled)
   waiterName: string, // display name of waiter
   waiterId: string,   // id of waiter to link
@@ -363,11 +390,11 @@ interface IOrder
   createdAt: Date
 }
 ```
-#### portata
+#### courses subCollection
 ``` typescript
 interface ICourse
 {
-  orderId: number,
+  orderNum: number,
   name: string,
   kitchen: string,
   status: string,      // (waiting,prep,ready,delivered)
@@ -375,7 +402,6 @@ interface ICourse
 }
 ```
 
-#### piatto
 ``` typescript
 interface IDish
 {
@@ -383,28 +409,27 @@ interface IDish
   qt: number
 }
 ```
-#### storage
+
+#### storage collection
 ``` typescript
 interface IStorage
 {
-  storage : ICourseMenu[]
+  storage : IStorageCourse[]
 }
 ```
 
-#### portataMenu
 ``` typescript
-interface ICourseMenu
+interface IStorageCourse
 {
   name: string,
   kitchen: string,
-  dishes: IDishMenu[],
+  dishes: IStorageDish[],
   isInstant: boolean
 }
 ```
 
-#### piattoMenu
 ``` typescript
-interface IDishMenu
+interface IStorageDish
 {
   name: string,
   shortName: string,
@@ -413,11 +438,23 @@ interface IDishMenu
   inMenu: boolean
 }
 ```
+## Strutture in UIs
+for each interface extend with id prop
+``` typescript
+interface IOrderProp extends IOrder
+{
+  id: string  
+}
+```
+``` typescript
+interface ICourseProp extends ICourse
+{
+  id: string  
+}
+```
 
 ## Note 
 Avere dati sull'evoluzione delle quantità in magazzino
-
-
 
 ## Stima costi per letture/scritture ordine
 
@@ -430,7 +467,7 @@ Avere dati sull'evoluzione delle quantità in magazzino
 - il cameriere conclude l'ordine, non lo smazzo
 
 #### creazione: c+2 r & n+3 w
-manca la parte di aggiornamento dell'adminPanel
+manca la parte di aggiornamento dell'AdminPage
 |  qt   | tipo  | desc                                                   |
 | :---: | :---: | ------------------------------------------------------ |
 |   1   |   r   | service/current per sapere lastOrderID                 |
