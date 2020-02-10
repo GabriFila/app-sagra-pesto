@@ -75,7 +75,6 @@ Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pes
 
 ## Interfacce
 
-### Generale
 Ogni interfaccia ha una top bar con:
 - se loggato:
   - il nome dell'utente e il tipo di interfaccia (es: Furio-dashboard)
@@ -172,7 +171,7 @@ Components:
   - [ServiceInfo](#ServiceInfo)
 
 
-## App
+### App
 - [ ] material UI theme builder
 - [ ] CSS Baseline
 - [ ] appbar
@@ -181,7 +180,7 @@ Components:
 - [ ] in useEffect setup onetime listener for firebase.auth() to change loggeIn state
 
 
-## PrivateRoute
+### PrivateRoute
 ``` typescript
 const PrivateRoute = ({component: Component, authed, ...rest}) => {
   return (
@@ -194,7 +193,7 @@ const PrivateRoute = ({component: Component, authed, ...rest}) => {
   )
 }
 ```
-## Appbar
+### Appbar
 ``` typescript
 if (generalState.userLoggedIn)
   // show name, role
@@ -202,19 +201,19 @@ if (generalState.userLoggedIn)
   if 'userCustomClaims.smazzo' // show also search and pending orders
   else if 'userCustomClaims.cassa' // show also cerca
 ```
-## PendingOrders
+### PendingOrders
 - [ ] setup firebase snapshot on orders Collection where state='pending'
 - [ ] render if there are more
 - [ ] a div containing the id of each order
 
-## LoginPage
+### LoginPage
 - [ ] notLoggedIn messagge
 - [ ] Login button
 - [ ] Register button
 
-## AdminPanel
+### AdminPanel
 
-## Storage
+### Storage
 - setup listener for storage collection
 - map courses of storage to StorageCouse
 - useReducer actions:
@@ -223,19 +222,19 @@ if (generalState.userLoggedIn)
 - StorageStateContext = state part of reducer
 - StorageDispatchContext 
 
-## StorageCourse
+### StorageCourse
 - map dishes in storageCourse to StorageDish
 - _LAST_ plus button to add dish
 
 
-## AuthStateContext
+### AuthStateContext
 ```typescript
  {
   userLoggedin: boolean
 }
 ```
 
-## AuthDispatchContext
+### AuthDispatchContext
 ```typescript
  {
   signUp: () => signUp(),
