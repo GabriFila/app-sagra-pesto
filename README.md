@@ -345,18 +345,20 @@ interface ICourseProp extends ICourse
 }
 ```
 
-## URLs
+
+## React UIs
+
+#### URLs
 base = url di default (es sagra.genova.cngei.it)
 - home = base
 - login = base/login
-- dashboard = base/admin
+- admin = base/admin
 - cucina primi = base/primi
 - cucina secondi = base/secondi
 - bar = base/bar
 - cassa = base/cassa
 - cassa istantanea = base/cassaBar
 - cameriere = base/cameriere
-## React UIs
 
 Assumption (need to be checked during development): for all UIs where a user event triggers a change in firestore there is no need to add a reducer but only a listener that acts on a state. Actions will pass through firestore on-device cache first and then propagate to other UI via DB. 
 
