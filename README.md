@@ -5,10 +5,11 @@ Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pes
 - [Parte I - comportamento](#parte-i---comportamento)
   - [Nozioni base](#nozioni-base)
   - [Ruoli utente](#ruoli-utente)
-  - [Compiti dei ruoli](#compiti-dei-ruoli)
+  - [Attività dei ruoli](#attività-dei-ruoli)
   - [Permessi dei ruoli](#permessi-dei-ruoli)
-  - [Interfacce](#interfacce)
+  - [Pagine](#pagine)
   - [Logging](#logging)
+  - [Stima dei costi](#stima--dei-cost)
 - [Parte II - funzionamento](#parte-ii---funzionamento)
   - [URLs](#urls)
   - [Codice interfacce](#codice-interfacce)
@@ -35,7 +36,7 @@ Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pes
 - Secondi
 - Smazzo
 
-## Compiti dei ruoli
+## Attività dei ruoli
 #### Super admin
 - modifica ruoli utente 
 #### Admin
@@ -105,7 +106,7 @@ Ogni pagina ha una top bar con:
   - un tasto per fare il login o registrarsi
 
 #### Home
-- link che portano alle altre interfacce
+- link che portano alle altre pagine
 #### Login
 - tasti per registrarsi e loggarsi
 #### DashBoard
@@ -156,6 +157,75 @@ Ogni pagina ha una top bar con:
 ## Logging
 Loggare l'evoluzioni degli ordini per avere dati statistici
 
+
+## Stima costi
+
+#### Condizioni e ipotesi
+- Prezzi: 0,06/100000r & 0,18/100000w
+- n = # portate per ordine ~ 4
+- c = # casse collegate ~ 2
+- a = # cucine per stessa portata  ~ 1,3
+- b smazzi collegati ~ 1
+- il cameriere conclude l'ordine, non lo smazzo
+
+#### creazione: c+2 r & n+3 w
+manca la parte di aggiornamento dell'AdminPage
+|  qt   | tipo  | desc                                                   |
+| :---: | :---: | ------------------------------------------------------ |
+|   1   |   r   | service/current per sapere lastOrderID                 |
+|   1   |   w   | service/current per aggiornare lastOrderID e prezzo    |
+|   1   |   w   | in service/current/orders per creare un nuovo ordine   |
+|   n   |   w   | in service/current/courses per creare le nuove portate |
+|   1   |   w   | per aggiornare le quantità in storage                  |
+|   c   |   r   | per aggiornare le quantità sulle UI della cassa        |
+|   1   |   r   | per aggiornare l'ordine pendente allo smazzo           |
+
+
+#### legame cameriere: n+2 r & 1 w     
+|  qt   | tipo  | desc                                    |
+| :---: | :---: | --------------------------------------- |
+|   1   |   r   | per collegamento cameriere ordine       |
+|   1   |   r   | per rimozione ordine pendente da smazzo |
+|   1   |   w   | per collegamento cameriere ordine       |
+|   n   |   r   | per visualizzare le portate dell'ordine |
+
+
+#### ciclo per ordine: n(2a+3b) r & 3n w
+#### ciclo singola portata: 2a+3b r & 3 w 
+|    qt     | tipo  | desc                      |
+| :-------: | :---: | ------------------------- |
+| cameriere |       |
+|     1     |   w   | cambio stato wait->prep   |
+|     1     |   r   | cambio stato prep->ready  |
+|     1     |   w   | cambio stato ready->compl |
+|  cucina   |       |
+|     a     |   r   | cambio stato wait->prep   |
+|     1     |   w   | cambio stato prep->ready  |
+|   (a-1)   |   r   | cambio stato prep->ready  |
+|  smazzo   |       |
+|     b     |   r   | cambio stato wait->prep   |
+|     b     |   r   | cambio stato prep->ready  |
+|     b     |   r   | cambio stato ready->compl |
+
+
+
+#### totale
+| qt           |       r        |   w   |
+| :----------- | :------------: | :---: |
+| creazione    |      c+2       |  n+3  |
+| collegamento |      n+2       |   1   |
+| ciclo        |    n(2a+3b)    |  3n   |
+| totale       | n(1+2a+3b)+c+4 | 4n+4  |
+
+#### caso reale: 
+n=4 a=2 b=1 c=2 => 38r &  20w
+
+4000 ordini = 152000 r & 80000 w ~ €0.09 & €0.27
+#### caso limite assurdo
+ipotesi: 400 r/ordine - 400 w/ordine
+
+4000 ordini = 1600000 r - 1600000 w -> $0,96 + $2,56
+
 # Parte II - Funzionamento
 ## URLs
 
@@ -168,8 +238,8 @@ base = url di default (es sagra.genova.cngei.it)
 - bar = base/bar
 - cassa = base/cassa
 - cassa istantanea = base/cassaBar
-- camerieri = base/cameriere
-
+- cameriere = base/cameriere
+- 
 ## Codice interfacce
 
 Components:
@@ -479,71 +549,3 @@ interface ICourseProp extends ICourse
 
 ## Note 
 Avere dati sull'evoluzione delle quantità in magazzino
-
-## Stima costi per letture/scritture ordine
-
-#### Condizioni e ipotesi
-- Prezzi: 0,06/100000r & 0,18/100000w
-- n = # portate per ordine ~ 4
-- c = # casse collegate ~ 2
-- a = # cucine per stessa portata  ~ 1,3
-- b smazzi collegati ~ 1
-- il cameriere conclude l'ordine, non lo smazzo
-
-#### creazione: c+2 r & n+3 w
-manca la parte di aggiornamento dell'AdminPage
-|  qt   | tipo  | desc                                                   |
-| :---: | :---: | ------------------------------------------------------ |
-|   1   |   r   | service/current per sapere lastOrderID                 |
-|   1   |   w   | service/current per aggiornare lastOrderID e prezzo    |
-|   1   |   w   | in service/current/orders per creare un nuovo ordine   |
-|   n   |   w   | in service/current/courses per creare le nuove portate |
-|   1   |   w   | per aggiornare le quantità in storage                  |
-|   c   |   r   | per aggiornare le quantità sulle UI della cassa        |
-|   1   |   r   | per aggiornare l'ordine pendente allo smazzo           |
-
-
-#### legame cameriere: n+2 r & 1 w     
-|  qt   | tipo  | desc                                    |
-| :---: | :---: | --------------------------------------- |
-|   1   |   r   | per collegamento cameriere ordine       |
-|   1   |   r   | per rimozione ordine pendente da smazzo |
-|   1   |   w   | per collegamento cameriere ordine       |
-|   n   |   r   | per visualizzare le portate dell'ordine |
-
-
-#### ciclo per ordine: n(2a+3b) r & 3n w
-#### ciclo singola portata: 2a+3b r & 3 w 
-|    qt     | tipo  | desc                      |
-| :-------: | :---: | ------------------------- |
-| cameriere |       |
-|     1     |   w   | cambio stato wait->prep   |
-|     1     |   r   | cambio stato prep->ready  |
-|     1     |   w   | cambio stato ready->compl |
-|  cucina   |       |
-|     a     |   r   | cambio stato wait->prep   |
-|     1     |   w   | cambio stato prep->ready  |
-|   (a-1)   |   r   | cambio stato prep->ready  |
-|  smazzo   |       |
-|     b     |   r   | cambio stato wait->prep   |
-|     b     |   r   | cambio stato prep->ready  |
-|     b     |   r   | cambio stato ready->compl |
-
-
-
-#### totale
-| qt           |       r        |   w   |
-| :----------- | :------------: | :---: |
-| creazione    |      c+2       |  n+3  |
-| collegamento |      n+2       |   1   |
-| ciclo        |    n(2a+3b)    |  3n   |
-| totale       | n(1+2a+3b)+c+4 | 4n+4  |
-
-#### caso reale: 
-n=4 a=2 b=1 c=2 => 38r &  20w
-
-4000 ordini = 152000 r & 80000 w ~ €0.09 & €0.27
-#### caso limite assurdo
-ipotesi: 400 r/ordine - 400 w/ordine
-
-4000 ordini = 1600000 r - 1600000 w -> $0,96 + $2,56
