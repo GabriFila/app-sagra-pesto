@@ -11,12 +11,12 @@ Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pes
   - [Logging](#logging)
   - [Stima dei costi](#stima--dei-cost)
 - [Parte II - implementazione](#parte-ii---implementazione)
-  - [URLs](#urls)
-  - [Codice interfacce](#codice-interfacce)
   - [Funzioni server](#funzoni-server)
   - [Collezioni DB Firestore](#collezioni-db-firestore)
   - [Security rules](#security-rules)
   - [Strutture in codice](#strutture-in-codice)
+  - [URLs](#urls)
+  - [React UIs](#react-uis)
 
 # Parte I - funzionamento
 ## Nozioni base
@@ -180,7 +180,6 @@ manca la parte di aggiornamento dell'AdminPage
 |   c   |   r   | per aggiornare le quantità sulle UI della cassa        |
 |   1   |   r   | per aggiornare l'ordine pendente allo smazzo           |
 
-
 #### legame cameriere: n+2 r & 1 w     
 |  qt   | tipo  | desc                                    |
 | :---: | :---: | --------------------------------------- |
@@ -188,7 +187,6 @@ manca la parte di aggiornamento dell'AdminPage
 |   1   |   r   | per rimozione ordine pendente da smazzo |
 |   1   |   w   | per collegamento cameriere ordine       |
 |   n   |   r   | per visualizzare le portate dell'ordine |
-
 
 #### ciclo per ordine: n(2a+3b) r & 3n w
 #### ciclo singola portata: 2a+3b r & 3 w 
@@ -206,8 +204,6 @@ manca la parte di aggiornamento dell'AdminPage
 |     b     |   r   | cambio stato wait->prep   |
 |     b     |   r   | cambio stato prep->ready  |
 |     b     |   r   | cambio stato ready->compl |
-
-
 
 #### totale
 | qt           |       r        |   w   |
@@ -227,197 +223,10 @@ ipotesi: 400 r/ordine - 400 w/ordine
 4000 ordini = 1600000 r - 1600000 w -> $0,96 + $2,56
 
 
+## Note 
+Avere dati sull'evoluzione delle quantità in magazzino
+
 # Parte II - implementazione
-
-## URLs
-base = url di default (es sagra.genova.cngei.it)
-- home = base
-- login = base/login
-- dashboard = base/admin
-- cucina primi = base/primi
-- cucina secondi = base/secondi
-- bar = base/bar
-- cassa = base/cassa
-- cassa istantanea = base/cassaBar
-- cameriere = base/cameriere
-
-
-## Codice interfacce
-Components:
-- [App](#App)
-  - [PrivateRoute](#PrivateRoute)
-  - [AppBar](#AppBar)
-    - [MenuDrawer](#MenuDrawer)
-    - [PendingOrders](#PendingOrders)
-    - SearchButton
-  - [LoginPage](#LoginPage)
-    - [LoginDialog](#LoginDialog)
-    - [RegisterDialog](#RegisterDialog)
-  - [CashRegisterPage](#CashRegisterPage)
-    - [CashRegisterCourse](#CashRegisterCourse)
-      - [CashRegisterDish](#CashRegisterDish)
-    - [CashRegisterConfirmOrder](#CashRegisterConfirmOrder)
-    - [CashRegisterSearchButton](#CashRegisterSearchButton)
-  - [AdminPage](#AdminPage)
-    - [Storage](#Storage)
-      - [StorageCourse](#StorageCourse)
-        - [StorageDish](#StorageDish) 
-        - [AddDishButton](#AddDishButton) 
-    - [ServiceTab](#ServiceTab) 
-      - [ServiceStarter](#ServiceStarter) 
-      - [ServiceInfo](#ServiceInfo)
-  - [WaiterPage](#WaiterPage)
-    - [WaiterOrder](#WaiterOrder) 
-      - [WaiterOrderCourse](#WaiterOrderCourse)
-        - [DishRow](#DishRow)
-    - [LinkOrderButton](#LinkOrderButton)
-    - [LinkOrderModal](#LinkOrderModal)
-  - [KitchenPage](#KitchenPage)
-    - [KitchenShelf](#KitchenShelf)
-      - [KitchenCourse](#KitchenCourse)
-        - [DishRow](#DishRow)
-    - [KitchenTotal](#KitchenTotal)
-        - [DishRow](#DishRow)
-  - [SmazzoPage](#SmazzoPage)
-
-#### App
-- [ ] material UI theme builder
-- [ ] CSS Baseline
-- [ ] appbar
-- [ ] router with all PrivateRoute for pages except for login
-- [ ] in useEffect setup onetime listener for firebase.auth() to change auth state
-
-#### PrivateRoute
-``` typescript
-const PrivateRoute = ({component: Component, auth, ...rest}) => {
-  return (
-    <Route
-      {...rest}
-      render={(props) => auth === true
-        ? <Component {...props} />
-        : <Redirect to={{pathname: '/login', state: {from: props.location}}} />}
-    />
-  )
-}
-```
-
-#### Appbar
-- [ ] on logout redirect to login page
-- [ ] if userLoggedIn show name, role, logout button
-- [ ] if user role is 'smazzo' show also search button and pending orders
-- [ ] if user role is 'cassa' show also cerca
-
-#### MenuDrawer
-- [ ] contains links to possible pages for user
-
-#### PendingOrders
-- [ ] setup firebase snapshot on orders Collection where state='pending'
-- [ ] render if there are more
-- [ ] a div containing the id of each order
-
-#### LoginPage
-- [ ] notLoggedIn messagge
-- [ ] Login button to trigger LoginDialog
-- [ ] Register button to trigger RegisterDialog
-
-#### LoginDialog
-- [ ] email and password fields
-- [ ] on login redirect to role page
-
-#### RegisterDialog
-- [ ] email, password, confirm password, name fields
-- [ ] on register redirect to role page
-
-#### AdminPage
-
-#### Storage
-- [ ] setup listener for storage collection in which setState to firebase document
-- [ ] map courses of storage to StorageCourse and pass single course via props
-- [ ] StorageState
-
-#### StorageCourse
-- [ ] map dishes in storageCourse to StorageDish and single dish via props
-- [ ] _LAST_ plus button to add dish
-
-#### StorageDish
-- [ ] render infos from props
-- [ ] need to edit qt, price
-- [ ] on edit click enter edit mode, dish row grays out and edit icon becomes check icon to finish, text input enables
-
-#### ServiceTab
-- [ ] setup listener to current service in db
-- [ ] pass serviceState as prop to serviceStarter
-- [ ] pass service info as prop to serviceInfo
-
-#### ServiceStarter
-- [ ] if service is active show red button to end it, i.e. set endDate where endDate is not defined
-- [ ] if service is not active show green button to start it, i.e. create new service with endDate undefined
-
-#### ServiceInfo
-- [ ] display current service info from props
-
-#### WaiterPage
-- [ ] in one-time useEffect listen for orders with waiterId == user.uuid
-- [ ] map orders to WaiterOrders and pass order as prop + docId
-
-##### WaiterOrder
-- [ ] in one-time useEffect listen for courses with orderId equal to prop one and pass Course obj as prop + docId
-- [ ] display table# and orderId
-- [ ] display close button
-- [ ] display unlink button
-
-#### WaiterCourse
-- [ ] when Course state == waiting, display sendToKitchen button
-- [ ] when Course state == prep, display cancelKitchen button
-- [ ] when Course state == ready, display conclude button
-- [ ] map Dishes to DishRow[]
-- [ ] when click a button change state in db appropriately
-
-#### DishRow
-- [ ] display dish shortName e qt
-
-#### LinkOrderButton
-- [ ] floating '+' button to trigger LinkOrderModal
-
-#### LinkOrderModal
-- [ ] modal with 2 inputs, orderNum and tableNum, onClick change tableNum in targetOrder
-
-#### KitchenPage
-- [ ] 2 sections, KitchenShelf (pass ICoursesProp[] docs as prop) and KitchenTotal (pass ICourseProp[] as prop)
-- [ ] in one-time useEffect setup listener for courses were state == 'prep' and kitchen is equal to url slug
-
-#### KitchenShelf
-- [ ] map props to KitchenCourse
-
-#### KitchenCourse
-- [ ] map props to DishRow
-
-#### KitchenTotal
-- [ ] reduce arrayProp to an array of IDIsh and map it to DishRow 
-
-
-## Funzoni server
-#### registrazione nuovo utente
-- [ ] mettere registrazione in back-end per maggiore sicurezza
-#### creazione nuovo ordine (unica transazione)
-- [ ] leggere il counter per l'id dell'ultimo ordine
-- [ ] creare uno nuovo ordine con l'id incrementato di uno
-- [ ] aggiornare lastOrderNum
-- [ ] aggiornare il revenue totale del servizio
-- [ ] aggiornare le quantità nello storage
-- [ ] aggiornare le quantità totale di ordini
-#### trigger creazione ordine istantaneo
-- [ ] aggiornare la revenue del servizio
-- [ ] aggiornare la quantità totale di ordini
-#### trigger cancellazione ordine
-- [ ] aggiornare la quantità totale di ordini
-#### trigger creazione nuovo utente
-- [ ] creare un nuovo record nella collezione ruoliUtenti con campo ruoli pari a []
-#### trigger rimozione utente
-- [ ] eliminare il record corrispondente nella collezione ruoliUtenti
-#### trigger modifica ruoli utenti
-- [ ] modificare le custom claims di un utente mettendole pari a quelle nel documento
-
 
 ## Collezioni DB Firestore
 
@@ -536,6 +345,216 @@ interface ICourseProp extends ICourse
 }
 ```
 
+## URLs
+base = url di default (es sagra.genova.cngei.it)
+- home = base
+- login = base/login
+- dashboard = base/admin
+- cucina primi = base/primi
+- cucina secondi = base/secondi
+- bar = base/bar
+- cassa = base/cassa
+- cassa istantanea = base/cassaBar
+- cameriere = base/cameriere
+## React UIs
 
-## Note 
-Avere dati sull'evoluzione delle quantità in magazzino
+Assumption (need to be checked during development): for all UIs where a user event triggers a change in firestore there is no need to add a reducer but only a listener that acts on a state. Actions will pass through firestore on-device cache first and then propagate to other UI via DB. 
+
+Components:
+- [ ] App
+  - [ ] AppBar
+    - [ ] MenuDrawer
+    - [ ] PendingOrders
+    - [ ] SearchButton 
+  - [ ] PrivateRoute
+  
+App
+- material UI theme builder
+- CSS Baseline
+- appbar
+- router with all PrivateRoute for pages except for login
+- state = {isLoggedIn, roles: string[]}
+- in useEffect setup onetime listener for firebase.auth() to change state
+
+Appbar
+- on logout redirect to login page
+- if userLoggedIn show name, role, logout button
+- if user role is 'smazzo' show also search button and pending orders
+- if user role is 'cassa' show also cerca
+
+
+PendingOrders
+- setup firebase snapshot on orders Collection where state='pending'
+- render if there are more
+- a div containing the id of each order
+
+MenuDrawer
+- contains links to possible pages for user
+
+PrivateRoute
+``` typescript
+const PrivateRoute = ({component, auth, userRoles, requiredRoles}) => {
+  return (
+    <Route
+      render={(props) => auth !== true  ? 
+      <Redirect to={{pathname: '/login', state: {from: props.location}}} />}
+        : userRoles.some(role => requiredRoles.includes(role)) ?
+        <component {...props} /> 
+        // modal for not right role and then redirect to home
+    />
+  )
+}
+```
+
+#### /home
+- [ ] HomePage
+  - [ ] HomeLinks
+
+ HomePage
+
+ HomeLinks
+
+#### /login
+- [ ] LoginPage
+  - [ ] LoginDialog
+  - [ ] RegisterDialog
+
+LoginPage
+- notLoggedIn messagge
+- Login button to trigger LoginDialog
+- Register button to trigger RegisterDialog
+
+LoginDialog
+- email and password fields
+- on login redirect to role page
+
+RegisterDialog
+- email, password, confirm password, name fields
+- on register redirect to role page
+
+#### /cassa
+- [ ] CashRegisterPage
+  - [ ] CashRegisterCourse
+    - [ ] CashRegisterDish
+  - [ ] CashRegisterConfirmOrder
+  - [ ] CashRegisterSearchButton
+
+#### /admin
+- [ ] AdminPage
+  - [ ] Storage
+    - [ ] StorageCourse
+      - [ ] StorageDish 
+      - [ ] AddDishButton 
+  - [ ] ServiceTab 
+    - [ ] ServiceStarter 
+    - [ ] ServiceInfo
+AdminPage
+
+Storage
+- setup listener for storage collection in which setState to firebase document
+- map courses of storage to StorageCourse and pass single course via props
+- StorageState
+
+StorageCourse
+- map dishes in storageCourse to StorageDish and single dish via props
+- _LAST_ plus button to add dish
+
+StorageDish
+- render infos from props
+- need to edit qt, price
+- on edit click enter edit mode, dish row grays out and edit icon becomes check icon to finish, text input enables
+
+ServiceTab
+- setup listener to current service in db
+- pass serviceState as prop to serviceStarter
+- pass service info as prop to serviceInfo
+
+ServiceStarter
+- if service is active show red button to end it, i.e. set endDate where endDate is not defined
+- if service is not active show green button to start it, i.e. create new service with endDate undefined
+
+ServiceInfo
+- display current service info from props
+
+
+#### /cameriere
+  - [ ] WaiterPage
+  - [ ] WaiterOrder 
+    - [ ] WaiterOrderCourse
+      - [ ] DishRow
+  - [ ] LinkOrderButton
+  - [ ] LinkOrderModal
+
+WaiterPage
+- in one-time useEffect listen for orders with waiterId == user.uuid
+- map orders to WaiterOrders and pass order as prop + docId
+
+ WaiterOrder
+- in one-time useEffect listen for courses with orderId equal to prop one and pass Course obj as prop + docId
+- display table# and orderId
+- display close button
+- display unlink button
+
+WaiterCourse
+- when Course state == waiting, display sendToKitchen button
+- when Course state == prep, display cancelKitchen button
+- when Course state == ready, display conclude button
+- map Dishes to DishRow[]
+- when click a button change state in db appropriately
+
+DishRow
+- display dish shortName e qt
+
+LinkOrderButton
+- floating '+' button to trigger LinkOrderModal
+
+LinkOrderModal
+- modal with 2 inputs, orderNum and tableNum, onClick change tableNum in targetOrder
+
+#### /(bar,primi,secondi)
+- [ ] KitchenPage
+  - [ ] KitchenShelf
+    - [ ] KitchenCourse
+      - [ ] DishRow
+  - [ ] KitchenTotal
+      - [ ] DishRow
+
+
+KitchenPage
+- 2 sections, KitchenShelf (pass ICoursesProp[] docs as prop) and KitchenTotal (pass ICourseProp[] as prop)
+- in one-time useEffect setup listener for courses were state == 'prep' and kitchen is equal to url slug
+
+KitchenShelf
+- map props to KitchenCourse
+
+KitchenCourse
+- map props to DishRow
+
+KitchenTotal
+- reduce arrayProp to an array of IDIsh and map it to DishRow 
+
+/smazzo
+- [ ] [SmazzoPage](#SmazzoPage)
+
+
+## Funzoni server
+#### registrazione nuovo utente
+- [ ] mettere registrazione in back-end per maggiore sicurezza
+#### creazione nuovo ordine (unica transazione)
+- [ ] leggere il counter per l'id dell'ultimo ordine
+- [ ] creare uno nuovo ordine con l'id incrementato di uno
+- [ ] aggiornare lastOrderNum
+- [ ] aggiornare il revenue totale del servizio
+- [ ] aggiornare le quantità nello storage
+- [ ] aggiornare le quantità totale di ordini
+#### trigger creazione ordine istantaneo
+- [ ] aggiornare la revenue del servizio
+- [ ] aggiornare la quantità totale di ordini
+#### trigger cancellazione ordine
+- [ ] aggiornare la quantità totale di ordini
+#### trigger creazione nuovo utente
+- [ ] creare un nuovo record nella collezione ruoliUtenti con campo ruoli pari a []
+#### trigger rimozione utente
+- [ ] eliminare il record corrispondente nella collezione ruoliUtenti
+#### trigger modifica ruoli utenti
+- [ ] modificare le custom claims di un utente mettendole pari a quelle nel documento
