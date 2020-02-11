@@ -1,8 +1,8 @@
 # App - Sagra del pesto
-Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pesto di Genova. La prima parte descrive il comportamento dell'app, la seconda ne descrive il funzionamento.
+Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pesto di Genova. La prima parte descrive il l'app, la seconda descrive la guida per l'implementazione.
 
 # Indice
-- [Parte I - comportamento](#parte-i---comportamento)
+- [Parte I - funzionamento](#parte-i---funzionamento)
   - [Nozioni base](#nozioni-base)
   - [Ruoli utente](#ruoli-utente)
   - [Attività dei ruoli](#attività-dei-ruoli)
@@ -10,7 +10,7 @@ Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pes
   - [Pagine](#pagine)
   - [Logging](#logging)
   - [Stima dei costi](#stima--dei-cost)
-- [Parte II - funzionamento](#parte-ii---funzionamento)
+- [Parte II - implementazione](#parte-ii---implementazione)
   - [URLs](#urls)
   - [Codice interfacce](#codice-interfacce)
   - [Funzioni server](#funzoni-server)
@@ -18,7 +18,7 @@ Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pes
   - [Security rules](#security-rules)
   - [Strutture in codice](#strutture-in-codice)
 
-# Parte I - Comportamento
+# Parte I - funzionamento
 ## Nozioni base
 - servizio: sessione di pasto (pranzo, cena)
 - ordini: ordine normale fatto dalla cassa che deve passare attraverso cameriere -> cucina -> smazzo
@@ -158,7 +158,7 @@ Ogni pagina ha una top bar con:
 Loggare l'evoluzioni degli ordini per avere dati statistici
 
 
-## Stima costi
+## Stima dei costi
 
 #### Condizioni e ipotesi
 - Prezzi: 0,06/100000r & 0,18/100000w
@@ -226,9 +226,10 @@ ipotesi: 400 r/ordine - 400 w/ordine
 
 4000 ordini = 1600000 r - 1600000 w -> $0,96 + $2,56
 
-# Parte II - Funzionamento
-## URLs
 
+# Parte II - implementazione
+
+## URLs
 base = url di default (es sagra.genova.cngei.it)
 - home = base
 - login = base/login
@@ -239,9 +240,9 @@ base = url di default (es sagra.genova.cngei.it)
 - cassa = base/cassa
 - cassa istantanea = base/cassaBar
 - cameriere = base/cameriere
-- 
-## Codice interfacce
 
+
+## Codice interfacce
 Components:
 - [App](#App)
   - [PrivateRoute](#PrivateRoute)
@@ -279,15 +280,12 @@ Components:
         - [DishRow](#DishRow)
   - [SmazzoPage](#SmazzoPage)
 
-
-
 #### App
 - [ ] material UI theme builder
 - [ ] CSS Baseline
 - [ ] appbar
 - [ ] router with all PrivateRoute for pages except for login
 - [ ] in useEffect setup onetime listener for firebase.auth() to change auth state
-
 
 #### PrivateRoute
 ``` typescript
@@ -302,6 +300,7 @@ const PrivateRoute = ({component: Component, auth, ...rest}) => {
   )
 }
 ```
+
 #### Appbar
 - [ ] on logout redirect to login page
 - [ ] if userLoggedIn show name, role, logout button
@@ -361,7 +360,6 @@ const PrivateRoute = ({component: Component, auth, ...rest}) => {
 - [ ] in one-time useEffect listen for orders with waiterId == user.uuid
 - [ ] map orders to WaiterOrders and pass order as prop + docId
 
-
 ##### WaiterOrder
 - [ ] in one-time useEffect listen for courses with orderId equal to prop one and pass Course obj as prop + docId
 - [ ] display table# and orderId
@@ -397,6 +395,7 @@ const PrivateRoute = ({component: Component, auth, ...rest}) => {
 #### KitchenTotal
 - [ ] reduce arrayProp to an array of IDIsh and map it to DishRow 
 
+
 ## Funzoni server
 #### registrazione nuovo utente
 - [ ] mettere registrazione in back-end per maggiore sicurezza
@@ -407,25 +406,17 @@ const PrivateRoute = ({component: Component, auth, ...rest}) => {
 - [ ] aggiornare il revenue totale del servizio
 - [ ] aggiornare le quantità nello storage
 - [ ] aggiornare le quantità totale di ordini
-
 #### trigger creazione ordine istantaneo
-- aggiornare la revenue del servizio
-- aggiornare la quantità totale di ordini
-
-
+- [ ] aggiornare la revenue del servizio
+- [ ] aggiornare la quantità totale di ordini
 #### trigger cancellazione ordine
-- aggiornare la quantità totale di ordini
-
-
+- [ ] aggiornare la quantità totale di ordini
 #### trigger creazione nuovo utente
-- creare un nuovo record nella collezione ruoliUtenti con campo ruoli pari a []
-
+- [ ] creare un nuovo record nella collezione ruoliUtenti con campo ruoli pari a []
 #### trigger rimozione utente
-- eliminare il record corrispondente nella collezione ruoliUtenti
-
-
+- [ ] eliminare il record corrispondente nella collezione ruoliUtenti
 #### trigger modifica ruoli utenti
-- modificare le custom claims di un utente mettendole pari a quelle nel documento
+- [ ] modificare le custom claims di un utente mettendole pari a quelle nel documento
 
 
 ## Collezioni DB Firestore
@@ -437,7 +428,6 @@ Ogni documento corrisponde a un [servizio](##servizio) nel tempo. Ogni servizio 
 -  orders
 -  portate
 -  instantOrders
-
 #### users
 Ogni documento corrisponde a un utente dell'app e contiene info aggiuntive. Potrebbe essere utile in futuro
 #### userRoles
