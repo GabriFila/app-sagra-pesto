@@ -105,55 +105,53 @@ Ogni pagina ha una top bar con:
   - un tasto per fare il login o registrarsi
 
 #### Home
-Contiene i link che portano alle altre interfacce
+- link che portano alle altre interfacce
 #### Login
-Contiene i tasti per registrarsi e loggarsi
+- tasti per registrarsi e loggarsi
 #### DashBoard
-una sezione per:
- - modificare il menu
- - modificare le quantità in magazzino
- - aggiungere e modificare piatti
-
-Un tasto per iniziare/concludere il servizio (verde per aprilo e rosso per chiuderlo)
-
-Una sezione per le info su ordini e incassi del servizio corrente e i totali passati
+- una sezione per:
+  - modificare il menu
+  - modificare le quantità in magazzino
+  - aggiungere e modificare piatti
+- Un tasto per iniziare/concludere il servizio (verde per aprilo e rosso per chiuderlo)
+- Una sezione per le info su ordini e incassi del servizio corrente e i totali passati
 #### Cassa istantanea
-Una sezione per ogni portata con i piatti istantanei nel menu. Ogni piatto è una riga con:
-- la quantità rimanente in magazzino
-- un numero per indicare la quantità richiesta dal cliente
-- un tasto '-' per decrementare le quantità richieste dal cliente
-- un tasto '+' per incrementare le quantità richieste dal cliente
+- Una sezione per ogni portata con i piatti istantanei nel menu. Ogni piatto è una riga con:
+  - la quantità rimanente in magazzino
+  - un numero per indicare la quantità richiesta dal cliente
+  - un tasto '-' per decrementare le quantità richieste dal cliente
+  - un tasto '+' per incrementare le quantità richieste dal cliente
 #### Cassa
-Una sezione per ogni portata con i piatti nel menu. Ogni piatto è una riga con:
-- la quantità rimanente in magazzino
-- un numero per indicare la quantità richiesta dal cliente
-- un tasto '-' per decrementare le quantità richieste dal cliente
-- un tasto '+' per incrementare le quantità richieste dal cliente
+- Una sezione per ogni portata con i piatti nel menu. Ogni piatto è una riga con:
+  - la quantità rimanente in magazzino
+  - un numero per indicare la quantità richiesta dal cliente
+  - un tasto '-' per decrementare le quantità richieste dal cliente
+  - un tasto '+' per incrementare le quantità richieste dal cliente
 
-Una sezione contente:
-- il totale dell'ordine
-- un tasto per inviarlo al sistema
-- una box per vedere il numero dell'ordine
-- un tasto per stampare l'ordine
+- Una sezione contente:
+  - il totale dell'ordine
+  - un tasto per inviarlo al sistema
+  - una box per vedere il numero dell'ordine
+  - un tasto per stampare l'ordine
 #### Cameriere
-Un tasto '+' per collegare ordine-cameriere-tavolo
+- Un tasto '+' per collegare ordine-cameriere-tavolo
 
-Un tab per ogni ordine con:
-- il numero dell'ordine 
-- il numero del tavolo
-- le portate dell'ordine, contenente:
-  - un tasto per completare la portata 
-  - un tasto per mandare la portata in preparazione
-  - una riga per piatto della portata contente i piattie le quantità
+- Un tab per ogni ordine con: 
+  - il numero dell'ordine 
+  - il numero del tavolo
+  - le portate dell'ordine, contenente:
+    - un tasto per completare la portata 
+    - un tasto per mandare la portata in preparazione
+    - una riga per piatto della portata contente i piattie le quantità
 #### Cucine/bar
-Una sezione ampia con tutti gli ordini in preparazione della propria cucina, ognuno con un tasto per segnarli completati
+- Una sezione ampia con tutti gli ordini in preparazione della propria cucina, ognuno con un tasto per segnarli completati
 
-Una mini sezione con il totale dei piatti da preparare attualmente
+- Una mini sezione con il totale dei piatti da preparare attualmente
 
 #### Smazzo
- 3 colonne (bar, primi, secondi), contentti le portate degli ordini in corso e il loro stato (preparazione, pronto). Ogni portata contiene:
- - lista dei piatti
- - tasto per concludere la portata
+ - 3 colonne (bar, primi, secondi), contentti le portate degli ordini in corso e il loro stato (preparazione, pronto). Ogni portata contiene:
+   - lista dei piatti
+   - tasto per concludere la portata
 
 ## Logging
 Loggare l'evoluzioni degli ordini per avere dati statistici
