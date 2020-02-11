@@ -184,6 +184,11 @@ Components:
   - [LoginPage](#LoginPage)
     - [LoginDialog](#LoginDialog)
     - [RegisterDialog](#RegisterDialog)
+  - [CashRegisterPage](#CashRegisterPage)
+    - [CashRegisterCourse](#CashRegisterCourse)
+      - [CashRegisterDish](#CashRegisterDish)
+    - [CashRegisterConfirmOrder](#CashRegisterConfirmOrder)
+    - [CashRegisterSearchButton](#CashRegisterSearchButton)
   - [AdminPage](#AdminPage)
     - [Storage](#Storage)
       - [StorageCourse](#StorageCourse)
@@ -195,8 +200,16 @@ Components:
   - [WaiterPage](#WaiterPage)
     - [WaiterOrder](#WaiterOrder) 
       - [WaiterOrderCourse](#WaiterOrderCourse)
-        - [WaiterOrderDish](#WaiterOrderDish)
+        - [DishRow](#DishRow)
     - [LinkOrderButton](#LinkOrderButton)
+    - [LinkOrderModal](#LinkOrderModal)
+  - [KitchenPage](#KitchenPage)
+    - [KitchenShelf](#KitchenShelf)
+      - [KitchenCourse](#KitchenCourse)
+        - [DishRow](#DishRow)
+    - [KitchenTotal](#KitchenTotal)
+        - [DishRow](#DishRow)
+  - [SmazzoPage](#SmazzoPage)
 
 
 
@@ -205,20 +218,12 @@ Components:
 - [ ] CSS Baseline
 - [ ] appbar
 - [ ] router with all PrivateRoute for pages except for login
-- [ ] useReducer for userLoggedIn
-- [ ] AuthStateContext for userLoggedIn state
-- [ ] AuthDispatchContext for userLoggedIn reducers
-- [ ] AuthDispatch actions:
-  - [ ] REGISTER
-  - [ ] SIGN_OUT
-  - [ ] SIGN_IN
 - [ ] in useEffect setup onetime listener for firebase.auth() to change auth state
 
 
 #### PrivateRoute
 ``` typescript
 const PrivateRoute = ({component: Component, auth, ...rest}) => {
-  // access auth from context not from props
   return (
     <Route
       {...rest}
@@ -292,17 +297,37 @@ const PrivateRoute = ({component: Component, auth, ...rest}) => {
 ##### WaiterOrder
 - [ ] in one-time useEffect listen for courses with orderId equal to prop one and pass Course obj as prop + docId
 - [ ] display table# and orderId
-- [ ] diplay close button
+- [ ] display close button
+- [ ] display unlink button
 
 #### WaiterCourse
 - [ ] when Course state == waiting, display sendToKitchen button
 - [ ] when Course state == prep, display cancelKitchen button
 - [ ] when Course state == ready, display conclude button
-- [ ] map Dishes to WaiterOrderDish[]
+- [ ] map Dishes to DishRow[]
 - [ ] when click a button change state in db appropriately
 
-#### WaiterOrderDish
+#### DishRow
 - [ ] display dish shortName e qt
+
+#### LinkOrderButton
+- [ ] floating '+' button to trigger LinkOrderModal
+
+#### LinkOrderModal
+- [ ] modal with 2 inputs, orderNum and tableNum, onClick change tableNum in targetOrder
+
+#### KitchenPage
+- [ ] 2 sections, KitchenShelf (pass ICoursesProp[] docs as prop) and KitchenTotal (pass ICourseProp[] as prop)
+- [ ] in one-time useEffect setup listener for courses were state == 'prep' and kitchen is equal to url slug
+
+#### KitchenShelf
+- [ ] map props to KitchenCourse
+
+#### KitchenCourse
+- [ ] map props to DishRow
+
+#### KitchenTotal
+- [ ] reduce arrayProp to an array of IDIsh and map it to DishRow 
 
 ## Funzoni server
 #### registrazione nuovo utente
@@ -362,7 +387,7 @@ interface IService
   start: Date,
   end: Date,
   totalRevenue: number,   
-  totalPeople: number,    // total number of people
+  totalPeople: number,     // total number of people
   lastOrderNum : number,   // progressive counter for orders
   totalInstantOrders: number
   totalOrders: number
@@ -452,6 +477,7 @@ interface ICourseProp extends ICourse
   id: string  
 }
 ```
+
 
 ## Note 
 Avere dati sull'evoluzione delle quantità in magazzino
