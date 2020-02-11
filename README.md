@@ -128,7 +128,6 @@ Ogni pagina ha una top bar con:
   - un numero per indicare la quantità richiesta dal cliente
   - un tasto '-' per decrementare le quantità richieste dal cliente
   - un tasto '+' per incrementare le quantità richieste dal cliente
-
 - Una sezione contente:
   - il totale dell'ordine
   - un tasto per inviarlo al sistema
@@ -136,7 +135,6 @@ Ogni pagina ha una top bar con:
   - un tasto per stampare l'ordine
 #### Cameriere
 - Un tasto '+' per collegare ordine-cameriere-tavolo
-
 - Un tab per ogni ordine con: 
   - il numero dell'ordine 
   - il numero del tavolo
@@ -146,7 +144,6 @@ Ogni pagina ha una top bar con:
     - una riga per piatto della portata contente i piattie le quantità
 #### Cucine/bar
 - Una sezione ampia con tutti gli ordini in preparazione della propria cucina, ognuno con un tasto per segnarli completati
-
 - Una mini sezione con il totale dei piatti da preparare attualmente
 
 #### Smazzo
@@ -220,7 +217,7 @@ n=4 a=2 b=1 c=2 => 38r &  20w
 #### caso limite assurdo
 ipotesi: 400 r/ordine - 400 w/ordine
 
-4000 ordini = 1600000 r - 1600000 w -> $0,96 + $2,56
+4000 ordini = 1600000 r - 1600000 w = $0,96 + $2,56
 
 
 ## Note 
@@ -274,7 +271,7 @@ interface IInstantOrder
 interface IOrder
 {
   orderNum: number,
-  status: string,     // (pending, accepted, completed, cancelled)
+  status: string,     // (pending, active, completed, deleted)
   waiterName: string, // display name of waiter
   waiterId: string,   // id of waiter to link
   table: number,
@@ -344,25 +341,32 @@ interface ICourseProp extends ICourse
   id: string  
 }
 ```
-
+``` typescript
+interface IOrderLinkInfo
+{
+  orderNum: number,
+  tableNum: number,
+  waiterName: string
+}
+```
 
 ## React UIs
 
 #### URLs
 base = url di default (es sagra.genova.cngei.it)
-- home = base
-- login = base/login
-- admin = base/admin
-- cucina primi = base/primi
-- cucina secondi = base/secondi
-- bar = base/bar
-- cassa = base/cassa
-- cassa istantanea = base/cassaBar
-- cameriere = base/cameriere
+- [home](#base) = base
+- [login](#base/login) = base/login
+- [admin](#base/admin) = base/admin
+- [primi](#basebarprimisecondi) primi = base/primi
+- [secondi](#basebarprimisecondi) secondi = base/secondi
+- [bar](#basebarprimisecondi) = base/bar
+- [cassa](#base/cassa) = base/cassa
+- [cassaBar](#base/cassaBar) istantanea = base/cassaBar
+- [cameriere](#base/cameriere) = base/cameriere
 
 Assumption (need to be checked during development): for all UIs where a user event triggers a change in firestore there is no need to add a reducer but only a listener that acts on a state. Actions will pass through firestore on-device cache first and then propagate to other UI via DB. 
 
-Components:
+
 - [ ] App
   - [ ] AppBar
     - [ ] MenuDrawer
@@ -373,22 +377,23 @@ Components:
 App
 - material UI theme builder
 - CSS Baseline
-- appbar
+- AppBar
 - router with all PrivateRoute for pages except for login
 - state = {isLoggedIn, roles: string[]}
 - in useEffect setup onetime listener for firebase.auth() to change state
 
-Appbar
+AppBar
 - on logout redirect to login page
 - if userLoggedIn show name, role, logout button
 - if user role is 'smazzo' show also search button and pending orders
-- if user role is 'cassa' show also cerca
-
+- if user role is 'cassa' show also search button
 
 PendingOrders
 - setup firebase snapshot on orders Collection where state='pending'
-- render if there are more
-- a div containing the id of each order
+- state = orders where state='pending'
+- if there are more than 1 order show attention sign
+- could signal if an order is waiting for too long
+- display id of each order
 
 MenuDrawer
 - contains links to possible pages for user
@@ -408,15 +413,13 @@ const PrivateRoute = ({component, auth, userRoles, requiredRoles}) => {
 }
 ```
 
-#### /home
+#### base
 - [ ] HomePage
-  - [ ] HomeLinks
 
- HomePage
+HomePage
+- display a link buttons for each app route 
 
- HomeLinks
-
-#### /login
+#### base/login
 - [ ] LoginPage
   - [ ] LoginDialog
   - [ ] RegisterDialog
@@ -427,21 +430,14 @@ LoginPage
 - Register button to trigger RegisterDialog
 
 LoginDialog
-- email and password fields
-- on login redirect to role page
+- fields: email and password
+- on login if user has at least a role redirect to role page else to home
 
 RegisterDialog
-- email, password, confirm password, name fields
-- on register redirect to role page
+- fields: email, password, confirm password, name
+- on register if user has at least a role redirect to role page else to home
 
-#### /cassa
-- [ ] CashRegisterPage
-  - [ ] CashRegisterCourse
-    - [ ] CashRegisterDish
-  - [ ] CashRegisterConfirmOrder
-  - [ ] CashRegisterSearchButton
-
-#### /admin
+#### base/admin
 - [ ] AdminPage
   - [ ] Storage
     - [ ] StorageCourse
@@ -451,11 +447,14 @@ RegisterDialog
     - [ ] ServiceStarter 
     - [ ] ServiceInfo
 AdminPage
+- 2 sections: 
+  - Storage
+  - ServiceTab
 
 Storage
 - setup listener for storage collection in which setState to firebase document
-- map courses of storage to StorageCourse and pass single course via props
-- StorageState
+- state = storage document
+- map courses of storage to StorageCourse and pass single course as prop
 
 StorageCourse
 - map dishes in storageCourse to StorageDish and single dish via props
@@ -464,23 +463,67 @@ StorageCourse
 StorageDish
 - render infos from props
 - need to edit qt, price
-- on edit click enter edit mode, dish row grays out and edit icon becomes check icon to finish, text input enables
+- state = isEditing
+- on editButton click  set isEditing to true
+- if isEditing is true dish row grays out and edit icon becomes check icon to finish, text input enables
+- on checkButton click send update to DB and setEditing to false
 
 ServiceTab
-- setup listener to current service in db
-- pass serviceState as prop to serviceStarter
-- pass service info as prop to serviceInfo
+- setup listener for service where EndDate is null
+- state = current service object
+- if service exists pass isServiceActive = true as prop to serviceStarter else pass false
+- if service exists pass service info as prop to serviceInfo
 
 ServiceStarter
-- if service is active show red button to end it, i.e. set endDate where endDate is not defined
-- if service is not active show green button to start it, i.e. create new service with endDate undefined
+- if isServiceActive is true show red button to end it, i.e. set endDate where endDate is not defined
+- if isServiceActive is not active show green button to start it, i.e. create new service with endDate undefined
 
 ServiceInfo
 - display current service info from props
 
 
-#### /cameriere
-  - [ ] WaiterPage
+#### base/cassa
+- [ ] CashRegisterPage
+  - [ ] CashRegisterCourse
+    - [ ] CashRegisterDish
+  - [ ] CashRegisterConfirmOrder
+  - [ ] CashRegisterSearchButton
+
+CashRegisterPage
+- setup listener for storage
+- state=storage
+- add useReducer:
+  - state: currentOrder
+  - dispatchActions:
+    - ADD_DISH
+    - REMOVE_DISH
+    - SEND_ORDER
+- map courses where inMenu=true in storage to list of CashRegisterCourse
+- one card with CashRegisterConfirmOrder pass totalOrder
+
+CashRegisterCourse
+- map dishes to CashRegisterDish
+
+CashRegisterDish
+- state=qt
+- a row with dish name, qt in storage, '-'. '+' and qt
+- on click of '-' and '+' trigger dispatch action with name of dish
+
+CashRegisterConfirmOrder
+- display total from props
+- on click of sendButton dispatch SEND_ORDER action
+
+#### base/cassaVeloce
+- [ ] CashRegisterPage
+  - [ ] CashRegisterCourse
+    - [ ] CashRegisterDish
+  - [ ] CashRegisterConfirmOrder
+  - [ ] CashRegisterSearchButton
+
+
+
+#### base/cameriere
+- [ ] WaiterPage
   - [ ] WaiterOrder 
     - [ ] WaiterOrderCourse
       - [ ] DishRow
@@ -488,14 +531,14 @@ ServiceInfo
   - [ ] LinkOrderModal
 
 WaiterPage
-- in one-time useEffect listen for orders with waiterId == user.uuid
-- map orders to WaiterOrders and pass order as prop + docId
+- in one-time useEffect listen for orders with waiterId == user.uuid and status='active' (get from firebase.auth().currentUser)
+- map orders to WaiterOrders and pass order as prop + firestoreId
 
  WaiterOrder
 - in one-time useEffect listen for courses with orderId equal to prop one and pass Course obj as prop + docId
 - display table# and orderId
-- display close button
-- display unlink button
+- display close button, on click set status='completed'
+- display unlink button, on click set status='pending'
 
 WaiterCourse
 - when Course state == waiting, display sendToKitchen button
@@ -511,20 +554,20 @@ LinkOrderButton
 - floating '+' button to trigger LinkOrderModal
 
 LinkOrderModal
-- modal with 2 inputs, orderNum and tableNum, onClick change tableNum in targetOrder
+- 2 inputs, orderNum and tableNum
+- 1 'confirm' button, onClick change tableNum in order
 
-#### /(bar,primi,secondi)
-- [ ] KitchenPage
+#### base/(bar,primi,secondi)
   - [ ] KitchenShelf
     - [ ] KitchenCourse
       - [ ] DishRow
   - [ ] KitchenTotal
       - [ ] DishRow
 
-
 KitchenPage
-- 2 sections, KitchenShelf (pass ICoursesProp[] docs as prop) and KitchenTotal (pass ICourseProp[] as prop)
-- in one-time useEffect setup listener for courses were state == 'prep' and kitchen is equal to url slug
+- in one-time useEffect setup listener for courses were status='prep' and kitchen is equal to url slug
+- KitchenShelf pass docs asICourseProp[] prop
+- KitchenTotal pass docs as ICourseProp[] prop
 
 KitchenShelf
 - map props to KitchenCourse
@@ -535,9 +578,25 @@ KitchenCourse
 KitchenTotal
 - reduce arrayProp to an array of IDIsh and map it to DishRow 
 
-/smazzo
 - [ ] [SmazzoPage](#SmazzoPage)
+  - [ ] CourseSection
+    - [ ] SmazzoCourse
 
+SmazzoPage
+- create array with 3 kitchens and map it to a columns in which to render CourseSection and pass kitchen as prop
+
+CourseSection
+- setup listener for courses where kitchen is equal to prop and statua in ['prep','ready']
+- state = array of courses
+- state = array of OrderLinkInfo[]
+- foreach document added get from firestore order where ordernum==course.orderNum and insert in OrderLinkInfo[] a new object with infos
+- foreach document deleted get from firestore order where ordernum==course.orderNum and remove in OrderLinkInfo[] a new object with infos
+- map courses to SmazzoCourse and pass Course and OrderLinkInfo
+
+SmazzoCourse
+- render infos
+- check button, on click set in db course.status='delivered'
+- if status is prep then background is yellowish else greenish
 
 ## Funzoni server
 #### registrazione nuovo utente
