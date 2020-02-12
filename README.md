@@ -3,7 +3,7 @@ Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pes
 
 # Indice
 - [Parte I - funzionamento](#parte-i---funzionamento)
-  - [Nozioni domain](#nozioni-domain)
+  - [Nozioni base](#nozioni-base)
   - [Ruoli utente](#ruoli-utente)
   - [Attività dei ruoli](#attività-dei-ruoli)
   - [Permessi dei ruoli](#permessi-dei-ruoli)
@@ -19,7 +19,7 @@ Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pes
   - [React UIs](#react-uis)
 
 # Parte I - funzionamento
-## Nozioni domain
+## Nozioni base
 - servizio: sessione di pasto (pranzo, cena)
 - ordini: ordine normale fatto dalla cassa che deve passare attraverso cameriere -> cucina -> smazzo
 - ordini istantanei: ordine fatto dal bar che viene consegnato al cliente direttamente
