@@ -3,7 +3,7 @@ Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pes
 
 # Indice
 - [Parte I - funzionamento](#parte-i---funzionamento)
-  - [Nozioni base](#nozioni-base)
+  - [Nozioni domain](#nozioni-domain)
   - [Ruoli utente](#ruoli-utente)
   - [Attività dei ruoli](#attività-dei-ruoli)
   - [Permessi dei ruoli](#permessi-dei-ruoli)
@@ -19,7 +19,7 @@ Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pes
   - [React UIs](#react-uis)
 
 # Parte I - funzionamento
-## Nozioni base
+## Nozioni domain
 - servizio: sessione di pasto (pranzo, cena)
 - ordini: ordine normale fatto dalla cassa che deve passare attraverso cameriere -> cucina -> smazzo
 - ordini istantanei: ordine fatto dal bar che viene consegnato al cliente direttamente
@@ -95,7 +95,7 @@ Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pes
 Ogni pagina ha una top bar con:
 - un hamburger per mostrare il menu con le interfacce
 - se loggato:
-  - il nome dell'utente e il tipo di interfaccia (es: Furio-dashboard)
+  - il nome dell'utente e il tipo di interfaccia (es: Furio-admim)
   - un tasto per fare il logout
   - se ruolo è 'smazzo'
     - una sezione con gli ordini pendenti
@@ -109,7 +109,7 @@ Ogni pagina ha una top bar con:
 - link che portano alle altre pagine
 #### Login
 - tasti per registrarsi e loggarsi
-#### DashBoard
+#### Admin
 - una sezione per:
   - modificare il menu
   - modificare le quantità in magazzino
@@ -322,7 +322,7 @@ interface IStorageDish
 {
   name: string,
   shortName: string,
-  storage: number,
+  storageQt: number,
   price: number,
   inMenu: boolean
 }
@@ -350,23 +350,31 @@ interface IOrderLinkInfo
 }
 ```
 
+``` typescript
+interface IReducerAction
+{
+  type: string,
+  payload: unknown,
+}
+```
+
 ## React UIs
 
 #### URLs
-base = url di default (es sagra.genova.cngei.it)
-- [home](#base) = base
-- [login](#base/login) = base/login
-- [admin](#base/admin) = base/admin
-- [primi](#basebarprimisecondi) primi = base/primi
-- [secondi](#basebarprimisecondi) secondi = base/secondi
-- [bar](#basebarprimisecondi) = base/bar
-- [cassa](#base/cassa) = base/cassa
-- [cassaBar](#base/cassaBar) istantanea = base/cassaBar
-- [cameriere](#base/cameriere) = base/cameriere
+domain = (e.g. sagra.genova.cngei.it)
+- [home](#domain) = domain
+- [login](#domain/login) = domain/login
+- [admin](#domain/admin) = domain/admin
+- [primi](#basebarprimisecondi) = domain/primi
+- [secondi](#basebarprimisecondi) = domain/secondi
+- [bar](#basebarprimisecondi) = domain/bar
+- [cassa](#domain/cassa) = domain/cassa
+- [cassaBar](#domain/cassaBar) istantanea = domain/cassaBar
+- [cameriere](#domain/cameriere) = domain/cameriere
 
-Assumption (need to be checked during development): for all UIs where a user event triggers a change in firestore there is no need to add a reducer but only a listener that acts on a state. Actions will pass through firestore on-device cache first and then propagate to other UI via DB. 
+Assumption (need to be checked during development): for all UIs where a user event triggers a change in firestore there is no need to add a reducer but only a listener that acts on a state. Actions will pass through firestore on-device cache first and then propagate to other UI via DB and then trigger the snapshot. In those components where a reducer is needed there should not be the need also for context, should be maximum 2-level prop-drilling.
 
-
+Base structure:
 - [ ] App
   - [ ] AppBar
     - [ ] MenuDrawer
@@ -379,31 +387,31 @@ App
 - CSS Baseline
 - AppBar
 - router with all PrivateRoute for pages except for login
-- state = {isLoggedIn, roles: string[]}
+- state = {isLoggedIn : boolean, roles: string[], name: string}
 - in useEffect setup onetime listener for firebase.auth() to change state
 
-AppBar
+AppBar (isUserLoggedIn, role)
 - on logout redirect to login page
 - if userLoggedIn show name, role, logout button
-- if user role is 'smazzo' show also search button and pending orders
-- if user role is 'cassa' show also search button
+- if user role is 'smazzo' and url is '/smazzo' show also search button and pending orders
+- if user role is 'cassa' and url is '/cassa' show also search button
 
-PendingOrders
+PendingOrders 
 - setup firebase snapshot on orders Collection where state='pending'
 - state = orders where state='pending'
-- if there are more than 1 order show attention sign
+- if there are more than 1 order show attention icon
 - could signal if an order is waiting for too long
 - display id of each order
 
-MenuDrawer
-- contains links to possible pages for user
+MenuDrawer (userRoles)
+- contains links to possible pages for user based on userRoles
 
 PrivateRoute
 ``` typescript
-const PrivateRoute = ({component, auth, userRoles, requiredRoles}) => {
+const PrivateRoute = ({component, authed, userRoles, requiredRoles}) => {
   return (
     <Route
-      render={(props) => auth !== true  ? 
+      render={(props) => authed !== true  ? 
       <Redirect to={{pathname: '/login', state: {from: props.location}}} />}
         : userRoles.some(role => requiredRoles.includes(role)) ?
         <component {...props} /> 
@@ -412,14 +420,14 @@ const PrivateRoute = ({component, auth, userRoles, requiredRoles}) => {
   )
 }
 ```
-
-#### base
+#### domain/
 - [ ] HomePage
 
-HomePage
-- display a link buttons for each app route 
+HomePage (userRoles)
+- display a link buttons for each app route reachable by user based on userRoles
+- if userRole is empty show message to go to superAdmin and give role
 
-#### base/login
+#### domain/login
 - [ ] LoginPage
   - [ ] LoginDialog
   - [ ] RegisterDialog
@@ -437,7 +445,7 @@ RegisterDialog
 - fields: email, password, confirm password, name
 - on register if user has at least a role redirect to role page else to home
 
-#### base/admin
+#### domain/admin
 - [ ] AdminPage
   - [ ] Storage
     - [ ] StorageCourse
@@ -452,37 +460,37 @@ AdminPage
   - ServiceTab
 
 Storage
-- setup listener for storage collection in which setState to firebase document
-- state = storage document
+- setup listener for storage collection
+- state = storage
 - map courses of storage to StorageCourse and pass single course as prop
 
-StorageCourse
-- map dishes in storageCourse to StorageDish and single dish via props
+StorageCourse (storageCourse : IStorageCourse)
+- map dishes in storageCourse to StorageDish and pass single dish as prop
 - _LAST_ plus button to add dish
 
-StorageDish
+StorageDish (storageDish : IStorageDish)
 - render infos from props
-- need to edit qt, price
+- need to be able to edit qt, price
 - state = isEditing
-- on editButton click  set isEditing to true
-- if isEditing is true dish row grays out and edit icon becomes check icon to finish, text input enables
-- on checkButton click send update to DB and setEditing to false
+- on editButton click set isEditing to true
+- if isEditing==true dish row grays out and edit icon becomes check icon to finish, text input enables
+- on checkButton click, update strogae in DB and set isEditing=false
 
 ServiceTab
 - setup listener for service where EndDate is null
-- state = current service object
-- if service exists pass isServiceActive = true as prop to serviceStarter else pass false
-- if service exists pass service info as prop to serviceInfo
+- state = current service
+- if service exists pass isServiceActive=true as prop to serviceStarter else pass false
+- if service exists  display ServiceInfo and pass service as prop
 
-ServiceStarter
+ServiceStarter (isServiceActive : boolean)
 - if isServiceActive is true show red button to end it, i.e. set endDate where endDate is not defined
 - if isServiceActive is not active show green button to start it, i.e. create new service with endDate undefined
 
-ServiceInfo
+ServiceInfo (service : IService)
 - display current service info from props
 
 
-#### base/cassa
+#### domain/cassa
 - [ ] CashRegisterPage
   - [ ] CashRegisterCourse
     - [ ] CashRegisterDish
@@ -491,38 +499,60 @@ ServiceInfo
 
 CashRegisterPage
 - setup listener for storage
-- state=storage
-- add useReducer:
-  - state: currentOrder
-  - dispatchActions:
-    - ADD_DISH
-    - REMOVE_DISH
+- filter courses from storage where inMenu==true and set them to state(storage)
+- useState = storage : IStorageCourse[]
+- useReducer =
+  - newOrder : {orderNum: number, total: number, courses: IStorageCourse[]}
+  - dispatchActions: IReducerAction
+    - (ADD_DISH, dishName)
+    - (REMOVE_DISH, dishName)
     - SEND_ORDER
-- map courses where inMenu=true in storage to list of CashRegisterCourse
-- one card with CashRegisterConfirmOrder pass totalOrder
+    - PRINT_ORDER
+- map state(storage) to list of CashRegisterCourse, if in newOrder there is a course with same name pass it as prop
+- one card with CashRegisterConfirmOrder pass newOrder reduced to total
 
-CashRegisterCourse
-- map dishes to CashRegisterDish
+CashRegisterCourse (courseInMenu : IStorageCourse, courseInOrder ?: IStorageCourse, dispatch)
+- map dishes to CashRegisterDish, if in courseInOrder there is a dish with the same name pass the qt as prop as prop
 
-CashRegisterDish
-- state=qt
-- a row with dish name, qt in storage, '-'. '+' and qt
+CashRegisterDish (courseInMenu : IDish, newOrderQt : number, dispatch)
+- a row with dish name, qt in storage, '-'. '+' and newOrderQt
 - on click of '-' and '+' trigger dispatch action with name of dish
 
 CashRegisterConfirmOrder
 - display total from props
 - on click of sendButton dispatch SEND_ORDER action
 
-#### base/cassaVeloce
-- [ ] CashRegisterPage
+cash register reducer actions:
+- ADD_DISH:
+  - copy state and find course where dishes includes a dish with name = payload, increment qt and recalculate total
+- REMOVE_DISH:
+  - copy state and find course where dishes includes a dish with name = payload, decrement qt and recalculate total
+- SEND_ORDER:
+  - call createOrder firebase cloud function, then set orderNum as the one received
+- PRINT_ORDER:
+  - set qt of newOrder to 0, and print...
+#### domain/cassaBar
+- [ ] InstantCashRegisterPage
   - [ ] CashRegisterCourse
     - [ ] CashRegisterDish
-  - [ ] CashRegisterConfirmOrder
-  - [ ] CashRegisterSearchButton
+  - [ ] InstantCashRegisterConfirmOrder
 
+InstantCashRegisterPage
+- setup firestore listener for storage
+- state = all courses in storage where isInstant=true
+- add useReducer:
+  - state: {newOrder : StorageCourse[]}
+  - dispatchActions:
+    - ADD_DISH
+    - REMOVE_DISH
+    - SEND_ORDER
+- map state to CashRegisterCourse and pass single course as props
 
+InstantCashRegisterConfirmOrder
+- display total from props
+- on click of sendButton dispatch SEND_ORDER action
 
-#### base/cameriere
+#### domain/cameriere
 - [ ] WaiterPage
   - [ ] WaiterOrder 
     - [ ] WaiterOrderCourse
@@ -557,7 +587,7 @@ LinkOrderModal
 - 2 inputs, orderNum and tableNum
 - 1 'confirm' button, onClick change tableNum in order
 
-#### base/(bar,primi,secondi)
+#### domain/(bar,primi,secondi)
   - [ ] KitchenShelf
     - [ ] KitchenCourse
       - [ ] DishRow
