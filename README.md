@@ -1,9 +1,10 @@
 # App - Sagra del pesto
-Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pesto di Genova. La prima parte descrive il l'app, la seconda descrive la guida per l'implementazione.
+Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pesto di Genova. La prima parte descrive il funzionamento dell'app, la seconda descrive la guida per l'implementazione.
 
 # Indice
 - [Parte I - funzionamento](#parte-i---funzionamento)
-  - [Nozioni base](#nozioni-base)
+  - [Obbiettivi](#obbiettivi)
+  - [Evoluzione di un ordine](#evoluzione-di-un-ordine)
   - [Ruoli utente](#ruoli-utente)
   - [Attività dei ruoli](#attività-dei-ruoli)
   - [Permessi dei ruoli](#permessi-dei-ruoli)
@@ -19,28 +20,54 @@ Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pes
   - [React UIs](#react-uis)
 
 # Parte I - funzionamento
-## Nozioni base
+## Obbiettivi
+L'applicazione ha l'obbiettivo di migliorare la gestione degli ordini della sagra, fornendo inoltre:
+- miglior interazione tra i vari organi operativi
+- aggiornamenti in tempo reale sullo stato degli ordini
+- maggiore visione d'insieme da parte di smazzo e responsabili
+- interfacce personalizzate per ciascun utente in base al suo ruolo
+- possibilità di analisi dei dati post-sagra per poter migliorare le spese e l'organizzazione dell'evento
+- un'architettura google cloud per una maggiore affidabilità e resilienza dei dati
+- un prodotto espandibile e modificabile per fondare le basi dell'informatizzazione della sezione di Genova
+
+## Evoluzione di un ordine
+Alcune nozioni fondamentali riguardo l'app:
 - servizio: sessione di pasto (pranzo, cena)
-- ordini: ordine normale fatto dalla cassa che deve passare attraverso cameriere -> cucina -> smazzo
-- ordini istantanei: ordine fatto dal bar che viene consegnato al cliente direttamente
-- portate: elementi dell'ordine elaborati da una singola cucina
-- piatti: elementi di ogni portata
+- ordine: ordine normale fatto dalla cassa che deve passare attraverso cameriere -> cucina -> smazzo
+- ordine istantaneo: ordine fatto dal bar che viene consegnato al cliente direttamente
+- portata: elemento dell'ordine elaborato da una singola cucina
+- piatto: elemento di una portata
+
+L'app prevedere che ogni membro attivo durante un servizio possieda un account dell'app (a parte forse alcuni camerieri). L'app permette l'accesso esclusivamente agli utenti loggati, con certe limitazioni in base al ruolo. Un utente può avere più ruoli.
+
+L'evoluzione ideale di un ordine è la seguente:
+1. il cliente arriva alla cassa
+2. il cassiere manda l'ordine al sistema
+3. lo smazzo vede la presenza di un ordine non ancora collegato a un cameriere
+4. il cliente si siede
+5. il cameriere collega l'ordine al suo tavolo
+6. il cameriere invia una portata alle cucine
+7. la cucina responsabile della portata vede la presenza di una portata da preparare
+8. la cucina prepara la portata e la segna come 'pronta'
+9. lo smazzo e il cameriere vedono l'update
+10. lo smazzo controlla che l'ordine si stato realizzato correttamente e lo passa al cameriere per portarlo al tavolo
+11. si ripete dal punto 4 al puntto 10 per ogni portata
 
 ## Ruoli Utente 
-- Super Admin
-- Admin
-- Cassiere
-- Cameriere
-- Bar
-- Primi
-- Secondi
-- Smazzo
+- [Super Admin](#super-admin)
+- [Admin](#admin)
+- [Cassiere](#cassiere)
+- [Cameriere](#cameriere)
+- [Bar](#bar)
+- [Primi](#primi)
+- [Secondi](#secondi)
+- [Smazzo](#smazzo)
 
 ## Attività dei ruoli
 #### Super admin
-- modifica ruoli utente 
+- modificare i ruoli degli utenti 
 #### Admin
-- modificare la quantità di cibo rimanente
+- modificare il 'magazzino'
 - modificare il menu
 - iniziare e concludere il servizio
 - vedere info su incassi e ordini correnti
@@ -73,12 +100,14 @@ Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pes
 
 ## Permessi dei ruoli
 
+#### modifica ruoli utente
+-  superAdmin
 #### creazione ordine
 - cassa solo ordini 'normali'
 - bar solo ordini istantanei
 #### modifica ordini selettiva 
 - cassa modifica solo portate e stato
-- smazzo modifica stato
+- smazzo modifica solo lo stato
 - cameriere modifica solo suoi ordini
 - bar modifica solo portate di bere e dolci
 - cucina primi modifica solo portate di primi
@@ -87,8 +116,6 @@ Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pes
 - admin
 #### inizio/fine servizio
 - admin
-#### modifica ruoli utente
--  superAdmin
 
 ## Pagine
 
@@ -496,6 +523,8 @@ ServiceInfo (service : IService)
     - [ ] CashRegisterDish
   - [ ] CashRegisterConfirmOrder
   - [ ] CashRegisterSearchButton
+  - 
+
 
 CashRegisterPage
 - setup listener for storage
@@ -508,6 +537,7 @@ CashRegisterPage
     - (REMOVE_DISH, dishName)
     - SEND_ORDER
     - PRINT_ORDER
+    - RESET_ORDER
 - map state(storage) to list of CashRegisterCourse, if in newOrder there is a course with same name pass it as prop
 - one card with CashRegisterConfirmOrder pass newOrder reduced to total
 
@@ -518,9 +548,12 @@ CashRegisterDish (courseInMenu : IDish, newOrderQt : number, dispatch)
 - a row with dish name, qt in storage, '-'. '+' and newOrderQt
 - on click of '-' and '+' trigger dispatch action with name of dish
 
-CashRegisterConfirmOrder
+CashRegisterConfirmOrder (total: number, orderNum ?: number )
 - display total from props
-- on click of sendButton dispatch SEND_ORDER action
+- display sendButton, on click of sendButton dispatch SEND_ORDER action
+- display send button on click of printButton dispatch PRINT_ORDER action
+- display orderNum
+- display resetOrderButton
 
 cash register reducer actions:
 - ADD_DISH:
@@ -530,7 +563,17 @@ cash register reducer actions:
 - SEND_ORDER:
   - call createOrder firebase cloud function, then set orderNum as the one received
 - PRINT_ORDER:
-  - set qt of newOrder to 0, and print...
+  - trigger print function
+- RESET_ORDER:
+ - set newOrder to [] and orderNum to undefined 
+
+
+CashRegisterSearchButton
+- on click trigger UpdateOrderModal
+
+UpdateOrderModal
+
+
 #### domain/cassaBar
 - [ ] InstantCashRegisterPage
   - [ ] CashRegisterCourse
