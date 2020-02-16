@@ -9,15 +9,15 @@ Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pes
   - [Attività dei ruoli](#attività-dei-ruoli)
   - [Permessi dei ruoli](#permessi-dei-ruoli)
   - [Pagine](#pagine)
-  - [Logging](#logging)
   - [Stima dei costi](#stima--dei-cost)
 - [Parte II - implementazione](#parte-ii---implementazione)
-  - [Funzioni server](#funzoni-server)
-  - [Collezioni DB Firestore](#collezioni-db-firestore)
+  - [Cloud functions](#cloud-functions)
+  - [Firestore DB structure](#firestore-db-structure)
   - [Security rules](#security-rules)
-  - [Strutture in codice](#strutture-in-codice)
+  - [Typescript Interfaces](#typescript-interfaces)
   - [URLs](#urls)
-  - [React UIs](#react-uis)
+  - [React Components](#react-components)
+  - [Logging](#logging)
 
 # Parte I - funzionamento
 ## Obbiettivi
@@ -178,10 +178,6 @@ Ogni pagina ha una top bar con:
    - lista dei piatti
    - tasto per concludere la portata
 
-## Logging
-Loggare l'evoluzioni degli ordini per avere dati statistici
-
-
 ## Stima dei costi
 
 #### Condizioni e ipotesi
@@ -252,24 +248,55 @@ Avere dati sull'evoluzione delle quantità in magazzino
 
 # Parte II - implementazione
 
-## Collezioni DB Firestore
+## Firestore DB structure
 
 #### storage
-Un documento con tutto lo storage
+Only one document which contains an IStorage Object
 #### services
-Ogni documento corrisponde a un [servizio](##servizio) nel tempo. Ogni servizio ha tre sottocollezioni: 
--  orders
--  portate
--  instantOrders
+Each document is a single service located in time. Each service has 3 subcollections:
+- instantOrders
+- orders
+- courses
 #### users
-Ogni documento corrisponde a un utente dell'app e contiene info aggiuntive. Potrebbe essere utile in futuro
+Each document corresponds to a user in the app, it could be useful for future use.
 #### userRoles
-Ogni oggetto contiene una proprietà contenenete i ruoli degli utenti. Modificabili solo dal superAdmin. L'ID di ogni documento è 'r_${uid}'
+Each document corresponds to a user and contains a 'roles' property which is a string[] which contains all roles of the user. Each document is linked with a user by its id, building it as  `r_${uid}`.
 
 ## Security rules
+match / {
+  function isLoggedIn() {
+    return request.auth.id != null;
+  }
+
+  function hasRole(reqRole) {
+    request.auth.token.reqRole == true; 
+  }
+
+  match /userRoles {
+    allow read: if false;
+    allow write: if false;
+  }
+
+  match /users  {
+    allow read: if false;
+    allow write: if false;
+  }
+
+  match /storage {
+    allow read: if isLoggedIn() && hasRole(admin) || hasRole(cassa);
+    allow write: if isLoggedIn();
+  }
+  match /services/{serviceID} {
+    match /orders/{orderID} {}
+    match /courses/{courseID} {}
+    match /instantOrders/{instantOrderID} {}
+  }
+  allow read: if false;
+  allow write: if true;
+}
 
 
-## Strutture in Firestore
+## Typescript Interfaces
 
 #### services collection
 ``` typescript
@@ -354,8 +381,7 @@ interface IStorageDish
   inMenu: boolean
 }
 ```
-## Strutture in UIs
-for each interface extend with id prop
+
 ``` typescript
 interface IOrderProp extends IOrder
 {
@@ -385,7 +411,7 @@ interface IReducerAction
 }
 ```
 
-## React UIs
+## React Components
 
 #### URLs
 domain = (e.g. sagra.genova.cngei.it)
@@ -399,7 +425,7 @@ domain = (e.g. sagra.genova.cngei.it)
 - [cassaBar](#domain/cassaBar) istantanea = domain/cassaBar
 - [cameriere](#domain/cameriere) = domain/cameriere
 
-Assumption (need to be checked during development): for all UIs where a user event triggers a change in firestore there is no need to add a reducer but only a listener that acts on a state. Actions will pass through firestore on-device cache first and then propagate to other UI via DB and then trigger the snapshot. In those components where a reducer is needed there should not be the need also for context, should be maximum 2-level prop-drilling.
+Assumption (need to be checked during development): for all Components where a user event triggers a change in firestore there is no need to add a reducer but only a listener that acts on a state. Actions will pass through firestore on-device cache first and then propagate to other UI via DB and then trigger the snapshot. In those components where a reducer is needed there should not be the need also for context, should be maximum 2-level prop-drilling.
 
 Base structure:
 - [ ] App
@@ -671,7 +697,7 @@ SmazzoCourse
 - check button, on click set in db course.status='delivered'
 - if status is prep then background is yellowish else greenish
 
-## Funzoni server
+## Cloud functions
 #### registrazione nuovo utente
 - [ ] mettere registrazione in back-end per maggiore sicurezza
 #### creazione nuovo ordine (unica transazione)
@@ -692,3 +718,6 @@ SmazzoCourse
 - [ ] eliminare il record corrispondente nella collezione ruoliUtenti
 #### trigger modifica ruoli utenti
 - [ ] modificare le custom claims di un utente mettendole pari a quelle nel documento
+
+## Logging
+L'app deve loggare l'evoluzioni degli ordini per avere dati statistici
