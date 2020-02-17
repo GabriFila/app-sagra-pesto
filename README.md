@@ -146,7 +146,9 @@ Ogni pagina ha una top bar con:
 <div style="width:150px; height:100px">
 ![Admin Page](/mockups/Admin.png#bordered "Admin Page")
 </div>
+<div style="width:150px; height:100px">
 <img src="mockups/Admin.png#bordered" style="border:4px solid black"/>
+</div>
 
 #### Cassa istantanea
 - Una sezione per ogni portata con i piatti istantanei nel menu. Ogni piatto è una riga con:
