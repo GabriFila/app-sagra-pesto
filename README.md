@@ -19,6 +19,8 @@ Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pes
   - [React Components](#react-components)
   - [Logging](#logging)
 
+<div style="page-break-after: always;"></div>
+
 # Parte I - funzionamento
 ## Obbiettivi
 L'applicazione ha l'obbiettivo di migliorare la gestione degli ordini della sagra, fornendo:
@@ -55,6 +57,7 @@ L'evoluzione temporale di un ordine è la seguente:
 10. lo smazzo controlla che l'ordine si stato realizzato correttamente e lo passa al cameriere per portarlo al tavolo
 11. si ripete dal punto 4 al puntto 10 per ogni portata
 
+<div style="page-break-after: always;"></div>
 
 ## Ruoli Utente 
 - [Super Admin](#super-admin)
@@ -118,6 +121,8 @@ L'evoluzione temporale di un ordine è la seguente:
 - Cameriere modifica tutto solo i propri ordini
 - Cucine modificano solo le proprie portate
 
+<div style="page-break-after: always;"></div>
+
 ## Pagine
 
 Ogni pagina ha una top bar con:
@@ -131,11 +136,15 @@ Ogni pagina ha una top bar con:
   - se ruolo è cassa:
     - un tasto cerca per modificare un ordine già fatto
 
+<div style="page-break-after: always;"></div>
+
 #### Home
 - Link che portano alle altre pagine
 <table><tr><td>
   <img src="mockups/home.png" height=400 style="border: 2px solid DimGray; border-radius: 3px" style="border: 2px solid DimGray; border-radius: 3px">
 </td></tr></table>
+
+<div style="page-break-after: always;"></div>
 
 #### Login
 - Tasti per registrarsi o loggarsi
@@ -143,6 +152,8 @@ Ogni pagina ha una top bar con:
 <table><tr><td>
   <img src="mockups/login.png" height=400 style="border: 2px solid DimGray; border-radius: 3px">
 </td></tr></table>
+
+<div style="page-break-after: always;"></div>
 
 #### Admin
 - Una sezione per:
@@ -156,6 +167,8 @@ Ogni pagina ha una top bar con:
   <img src="mockups/admin.png" height=400 style="border: 2px solid DimGray; border-radius: 3px">
 </td></tr></table>
 
+<div style="page-break-after: always;"></div>
+
 #### Cassa istantanea
 - Una sezione per ogni portata con i piatti istantanei nel menu. Ogni piatto è una riga con:
   - la quantità rimanente in magazzino
@@ -166,10 +179,12 @@ Ogni pagina ha una top bar con:
 - Una sezione con:
   - il totale dell'ordine
   - un tasto per confermare l'ordine
-  - 
+
 <table><tr><td>
   <img src="mockups/cassaBar.png" height=400 style="border: 2px solid DimGray; border-radius: 3px">
 </td></tr></table>
+
+<div style="page-break-after: always;"></div>
 
 #### Cassa
 - Una sezione per ogni portata con i piatti nel menu. Ogni piatto è una riga con:
@@ -189,6 +204,8 @@ Ogni pagina ha una top bar con:
   <img src="mockups/cassa.png" height=400 style="border: 2px solid DimGray; border-radius: 3px">
 </td></tr></table>
 
+<div style="page-break-after: always;"></div>
+
 #### Cameriere
 - Un tasto '+' per collegare ordine-cameriere-tavolo
 - Una sezione per ogni ordine con: 
@@ -199,10 +216,11 @@ Ogni pagina ha una top bar con:
     - un tasto per completare la portata 
     - un tasto per mandare la portata in preparazione
     - una riga per piatto con nome e quantità
-    - 
 
 <table><tr><td>
   <img src="mockups/cameriere.png" height=400 style="border: 2px solid DimGray; border-radius: 3px" align="center">
+
+<div style="page-break-after: always;"></div>
 
 #### Cucine/bar
 - Una sezione ampia con tutti gli ordini in preparazione della propria cucina, ognuno con un tasto per segnarli completati
@@ -212,6 +230,8 @@ Ogni pagina ha una top bar con:
   <img src="mockups/cucina.png" height=400 style="border: 2px solid DimGray; border-radius: 3px">
 </td></tr></table>
 
+<div style="page-break-after: always;"></div>
+
 #### Smazzo
  - 3 colonne (bar, primi, secondi), contentti le portate degli ordini in corso e il loro stato (preparazione, pronto). Ogni portata contiene:
    - lista dei piatti
@@ -220,6 +240,9 @@ Ogni pagina ha una top bar con:
 <table><tr><td>
   <img src="mockups/smazzo.png" height=400 style="border: 2px solid DimGray; border-radius: 3px">
 </td></tr></table>
+
+<div style="page-break-after: always;"></div>
+
 
 ## Stima dei costi
 
@@ -231,7 +254,9 @@ Ogni pagina ha una top bar con:
 - b smazzi collegati ~ 1
 - il cameriere conclude l'ordine, non lo smazzo
 
-#### creazione: c+2 r & n+3 w
+#### Creazione ordine:
+c+2 r & n+3 w
+
 manca la parte di aggiornamento dell'AdminPage
 |  qt   | tipo  | desc                                                   |
 | :---: | :---: | ------------------------------------------------------ |
@@ -243,7 +268,7 @@ manca la parte di aggiornamento dell'AdminPage
 |   c   |   r   | per aggiornare le quantità sulle UI della cassa        |
 |   1   |   r   | per aggiornare l'ordine pendente allo smazzo           |
 
-#### legame cameriere: n+2 r & 1 w     
+#### Legame cameriere: n+2 r & 1 w     
 |  qt   | tipo  | desc                                    |
 | :---: | :---: | --------------------------------------- |
 |   1   |   r   | per collegamento cameriere ordine       |
@@ -268,7 +293,7 @@ manca la parte di aggiornamento dell'AdminPage
 |     b     |   r   | cambio stato prep->ready  |
 |     b     |   r   | cambio stato ready->compl |
 
-#### totale
+#### Totale
 | qt           |       r        |   w   |
 | :----------- | :------------: | :---: |
 | creazione    |      c+2       |  n+3  |
@@ -276,11 +301,11 @@ manca la parte di aggiornamento dell'AdminPage
 | ciclo        |    n(2a+3b)    |  3n   |
 | totale       | n(1+2a+3b)+c+4 | 4n+4  |
 
-#### caso reale: 
+#### Caso reale: 
 n=4 a=2 b=1 c=2 => 38r &  20w
 
 4000 ordini = 152000 r & 80000 w ~ €0.09 & €0.27
-#### caso limite assurdo
+#### Caso limite assurdo
 ipotesi: 400 r/ordine - 400 w/ordine
 
 4000 ordini = 1600000 r - 1600000 w = $0,96 + $2,56
@@ -288,6 +313,8 @@ ipotesi: 400 r/ordine - 400 w/ordine
 
 ## Note 
 Avere dati sull'evoluzione delle quantità in magazzino
+
+<div style="page-break-after: always;"></div>
 
 # Parte II - implementazione
 
@@ -304,6 +331,8 @@ Each document is a single service located in time. Each service has 3 subcollect
 Each document corresponds to a user in the app, it could be useful for future use.
 #### userRoles
 Each document corresponds to a user and contains a 'roles' property which is a string[] which contains all roles of the user. Each document is linked with a user by its id, building it as  `r_${uid}`.
+
+<div style="page-break-after: always;"></div>
 
 ## Security rules
 ``` js
@@ -339,6 +368,7 @@ match / {
   allow write: if true;
 }
 ```
+<div style="page-break-after: always;"></div>
 
 ## Typescript Interfaces
 
@@ -454,6 +484,8 @@ interface IReducerAction
   payload: unknown,
 }
 ```
+
+<div style="page-break-after: always;"></div>
 
 ## React Components
 
@@ -740,6 +772,8 @@ SmazzoCourse
 - render infos
 - check button, on click set in db course.status='delivered'
 - if status is prep then background is yellowish else greenish
+
+<div style="page-break-after: always;"></div>
 
 ## Cloud functions
 #### registrazione nuovo utente
