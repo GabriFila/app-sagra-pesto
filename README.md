@@ -189,15 +189,19 @@ Ogni pagina ha una top bar con:
     - un tasto per mandare la portata in preparazione
     - una riga per piatto con nome e quantità
     - 
-![Pagina cameriere](/mockups/cameriere.png "Pagina cameriere")
+![Pagina cameriere](/mockups/cameriere.png?v=4&s=200 "Pagina cameriere")
+
+<img src="mockups/cameriere.png" height="300">
+
 #### Cucine/bar
 - Una sezione ampia con tutti gli ordini in preparazione della propria cucina, ognuno con un tasto per segnarli completati
 - Una mini sezione con il totale dei piatti da preparare attualmente
 
 ![Pagina cucina](/mockups/cucina.png "Pagina cucina")
+<img src="mockups/cucina.png" height="300">
 
 #### Smazzo
- - 3 colonne (bar, primi, secondi), contentti le portate degliordini in corso e il loro stato (preparazione, pronto). Ogni portata contiene:
+ - 3 colonne (bar, primi, secondi), contentti le portate degli ordini in corso e il loro stato (preparazione, pronto). Ogni portata contiene:
    - lista dei piatti
    - tasto per concludere la portata
 
