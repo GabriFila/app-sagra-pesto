@@ -133,12 +133,14 @@ Ogni pagina ha una top bar con:
 
 #### Home
 - Link che portano alle altre pagine
-- 
-<img src="mockups/home.png" height=400>
+
+<img src="mockups/home.png" height=400 style="border: 2px solid red">
+
 #### Login
 - Tasti per registrarsi o loggarsi
 
 <img src="mockups/login.png" height=400>
+
 #### Admin
 - Una sezione per:
   - modificare il menu
