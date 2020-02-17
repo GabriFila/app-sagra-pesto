@@ -141,16 +141,14 @@ Ogni pagina ha una top bar con:
 #### Home
 - Link che portano alle altre pagine
 <table><tr><td>
-  <img src="mockups/home.png" height=400 style="border: 2px solid DimGray; border-radius: 3px" style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="mockups/home.png" height=380 style="border: 2px solid DimGray; border-radius: 3px" style="border: 2px solid DimGray; border-radius: 3px">
 </td></tr></table>
-
-<div style="page-break-after: always;"></div>
 
 #### Login
 - Tasti per registrarsi o loggarsi
 
 <table><tr><td>
-  <img src="mockups/login.png" height=400 style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="mockups/login.png" height=380 style="border: 2px solid DimGray; border-radius: 3px">
 </td></tr></table>
 
 <div style="page-break-after: always;"></div>
@@ -164,7 +162,7 @@ Ogni pagina ha una top bar con:
 - Una sezione per le info su ordini e incassi del servizio corrente
 
 <table><tr><td>
-  <img src="mockups/admin.png" height=400 style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="mockups/admin.png" height=380 style="border: 2px solid DimGray; border-radius: 3px">
 </td></tr></table>
 
 <div style="page-break-after: always;"></div>
@@ -181,7 +179,7 @@ Ogni pagina ha una top bar con:
   - un tasto per confermare l'ordine
 
 <table><tr><td>
-  <img src="mockups/cassaBar.png" height=400 style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="mockups/cassaBar.png" height=380 style="border: 2px solid DimGray; border-radius: 3px">
 </td></tr></table>
 
 <div style="page-break-after: always;"></div>
@@ -201,7 +199,7 @@ Ogni pagina ha una top bar con:
   - un tasto per resettare la pagina a zero
 
 <table><tr><td>
-  <img src="mockups/cassa.png" height=400 style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="mockups/cassa.png" height=380 style="border: 2px solid DimGray; border-radius: 3px">
 </td></tr></table>
 
 <div style="page-break-after: always;"></div>
@@ -218,7 +216,7 @@ Ogni pagina ha una top bar con:
     - una riga per piatto con nome e quantità
 
 <table><tr><td>
-  <img src="mockups/cameriere.png" height=400 style="border: 2px solid DimGray; border-radius: 3px" align="center">
+  <img src="mockups/cameriere.png" height=380 style="border: 2px solid DimGray; border-radius: 3px" align="center">
 
 <div style="page-break-after: always;"></div>
 
@@ -227,7 +225,7 @@ Ogni pagina ha una top bar con:
 - Una mini sezione con il totale dei piatti da preparare attualmente
 
 <table><tr><td>
-  <img src="mockups/cucina.png" height=400 style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="mockups/cucina.png" height=380 style="border: 2px solid DimGray; border-radius: 3px">
 </td></tr></table>
 
 <div style="page-break-after: always;"></div>
@@ -238,7 +236,7 @@ Ogni pagina ha una top bar con:
    - tasto per concludere la portata
 
 <table><tr><td>
-  <img src="mockups/smazzo.png" height=400 style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="mockups/smazzo.png" height=380 style="border: 2px solid DimGray; border-radius: 3px">
 </td></tr></table>
 
 <div style="page-break-after: always;"></div>
