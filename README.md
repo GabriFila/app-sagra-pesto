@@ -133,8 +133,12 @@ Ogni pagina ha una top bar con:
 
 #### Home
 - Link che portano alle altre pagine
+- 
+![Pagina home](/mockups/home.png "Pagina home")
 #### Login
 - Tasti per registrarsi o loggarsi
+
+![Pagina login](/mockups/login.png "Pagina login")
 #### Admin
 - Una sezione per:
   - modificare il menu
@@ -142,10 +146,8 @@ Ogni pagina ha una top bar con:
   - aggiungere e modificare piatti 
 - Un tasto per iniziare/concludere il servizio (verde per aprilo e rosso per chiuderlo)
 - Una sezione per le info su ordini e incassi del servizio corrente
----
-![Admin Page](/mockups/Admin.png#bordered "Admin Page")
 
----
+![Pagina admin](/mockups/admin.png "Pagina admin")
 
 #### Cassa istantanea
 - Una sezione per ogni portata con i piatti istantanei nel menu. Ogni piatto è una riga con:
@@ -157,6 +159,9 @@ Ogni pagina ha una top bar con:
 - Una sezione con:
   - il totale dell'ordine
   - un tasto per confermare l'ordine
+  - 
+![Pagina cassaBar](/mockups/cassaBar.png "Pagina cassaBar")
+
 #### Cassa
 - Una sezione per ogni portata con i piatti nel menu. Ogni piatto è una riga con:
   - la quantità rimanente in magazzino
@@ -170,24 +175,33 @@ Ogni pagina ha una top bar con:
   - una box per vedere il numero dell'ordine
   - un tasto per stampare l'ordine
   - un tasto per resettare la pagina a zero
+
+![Pagina cassa](/mockups/cassa.png "Pagina cassa")
+
 #### Cameriere
 - Un tasto '+' per collegare ordine-cameriere-tavolo
 - Una sezione per ogni ordine con: 
   - il numero dell'ordine 
   - il numero del tavolo
-  - un tasto per completare l'ordine
+  - un tasto per modificare l'ordine
   - le portate dell'ordine, contenente:
     - un tasto per completare la portata 
     - un tasto per mandare la portata in preparazione
     - una riga per piatto con nome e quantità
+    - 
+![Pagina cameriere](/mockups/cameriere.png "Pagina cameriere")
 #### Cucine/bar
 - Una sezione ampia con tutti gli ordini in preparazione della propria cucina, ognuno con un tasto per segnarli completati
 - Una mini sezione con il totale dei piatti da preparare attualmente
 
+![Pagina cucina](/mockups/cucina.png "Pagina cucina")
+
 #### Smazzo
- - 3 colonne (bar, primi, secondi), contentti le portate degli ordini in corso e il loro stato (preparazione, pronto). Ogni portata contiene:
+ - 3 colonne (bar, primi, secondi), contentti le portate degliordini in corso e il loro stato (preparazione, pronto). Ogni portata contiene:
    - lista dei piatti
    - tasto per concludere la portata
+
+![Pagina smazzo](/mockups/smazzo.png "Pagina smazzo")
 
 ## Stima dei costi
 
