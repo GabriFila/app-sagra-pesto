@@ -133,14 +133,15 @@ Ogni pagina ha una top bar con:
 
 #### Home
 - Link che portano alle altre pagine
----
-> <img src="mockups/home.png" height=400 style="border: 2px solid DimGray; border-radius: 3px" style="border: 2px solid DimGray; border-radius: 3px">
----
+<table><tr><td>
+  <img src="mockups/home.png" height=400 style="border: 2px solid DimGray; border-radius: 3px" style="border: 2px solid DimGray; border-radius: 3px">
+</td></tr></table>
+
 #### Login
 - Tasti per registrarsi o loggarsi
 
 <table><tr><td>
-<img src="mockups/login.png" height=400 style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="mockups/login.png" height=400 style="border: 2px solid DimGray; border-radius: 3px">
 </td></tr></table>
 
 #### Admin
@@ -151,7 +152,9 @@ Ogni pagina ha una top bar con:
 - Un tasto per iniziare/concludere il servizio (verde per aprilo e rosso per chiuderlo)
 - Una sezione per le info su ordini e incassi del servizio corrente
 
-<img src="mockups/admin.png" height=400 style="border: 2px solid DimGray; border-radius: 3px">
+<table><tr><td>
+  <img src="mockups/admin.png" height=400 style="border: 2px solid DimGray; border-radius: 3px">
+</td></tr></table>
 
 #### Cassa istantanea
 - Una sezione per ogni portata con i piatti istantanei nel menu. Ogni piatto è una riga con:
@@ -164,7 +167,9 @@ Ogni pagina ha una top bar con:
   - il totale dell'ordine
   - un tasto per confermare l'ordine
   - 
-<img src="mockups/cassaBar.png" height=400 style="border: 2px solid DimGray; border-radius: 3px">
+<table><tr><td>
+  <img src="mockups/cassaBar.png" height=400 style="border: 2px solid DimGray; border-radius: 3px">
+</td></tr></table>
 
 #### Cassa
 - Una sezione per ogni portata con i piatti nel menu. Ogni piatto è una riga con:
@@ -180,7 +185,9 @@ Ogni pagina ha una top bar con:
   - un tasto per stampare l'ordine
   - un tasto per resettare la pagina a zero
 
-<img src="mockups/cassa.png" height=400 style="border: 2px solid DimGray; border-radius: 3px">
+<table><tr><td>
+  <img src="mockups/cassa.png" height=400 style="border: 2px solid DimGray; border-radius: 3px">
+</td></tr></table>
 
 #### Cameriere
 - Un tasto '+' per collegare ordine-cameriere-tavolo
@@ -194,20 +201,25 @@ Ogni pagina ha una top bar con:
     - una riga per piatto con nome e quantità
     - 
 
-<img src="mockups/cameriere.png" height=400 style="border: 2px solid DimGray; border-radius: 3px" align="center">
+<table><tr><td>
+  <img src="mockups/cameriere.png" height=400 style="border: 2px solid DimGray; border-radius: 3px" align="center">
 
 #### Cucine/bar
 - Una sezione ampia con tutti gli ordini in preparazione della propria cucina, ognuno con un tasto per segnarli completati
 - Una mini sezione con il totale dei piatti da preparare attualmente
 
-<img src="mockups/cucina.png" height=400 style="border: 2px solid DimGray; border-radius: 3px">
+<table><tr><td>
+  <img src="mockups/cucina.png" height=400 style="border: 2px solid DimGray; border-radius: 3px">
+</td></tr></table>
 
 #### Smazzo
  - 3 colonne (bar, primi, secondi), contentti le portate degli ordini in corso e il loro stato (preparazione, pronto). Ogni portata contiene:
    - lista dei piatti
    - tasto per concludere la portata
 
-<img src="mockups/smazzo.png" height=400 style="border: 2px solid DimGray; border-radius: 3px">
+<table><tr><td>
+  <img src="mockups/smazzo.png" height=400 style="border: 2px solid DimGray; border-radius: 3px">
+</td></tr></table>
 
 ## Stima dei costi
 
