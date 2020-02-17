@@ -133,13 +133,15 @@ Ogni pagina ha una top bar con:
 
 #### Home
 - Link che portano alle altre pagine
-
+---
 > <img src="mockups/home.png" height=400 style="border: 2px solid DimGray; border-radius: 3px" style="border: 2px solid DimGray; border-radius: 3px">
-
+---
 #### Login
 - Tasti per registrarsi o loggarsi
 
+<table><tr><td>
 <img src="mockups/login.png" height=400 style="border: 2px solid DimGray; border-radius: 3px">
+</td></tr></table>
 
 #### Admin
 - Una sezione per:
