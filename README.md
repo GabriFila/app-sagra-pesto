@@ -143,11 +143,9 @@ Ogni pagina ha una top bar con:
 - Un tasto per iniziare/concludere il servizio (verde per aprilo e rosso per chiuderlo)
 - Una sezione per le info su ordini e incassi del servizio corrente
 
-<img
 ![Admin Page](/mockups/Admin.png#bordered "Admin Page")
-/>
 
-<img src="mockups/Admin.png#bordered" style="border:4px solid black border-radius: 5px;"/>
+<img src="mockups/Admin.png#bordered" style="border:4px solid black"/>
 
 #### Cassa istantanea
 - Una sezione per ogni portata con i piatti istantanei nel menu. Ogni piatto è una riga con:
