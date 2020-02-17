@@ -21,26 +21,28 @@ Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pes
 
 # Parte I - funzionamento
 ## Obbiettivi
-L'applicazione ha l'obbiettivo di migliorare la gestione degli ordini della sagra, fornendo inoltre:
+L'applicazione ha l'obbiettivo di migliorare la gestione degli ordini della sagra, fornendo:
 - miglior interazione tra i vari organi operativi
 - aggiornamenti in tempo reale sullo stato degli ordini
 - maggiore visione d'insieme da parte di smazzo e responsabili
-- interfacce personalizzate per ciascun utente in base al suo ruolo
-- possibilità di analisi dei dati post-sagra per poter migliorare le spese e l'organizzazione dell'evento
+- interfacce personalizzate per ciascun utente in base al ruolo
+- possibilità di analisi dei dati post-sagra per poter migliorare le spese e l'organizzazione
 - un'architettura google cloud per una maggiore affidabilità e resilienza dei dati
 - un prodotto espandibile e modificabile per fondare le basi dell'informatizzazione della sezione di Genova
 
 ## Evoluzione di un ordine
 Alcune nozioni fondamentali riguardo l'app:
 - servizio: sessione di pasto (pranzo, cena)
-- ordine: ordine normale fatto dalla cassa che deve passare attraverso cameriere -> cucina -> smazzo
 - ordine istantaneo: ordine fatto dal bar che viene consegnato al cliente direttamente
+- ordine (classico): ordine normale fatto dalla cassa che deve passare attraverso cameriere -> cucina -> smazzo
 - portata: elemento dell'ordine elaborato da una singola cucina
 - piatto: elemento di una portata
 
-L'app prevedere che ogni membro attivo durante un servizio possieda un account dell'app (a parte forse alcuni camerieri). L'app permette l'accesso esclusivamente agli utenti loggati, con certe limitazioni in base al ruolo. Un utente può avere più ruoli.
+L'app prevede che ogni membro attivo durante un servizio possieda un account (a parte forse alcuni camerieri). L'utilizzo è consentito esclusivamente agli utenti loggati, con certe limitazioni in base al ruolo. Un utente può avere più ruoli.
 
-L'evoluzione ideale di un ordine è la seguente:
+L'elemento minimo dell'app è la portata di un ordine. E' l'oggetto che viene passato tra i vari 'centri' operativi della sagra.
+
+L'evoluzione temporale di un ordine è la seguente:
 1. il cliente arriva alla cassa
 2. il cassiere manda l'ordine al sistema
 3. lo smazzo vede la presenza di un ordine non ancora collegato a un cameriere
@@ -52,6 +54,7 @@ L'evoluzione ideale di un ordine è la seguente:
 9. lo smazzo e il cameriere vedono l'update
 10. lo smazzo controlla che l'ordine si stato realizzato correttamente e lo passa al cameriere per portarlo al tavolo
 11. si ripete dal punto 4 al puntto 10 per ogni portata
+
 
 ## Ruoli Utente 
 - [Super Admin](#super-admin)
@@ -72,87 +75,91 @@ L'evoluzione ideale di un ordine è la seguente:
 - iniziare e concludere il servizio
 - vedere info su incassi e ordini correnti
 #### Cassiere
-- creare l'ordine
-- stampare l'ordine
+- creare un ordine
+- stampare un ordine
 - modificare un ordine già creato
 #### Cameriere
 - associare ordine e tavolo
 - mandare una portata di un ordine in preparazione
 - concludere una portata di un ordine
-- modificare l'ordine
+- modificare un ordine
 - _LAST_ ricevere modifica quando un ordine è pronto
 #### Bar
 - visualizzare il bere e i dolci degli ordini che sono in preparazione
-- cambiare lo stato del bere e dei dolci quando sono pronti (notificare smazzo e camerieri)
+- cambiare lo stato del bere e dei dolci quando sono pronti
 - creare ordini istantanei
 #### Primi
 - visualizzare i primi degli ordini che sono in preparazione
-- cambiare lo stato dei primi quando sono pronti (notificare smazzo e camerieri)
+- cambiare lo stato dei primi quando sono pronti
 #### Secondi
 - visualizzare i secondi degli ordini che sono in preparazione
-- cambiare lo stato dei secondi quando sono pronti (notificare smazzo e camerieri)
+- cambiare lo stato dei secondi quando sono pronti
 
 #### Smazzo
-- vedere gli ordini non collegati a cemerieri
-- vedere gli ordini in corso e il loro stato (preparazione, pronto)
+- vedere gli ordini non collegati a un cameriere
+- vedere le portate degli ordini in corso e il loro stato (in preparazione, pronto)
 - concludere una portata di un ordine
 - recuperare vecchie portate di ordini già conclusi per eventuali modifiche
 
 ## Permessi dei ruoli
 
-#### modifica ruoli utente
--  superAdmin
-#### creazione ordine
-- cassa solo ordini 'normali'
-- bar solo ordini istantanei
-#### modifica ordini selettiva 
-- cassa modifica solo portate e stato
-- smazzo modifica solo lo stato
-- cameriere modifica solo suoi ordini
-- bar modifica solo portate di bere e dolci
-- cucina primi modifica solo portate di primi
-- secondi modifica solo portate di secondi
-#### modifica menu
-- admin
-#### inizio/fine servizio
-- admin
+#### Modifica ruoli utente
+-  Super admin
+#### Modifica menu
+- Admin
+#### Inizio/fine servizio
+- Admin
+#### Creazione ordine
+- Cassa solo ordini classici
+- Bar solo ordini istantanei
+#### Modifica ordine
+- Cassa modifica tutto
+- Smazzo modifica solo lo stato
+- Cameriere modifica tutto solo i propri ordini
+- Cucine modificano solo le proprie portate
 
 ## Pagine
 
 Ogni pagina ha una top bar con:
-- un hamburger per mostrare il menu con le interfacce
 - se loggato:
   - il nome dell'utente e il tipo di interfaccia (es: Furio-admim)
-  - un tasto per fare il logout
+  - un'icona per mostrare il menu con i link alle pagine accessibili dall'utente
+  - un tasto per uscire dall'app
   - se ruolo è 'smazzo'
     - una sezione con gli ordini pendenti
-    - un tasto cerca per visualizzare un ordine già fatto
+    - un tasto cerca per visualizzare una portata di un ordine
   - se ruolo è cassa:
     - un tasto cerca per modificare un ordine già fatto
-- se non loggato:
-  - un tasto per fare il login o registrarsi
 
 #### Home
-- link che portano alle altre pagine
+- Link che portano alle altre pagine
 #### Login
-- tasti per registrarsi e loggarsi
+- Tasti per registrarsi o loggarsi
 #### Admin
-- una sezione per:
+- Una sezione per:
   - modificare il menu
   - modificare le quantità in magazzino
-  - aggiungere e modificare piatti
+  - aggiungere e modificare piatti 
 - Un tasto per iniziare/concludere il servizio (verde per aprilo e rosso per chiuderlo)
-- Una sezione per le info su ordini e incassi del servizio corrente e i totali passati
+- Una sezione per le info su ordini e incassi del servizio corrente
+
+![Admin Page](/mockups/Admin.png "Admin Page")
+
 #### Cassa istantanea
 - Una sezione per ogni portata con i piatti istantanei nel menu. Ogni piatto è una riga con:
   - la quantità rimanente in magazzino
-  - un numero per indicare la quantità richiesta dal cliente
+  - il prezzo
+  - la quantità richiesta dal cliente
   - un tasto '-' per decrementare le quantità richieste dal cliente
   - un tasto '+' per incrementare le quantità richieste dal cliente
+- Una sezione con:
+  - il totale dell'ordine
+  - un tasto per confermare l'ordine
 #### Cassa
 - Una sezione per ogni portata con i piatti nel menu. Ogni piatto è una riga con:
   - la quantità rimanente in magazzino
-  - un numero per indicare la quantità richiesta dal cliente
+  - il prezzo
+  - la quantità richiesta dal cliente
   - un tasto '-' per decrementare le quantità richieste dal cliente
   - un tasto '+' per incrementare le quantità richieste dal cliente
 - Una sezione contente:
@@ -160,15 +167,17 @@ Ogni pagina ha una top bar con:
   - un tasto per inviarlo al sistema
   - una box per vedere il numero dell'ordine
   - un tasto per stampare l'ordine
+  - un tasto per resettare la pagina a zero
 #### Cameriere
 - Un tasto '+' per collegare ordine-cameriere-tavolo
-- Un tab per ogni ordine con: 
+- Una sezione per ogni ordine con: 
   - il numero dell'ordine 
   - il numero del tavolo
+  - un tasto per completare l'ordine
   - le portate dell'ordine, contenente:
     - un tasto per completare la portata 
     - un tasto per mandare la portata in preparazione
-    - una riga per piatto della portata contente i piattie le quantità
+    - una riga per piatto con nome e quantità
 #### Cucine/bar
 - Una sezione ampia con tutti gli ordini in preparazione della propria cucina, ognuno con un tasto per segnarli completati
 - Una mini sezione con il totale dei piatti da preparare attualmente
@@ -263,6 +272,7 @@ Each document corresponds to a user in the app, it could be useful for future us
 Each document corresponds to a user and contains a 'roles' property which is a string[] which contains all roles of the user. Each document is linked with a user by its id, building it as  `r_${uid}`.
 
 ## Security rules
+``` js
 match / {
   function isLoggedIn() {
     return request.auth.id != null;
@@ -294,12 +304,12 @@ match / {
   allow read: if false;
   allow write: if true;
 }
-
+```
 
 ## Typescript Interfaces
 
 #### services collection
-``` typescript
+``` ts
 interface IService
 {
   start: Date,
@@ -312,7 +322,7 @@ interface IService
 }
 ```
 #### instantOrders subCollection
-``` typescript
+``` ts
 interface IInstantOrder
 {
   revenue: number,
@@ -321,7 +331,7 @@ interface IInstantOrder
 ```
 
 #### orders subCollection
-``` typescript
+``` ts
 interface IOrder
 {
   orderNum: number,
@@ -334,7 +344,7 @@ interface IOrder
 }
 ```
 #### courses subCollection
-``` typescript
+``` ts
 interface ICourse
 {
   orderNum: number,
@@ -345,7 +355,7 @@ interface ICourse
 }
 ```
 
-``` typescript
+``` ts
 interface IDish
 {
   shortName: string,
@@ -354,14 +364,14 @@ interface IDish
 ```
 
 #### storage collection
-``` typescript
+``` ts
 interface IStorage
 {
   storage : IStorageCourse[]
 }
 ```
 
-``` typescript
+``` ts
 interface IStorageCourse
 {
   name: string,
@@ -371,7 +381,7 @@ interface IStorageCourse
 }
 ```
 
-``` typescript
+``` ts
 interface IStorageDish
 {
   name: string,
@@ -382,19 +392,19 @@ interface IStorageDish
 }
 ```
 
-``` typescript
+``` ts
 interface IOrderProp extends IOrder
 {
   id: string  
 }
 ```
-``` typescript
+``` ts
 interface ICourseProp extends ICourse
 {
   id: string  
 }
 ```
-``` typescript
+``` ts
 interface IOrderLinkInfo
 {
   orderNum: number,
@@ -403,7 +413,7 @@ interface IOrderLinkInfo
 }
 ```
 
-``` typescript
+``` ts
 interface IReducerAction
 {
   type: string,
@@ -460,7 +470,7 @@ MenuDrawer (userRoles)
 - contains links to possible pages for user based on userRoles
 
 PrivateRoute
-``` typescript
+``` ts
 const PrivateRoute = ({component, authed, userRoles, requiredRoles}) => {
   return (
     <Route
