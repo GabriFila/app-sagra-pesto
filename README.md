@@ -190,7 +190,7 @@ Ogni pagina ha una top bar con:
     - una riga per piatto con nome e quantità
     - 
 
-<img src="mockups/cameriere.png" height="300" align="center" style="margin:auto">
+<img src="mockups/cameriere.png" height="300" align="center">
 
 #### Cucine/bar
 - Una sezione ampia con tutti gli ordini in preparazione della propria cucina, ognuno con un tasto per segnarli completati
