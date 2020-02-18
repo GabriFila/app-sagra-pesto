@@ -1,5 +1,5 @@
 # App - Sagra del pesto
-Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pesto di Genova. La prima parte descrive il funzionamento dell'app, la seconda descrive la guida per l'implementazione.
+Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pesto di Genova. La prima parte descrive il funzionamento dell'app, la seconda descrive la guida per l'implementazione. Si propone che l'app sia una parte di un'infrastuttura più generale per gestire l'IT della sezione di Genova.
 
 # Indice
 - [Parte I - funzionamento](#parte-i---funzionamento)
@@ -80,12 +80,13 @@ L'evoluzione temporale di un ordine è la seguente:
 #### Cassiere
 - creare un ordine
 - stampare un ordine
-- modificare un ordine già creato
+- cancellare un ordine già creato
+- _LAST_ modificare un ordine già creato 
 #### Cameriere
 - associare ordine e tavolo
 - mandare una portata di un ordine in preparazione
 - concludere una portata di un ordine
-- modificare un ordine
+- aggiungere una portata a un ordine
 - _LAST_ ricevere modifica quando un ordine è pronto
 #### Bar
 - visualizzare il bere e i dolci degli ordini che sono in preparazione
@@ -134,7 +135,8 @@ Ogni pagina ha una top bar con:
     - una sezione con gli ordini pendenti
     - un tasto cerca per visualizzare una portata di un ordine
   - se ruolo è cassa:
-    - un tasto cerca per modificare un ordine già fatto
+    - un tasto 'cestino' per eliminare un ordine già fatto
+    - _LAST_ un tasto 'matita' per modificare un ordine già fatto
 
 <div style="page-break-after: always;"></div>
 
@@ -315,19 +317,30 @@ Avere dati sull'evoluzione delle quantità in magazzino
 <div style="page-break-after: always;"></div>
 
 # Parte II - implementazione
+App relies on 2 main technologies:
+- Firebase: a BaaS(Back-end as a Service) supported by Google. It will be used for:
+  -  hosting
+  -  DB
+  -  server-side functions
+- React: a UI library created and maintained by Facebook to build user interfaces based on components and state.
 
 ## Firestore DB structure
+#### sagre
+One document for each 'sagra' of type ISagra with 2 subcollections:
 
-#### storage
-Only one document which contains an IStorage Object
-#### services
-Each document is a single service located in time. Each service has 3 subcollections:
-- instantOrders
-- orders
-- courses
+- #### storage
+  Only one document which contains an IStorage Object
+- #### services
+  Each document is a single service located in time. Each service has 3 subcollections:
+  - #### instantOrders
+    - each document is of type IInstantOrder
+  - #### orders
+    - each document is of type IOrder
+  - #### courses
+    - each document is a course of type ICourse
 #### users
 Each document corresponds to a user in the app, it could be useful for future use.
-#### userRoles
+#### userSagraRoles
 Each document corresponds to a user and contains a 'roles' property which is a string[] which contains all roles of the user. Each document is linked with a user by its id, building it as  `r_${uid}`.
 
 <div style="page-break-after: always;"></div>
@@ -370,82 +383,34 @@ match / {
 
 ## Typescript Interfaces
 
-#### services collection
-``` ts
-interface IService
-{
-  start: Date,
-  end: Date,
-  totalRevenue: number,   
-  totalPeople: number,     // total number of people
-  lastOrderNum : number,   // progressive counter for orders
+#### Firestore
+```  ts
+interface ISagra {
+  year: number,
+  totalRevenue : number,
+  totalInstantRevenue: number,
+  totalPeople: number,
+  totalOrders: number,
   totalInstantOrders: number
-  totalOrders: number
 }
-```
-#### instantOrders subCollection
-``` ts
-interface IInstantOrder
-{
-  revenue: number,
-  dishes: Dish[]
-}
-```
 
-#### orders subCollection
-``` ts
-interface IOrder
-{
-  orderNum: number,
-  status: string,     // (pending, active, completed, deleted)
-  waiterName: string, // display name of waiter
-  waiterId: string,   // id of waiter to link
-  table: number,
-  revenue: number,
-  createdAt: Date
-}
 ```
-#### courses subCollection
 ``` ts
-interface ICourse
-{
-  orderNum: number,
-  name: string,
-  kitchen: string,
-  status: string,      // (waiting,prep,ready,delivered)
-  dishes: IDish[],
+interface IStorage {
+  courses : IStorageCourse[]
 }
 ```
 
 ``` ts
-interface IDish
-{
-  shortName: string,
-  qt: number
-}
-```
-
-#### storage collection
-``` ts
-interface IStorage
-{
-  storage : IStorageCourse[]
-}
-```
-
-``` ts
-interface IStorageCourse
-{
+interface IStorageCourse {
   name: string,
   kitchen: string,
   dishes: IStorageDish[],
   isInstant: boolean
 }
 ```
-
 ``` ts
-interface IStorageDish
-{
+interface IStorageDish {
   name: string,
   shortName: string,
   storageQt: number,
@@ -453,31 +418,69 @@ interface IStorageDish
   inMenu: boolean
 }
 ```
-
 ``` ts
-interface IOrderProp extends IOrder
-{
+interface IService {
+  start: Date,
+  end: Date,
+  totalRevenue: number,
+  totalInstantRevenue: number,
+  totalPeople: number,     // total number of people
+  lastOrderNum : number,   // progressive counter for orders
+  totalInstantOrders: number,
+  totalOrders: number
+}
+```
+``` ts
+interface IInstantOrder {
+  revenue: number,
+  dishes: IDish[]
+}
+```
+``` ts
+interface IOrder {
+  orderNum: number,
+  status: string,     // (pending, active, completed, deleted)
+  waiterName: string, // display name of waiter
+  waiterId: string,   // id of waiter to link
+  table: number,
+  revenue: number,
+}
+```
+``` ts
+interface ICourse {
+  orderNum: number,
+  name: string,
+  kitchen: string,
+  status: string,      // (waiting,prep,ready,delivered)
+  dishes: IDish[],
+}
+```
+``` ts
+interface IDish {
+  shortName: string,
+  qt: number
+}
+```
+#### React
+``` ts
+interface IOrderProp extends IOrder {
   id: string  
 }
 ```
 ``` ts
-interface ICourseProp extends ICourse
-{
+interface ICourseProp extends ICourse {
   id: string  
 }
 ```
 ``` ts
-interface IOrderLinkInfo
-{
+interface IOrderLinkInfo {
   orderNum: number,
   tableNum: number,
   waiterName: string
 }
 ```
-
 ``` ts
-interface IReducerAction
-{
+interface IReducerAction {
   type: string,
   payload: unknown,
 }
@@ -499,10 +502,11 @@ domain = (e.g. sagra.genova.cngei.it)
 - [cassaBar](#domain/cassaBar) istantanea = domain/cassaBar
 - [cameriere](#domain/cameriere) = domain/cameriere
 
-Assumption (need to be checked during development): for all Components where a user event triggers a change in firestore there is no need to add a reducer but only a listener that acts on a state. Actions will pass through firestore on-device cache first and then propagate to other UI via DB and then trigger the snapshot. In those components where a reducer is needed there should not be the need also for context, should be maximum 2-level prop-drilling.
+Assumption (need to be checked during development): for all Components where a user event triggers a change in firestore there is no need to add a reducer but only a listener that acts on the state. Actions will pass through firestore on-device cache first and then propagate to other UIs via DB and then trigger the snapshot. In those components where a reducer is needed (cassa, cassBar) there should not be the need also for context, should be maximum 2-level prop-drilling, which doesn't make the use of Context so imminent.
 
 Base structure:
 - [ ] App
+  - [ ] SagraContextProvider
   - [ ] AppBar
     - [ ] MenuDrawer
     - [ ] PendingOrders
@@ -515,27 +519,32 @@ App
 - AppBar
 - router with all PrivateRoute for pages except for login
 - state = {isLoggedIn : boolean, roles: string[], name: string}
-- in useEffect setup onetime listener for firebase.auth() to change state
+- state = {serviceDbRef: string, storageDbRef: string}
+- in useEffect setup onetime listener for firebase.auth() to change state and set serviceDbRef and storageDbRef in SagraContext
 
-AppBar (isUserLoggedIn, role)
-- on logout redirect to login page
+SagraContext
+- context with state serviceDbRef and storageDbRef
+
+AppBar (isUserLoggedIn, userRoles)
 - if userLoggedIn show name, role, logout button
-- if user role is 'smazzo' and url is '/smazzo' show also search button and pending orders
-- if user role is 'cassa' and url is '/cassa' show also search button
+- if userRoles includes 'smazzo' and url is '/smazzo' show also search button and pending orders
+- if userRoles includes 'cassa' and url is '/cassa' show also search button
+- on logoutButton click redirect to login page
 
 PendingOrders 
-- setup firebase snapshot on orders Collection where state='pending'
+- use SagraContextConsumer to get Firestore Storage
+- setup firebase snapshot on orders collection where state='pending'
 - state = orders where state='pending'
 - if there are more than 1 order show attention icon
-- could signal if an order is waiting for too long
 - display id of each order
+- _LAST_ could signal if an order is waiting for too long
 
 MenuDrawer (userRoles)
-- contains links to possible pages for user based on userRoles
+- contains links to reachable pages by user based on userRoles
 
 PrivateRoute
 ``` ts
-const PrivateRoute = ({component, authed, userRoles, requiredRoles}) => {
+const PrivateRoute = ({component, authed, userRoles, requiredRoles, otherProps}) => {
   return (
     <Route
       render={(props) => authed !== true  ? 
@@ -547,11 +556,13 @@ const PrivateRoute = ({component, authed, userRoles, requiredRoles}) => {
   )
 }
 ```
+<div style="page-break-after: always;"></div>
+
 #### domain/
 - [ ] HomePage
 
 HomePage (userRoles)
-- display a link buttons for each app route reachable by user based on userRoles
+- display a link buttons for each route reachable by user based on userRoles
 - if userRole is empty show message to go to superAdmin and give role
 
 #### domain/login
@@ -561,8 +572,8 @@ HomePage (userRoles)
 
 LoginPage
 - notLoggedIn messagge
-- Login button to trigger LoginDialog
-- Register button to trigger RegisterDialog
+- loginButton to trigger LoginDialog
+- registerButton to trigger RegisterDialog
 
 LoginDialog
 - fields: email and password
@@ -570,7 +581,9 @@ LoginDialog
 
 RegisterDialog
 - fields: email, password, confirm password, name
-- on register if user has at least a role redirect to role page else to home
+- on register if user has at least a role redirect to home
+
+<div style="page-break-after: always;"></div>
 
 #### domain/admin
 - [ ] AdminPage
@@ -581,6 +594,7 @@ RegisterDialog
   - [ ] ServiceTab 
     - [ ] ServiceStarter 
     - [ ] ServiceInfo
+
 AdminPage
 - 2 sections: 
   - Storage
@@ -616,15 +630,15 @@ ServiceStarter (isServiceActive : boolean)
 ServiceInfo (service : IService)
 - display current service info from props
 
+<div style="page-break-after: always;"></div>
 
 #### domain/cassa
 - [ ] CashRegisterPage
   - [ ] CashRegisterCourse
     - [ ] CashRegisterDish
   - [ ] CashRegisterConfirmOrder
-  - [ ] CashRegisterSearchButton
-  - 
-
+  - [ ] CashRegisteeDeleteButton
+    - [ ] DeleteOrderModal
 
 CashRegisterPage
 - setup listener for storage
@@ -638,8 +652,9 @@ CashRegisterPage
     - SEND_ORDER
     - PRINT_ORDER
     - RESET_ORDER
+    - SET_ORDER
 - map state(storage) to list of CashRegisterCourse, if in newOrder there is a course with same name pass it as prop
-- one card with CashRegisterConfirmOrder pass newOrder reduced to total
+- one card with CashRegisterConfirmOrder pass newOrder revenue
 
 CashRegisterCourse (courseInMenu : IStorageCourse, courseInOrder ?: IStorageCourse, dispatch)
 - map dishes to CashRegisterDish, if in courseInOrder there is a dish with the same name pass the qt as prop as prop
@@ -648,31 +663,34 @@ CashRegisterDish (courseInMenu : IDish, newOrderQt : number, dispatch)
 - a row with dish name, qt in storage, '-'. '+' and newOrderQt
 - on click of '-' and '+' trigger dispatch action with name of dish
 
-CashRegisterConfirmOrder (total: number, orderNum ?: number )
-- display total from props
+CashRegisterConfirmOrder (revenue: number, orderNum ?: number )
+- display revenue from props
 - display sendButton, on click of sendButton dispatch SEND_ORDER action
 - display send button on click of printButton dispatch PRINT_ORDER action
 - display orderNum
 - display resetOrderButton
 
 cash register reducer actions:
-- ADD_DISH:
-  - copy state and find course where dishes includes a dish with name = payload, increment qt and recalculate total
-- REMOVE_DISH:
-  - copy state and find course where dishes includes a dish with name = payload, decrement qt and recalculate total
+- ADD_DISH: (payload = dishName)
+  - copy state and find course where dishes includes a dish==payload, increment qt and recalculate revenue
+- REMOVE_DISH: 
+  - copy state and find course where dishes includes a dish==payload, decrement qt and recalculate revenue
 - SEND_ORDER:
-  - call createOrder firebase cloud function, then set orderNum as the one received
+  - call createOrder firebase cloud function with undefined as orderNum argument, then set orderNum as the one received
 - PRINT_ORDER:
   - trigger print function
 - RESET_ORDER:
  - set newOrder to [] and orderNum to undefined 
 
 
-CashRegisterSearchButton
-- on click trigger UpdateOrderModal
+CashRegisterDeleteButton
+- on click trigger DeleteOrderModal
 
-UpdateOrderModal
+DeleteOrderModal
+- text input for number of order to delete
+- on click deleteButton call deleteOrder cloud function 
 
+<div style="page-break-after: always;"></div>
 
 #### domain/cassaBar
 - [ ] InstantCashRegisterPage
@@ -695,16 +713,19 @@ InstantCashRegisterConfirmOrder
 - display total from props
 - on click of sendButton dispatch SEND_ORDER action
 
+<div style="page-break-after: always;"></div>
+
 #### domain/cameriere
 - [ ] WaiterPage
   - [ ] WaiterOrder 
     - [ ] WaiterOrderCourse
       - [ ] DishRow
+    - [ ] AddCourseModal
   - [ ] LinkOrderButton
   - [ ] LinkOrderModal
 
 WaiterPage
-- in one-time useEffect listen for orders with waiterId == user.uuid and status='active' (get from firebase.auth().currentUser)
+- in one-time useEffect listen for orders with waiterId == userID.uuid and status='active' (get from firebase.auth().currentUser)
 - map orders to WaiterOrders and pass order as prop + firestoreId
 
  WaiterOrder
@@ -712,7 +733,8 @@ WaiterPage
 - display table# and orderId
 - display close button, on click set status='completed'
 - display unlink button, on click set status='pending'
-
+- on click of AddCourseButton trigger AddCourseModal
+  
 WaiterCourse
 - when Course state == waiting, display sendToKitchen button
 - when Course state == prep, display cancelKitchen button
@@ -721,14 +743,20 @@ WaiterCourse
 - when click a button change state in db appropriately
 
 DishRow
-- display dish shortName e qt
+- display dish shortName and qt
+
+AddCourseModal
+- display orderNum
+- display cassa...
 
 LinkOrderButton
 - floating '+' button to trigger LinkOrderModal
 
 LinkOrderModal
 - 2 inputs, orderNum and tableNum
-- 1 'confirm' button, onClick change tableNum in order
+- 1 'confirm' button, onClick change tableNum in DB order
+
+<div style="page-break-after: always;"></div>
 
 #### domain/(bar,primi,secondi)
   - [ ] KitchenShelf
@@ -751,7 +779,11 @@ KitchenCourse
 KitchenTotal
 - reduce arrayProp to an array of IDIsh and map it to DishRow 
 
-- [ ] [SmazzoPage](#SmazzoPage)
+<div style="page-break-after: always;"></div>
+
+#### domain/smazzo
+
+- [ ] SmazzoPage
   - [ ] CourseSection
     - [ ] SmazzoCourse
 
@@ -774,26 +806,45 @@ SmazzoCourse
 <div style="page-break-after: always;"></div>
 
 ## Cloud functions
-#### registrazione nuovo utente
-- [ ] mettere registrazione in back-end per maggiore sicurezza
-#### creazione nuovo ordine (unica transazione)
-- [ ] leggere il counter per l'id dell'ultimo ordine
-- [ ] creare uno nuovo ordine con l'id incrementato di uno
-- [ ] aggiornare lastOrderNum
-- [ ] aggiornare il revenue totale del servizio
-- [ ] aggiornare le quantità nello storage
-- [ ] aggiornare le quantità totale di ordini
-#### trigger creazione ordine istantaneo
-- [ ] aggiornare la revenue del servizio
-- [ ] aggiornare la quantità totale di ordini
-#### trigger cancellazione ordine
-- [ ] aggiornare la quantità totale di ordini
-#### trigger creazione nuovo utente
-- [ ] creare un nuovo record nella collezione ruoliUtenti con campo ruoli pari a []
-#### trigger rimozione utente
-- [ ] eliminare il record corrispondente nella collezione ruoliUtenti
-#### trigger modifica ruoli utenti
-- [ ] modificare le custom claims di un utente mettendole pari a quelle nel documento
+
+#### callables:
+- #### createOrder
+  (order : IOrder) => {} : number
+
+  in a single transaction
+  1. read lastOrderNum of current service
+  2. create a new order with lastOrderNum++
+  3. update lastOrderNum
+  4. increase total revenue of service
+  5. increase storage qts
+  6. increase totalPeople
+  7. increase totalOrders
+- #### deleteOrder
+  4. decrease total revenue of service
+  5. decrease storage qts
+  6. decrease totalPeople
+  7. decrease totalOrders
+
+#### triggers:
+- #### onCreate on instantOrder
+  1. update totalRevenue of current service
+  2. update totalInstantOrders of current service
+  3. update qts in storage
+- #### newUser registration
+  1. create new record in userSagraRoles collection with 'roles' field = []
+  2. create new reacord in users with empty doc
+- #### ??? user Removes
+    a single batch
+  1. delete user record from userSagraRole
+  2. delete user record from users
+- #### onUpdate on sagraUserRoles
+  1. delete all userCostum claims
+  2. for each role in user add userCostumClaims 'role' = true
 
 ## Logging
-L'app deve loggare l'evoluzioni degli ordini per avere dati statistici
+L'app deve loggare le evoluzioni degli ordini per avere dati statistici
+
+
+db.collection('sagre').where('year','==',thisYear).collection('storage').where('endDate','==',null)
+
+db.collection('sagre').where('year','==',thisYear).collection('storage')s
