@@ -1,6 +1,8 @@
 # App - Sagra del pesto
 Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pesto di Genova. La prima parte descrive il funzionamento dell'app, la seconda descrive la guida per l'implementazione. Si propone che l'app sia una parte di un'infrastuttura più generale per gestire l'IT della sezione di Genova.
 
+
+
 # Indice
 - [Parte I - funzionamento](#parte-i---funzionamento)
   - [Obbiettivi](#obbiettivi)
@@ -9,7 +11,7 @@ Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pes
   - [Attività dei ruoli](#attività-dei-ruoli)
   - [Permessi dei ruoli](#permessi-dei-ruoli)
   - [Pagine](#pagine)
-  - [Stima dei costi](#stima--dei-cost)
+  - [Stima dei costi](#stima-dei-costi)
 - [Parte II - implementazione](#parte-ii---implementazione)
   - [Cloud functions](#cloud-functions)
   - [Firestore DB structure](#firestore-db-structure)
@@ -31,6 +33,9 @@ L'applicazione ha l'obbiettivo di migliorare la gestione degli ordini della sagr
 - possibilità di analisi dei dati post-sagra per poter migliorare le spese e l'organizzazione
 - un'architettura google cloud per una maggiore affidabilità e resilienza dei dati
 - un prodotto espandibile e modificabile per fondare le basi dell'informatizzazione della sezione di Genova
+  
+[⮝ torna all'indice](#indice) 
+<div style="page-break-after: always;"></div>
 
 ## Evoluzione di un ordine
 Alcune nozioni fondamentali riguardo l'app:
@@ -39,6 +44,7 @@ Alcune nozioni fondamentali riguardo l'app:
 - ordine (classico): ordine normale fatto dalla cassa che deve passare attraverso cameriere -> cucina -> smazzo
 - portata: elemento dell'ordine elaborato da una singola cucina
 - piatto: elemento di una portata
+- ogni piatto deve possedere un nome 'corto' per facilitare la visualizzazione su certe pagine 
 
 L'app prevede che ogni membro attivo durante un servizio possieda un account (a parte forse alcuni camerieri). L'utilizzo è consentito esclusivamente agli utenti loggati, con certe limitazioni in base al ruolo. Un utente può avere più ruoli.
 
@@ -55,7 +61,9 @@ L'evoluzione temporale di un ordine è la seguente:
 8. la cucina prepara la portata e la segna come 'pronta'
 9. lo smazzo e il cameriere vedono l'update
 10. lo smazzo controlla che l'ordine si stato realizzato correttamente e lo passa al cameriere per portarlo al tavolo
-11. si ripete dal punto 4 al puntto 10 per ogni portata
+11. si ripete dal punto 4 al punto 10 per ogni portata
+
+[⮝ torna all'indice](#indice) 
 
 <div style="page-break-after: always;"></div>
 
@@ -69,6 +77,7 @@ L'evoluzione temporale di un ordine è la seguente:
 - [Secondi](#secondi)
 - [Smazzo](#smazzo)
 
+[⮝ torna all'indice](#indice) 
 ## Attività dei ruoli
 #### Super admin
 - modificare i ruoli degli utenti 
@@ -105,6 +114,7 @@ L'evoluzione temporale di un ordine è la seguente:
 - concludere una portata di un ordine
 - recuperare vecchie portate di ordini già conclusi per eventuali modifiche
 
+[⮝ torna all'indice](#indice) 
 ## Permessi dei ruoli
 
 #### Modifica ruoli utente
@@ -121,6 +131,8 @@ L'evoluzione temporale di un ordine è la seguente:
 - Smazzo modifica solo lo stato
 - Cameriere modifica tutto solo i propri ordini
 - Cucine modificano solo le proprie portate
+
+[⮝ torna all'indice](#indice) 
 
 <div style="page-break-after: always;"></div>
 
@@ -218,7 +230,7 @@ Ogni pagina ha una top bar con:
     - una riga per piatto con nome e quantità
 
 <table><tr><td>
-  <img src="mockups/cameriere.png" height=380 style="border: 2px solid DimGray; border-radius: 3px" align="center">
+  <img src="mockups/cameriere.png" height=380 style="border: 2px solid DimGray; border-radius: 3px">
 
 <div style="page-break-after: always;"></div>
 
@@ -241,8 +253,9 @@ Ogni pagina ha una top bar con:
   <img src="mockups/smazzo.png" height=380 style="border: 2px solid DimGray; border-radius: 3px">
 </td></tr></table>
 
-<div style="page-break-after: always;"></div>
+[⮝ torna all'indice](#indice) 
 
+<div style="page-break-after: always;"></div>
 
 ## Stima dei costi
 
@@ -311,6 +324,7 @@ ipotesi: 400 r/ordine - 400 w/ordine
 4000 ordini = 1600000 r - 1600000 w = $0,96 + $2,56
 
 
+[⮝ torna all'indice](#indice) 
 ## Note 
 Avere dati sull'evoluzione delle quantità in magazzino
 
@@ -318,12 +332,13 @@ Avere dati sull'evoluzione delle quantità in magazzino
 
 # Parte II - implementazione
 App relies on 2 main technologies:
-- Firebase: a BaaS(Back-end as a Service) supported by Google. It will be used for:
+- [Firebase](https://firebase.google.com/): a BaaS(Back-end as a Service) supported by Google. It will be used for:
   -  hosting
   -  DB
   -  server-side functions
-- React: a UI library created and maintained by Facebook to build user interfaces based on components and state.
+- [React](https://reactjs.org/): a UI library created and maintained by Facebook to build user interfaces based on components and state.
 
+[⮝ back to table of contents](#indice) 
 ## Firestore DB structure
 #### sagre
 One document for each 'sagra' of type ISagra with 2 subcollections:
@@ -343,6 +358,7 @@ Each document corresponds to a user in the app, it could be useful for future us
 #### userSagraRoles
 Each document corresponds to a user and contains a 'roles' property which is a string[] which contains all roles of the user. Each document is linked with a user by its id, building it as  `r_${uid}`.
 
+[⮝ back to table of contents](#indice) 
 <div style="page-break-after: always;"></div>
 
 ## Security rules
@@ -379,6 +395,7 @@ match / {
   allow write: if true;
 }
 ```
+[⮝ back to table of contents](#indice) 
 <div style="page-break-after: always;"></div>
 
 ## Typescript Interfaces
@@ -451,7 +468,7 @@ interface ICourse {
   orderNum: number,
   name: string,
   kitchen: string,
-  status: string,      // (waiting,prep,ready,delivered)
+  status: string,      // (wait,prep,ready,delivered)
   dishes: IDish[],
 }
 ```
@@ -486,6 +503,7 @@ interface IReducerAction {
 }
 ```
 
+[⮝ back to table of contents](#indice) 
 <div style="page-break-after: always;"></div>
 
 ## React Components
@@ -518,8 +536,8 @@ App
 - CSS Baseline
 - AppBar
 - router with all PrivateRoute for pages except for login
-- state = {isLoggedIn : boolean, roles: string[], name: string}
-- state = {serviceDbRef: string, storageDbRef: string}
+- useState = {isLoggedIn : boolean, roles: string[], name: string}
+- useState = {serviceDbRef: string, storageDbRef: string}
 - in useEffect setup onetime listener for firebase.auth() to change state and set serviceDbRef and storageDbRef in SagraContext
 
 SagraContext
@@ -534,7 +552,7 @@ AppBar (isUserLoggedIn, userRoles)
 PendingOrders 
 - use SagraContextConsumer to get Firestore Storage
 - setup firebase snapshot on orders collection where state='pending'
-- state = orders where state='pending'
+- useState = orders where state='pending'
 - if there are more than 1 order show attention icon
 - display id of each order
 - _LAST_ could signal if an order is waiting for too long
@@ -602,7 +620,7 @@ AdminPage
 
 Storage
 - setup listener for storage collection
-- state = storage
+- useState = storage
 - map courses of storage to StorageCourse and pass single course as prop
 
 StorageCourse (storageCourse : IStorageCourse)
@@ -612,14 +630,14 @@ StorageCourse (storageCourse : IStorageCourse)
 StorageDish (storageDish : IStorageDish)
 - render infos from props
 - need to be able to edit qt, price
-- state = isEditing
+- useState = isEditing
 - on editButton click set isEditing to true
 - if isEditing==true dish row grays out and edit icon becomes check icon to finish, text input enables
 - on checkButton click, update strogae in DB and set isEditing=false
 
 ServiceTab
 - setup listener for service where EndDate is null
-- state = current service
+- useState = current service
 - if service exists pass isServiceActive=true as prop to serviceStarter else pass false
 - if service exists  display ServiceInfo and pass service as prop
 
@@ -652,7 +670,6 @@ CashRegisterPage
     - SEND_ORDER
     - PRINT_ORDER
     - RESET_ORDER
-    - SET_ORDER
 - map state(storage) to list of CashRegisterCourse, if in newOrder there is a course with same name pass it as prop
 - one card with CashRegisterConfirmOrder pass newOrder revenue
 
@@ -682,7 +699,6 @@ cash register reducer actions:
 - RESET_ORDER:
  - set newOrder to [] and orderNum to undefined 
 
-
 CashRegisterDeleteButton
 - on click trigger DeleteOrderModal
 
@@ -700,9 +716,9 @@ DeleteOrderModal
 
 InstantCashRegisterPage
 - setup firestore listener for storage
-- state = all courses in storage where isInstant=true
+- useState = all courses in storage where isInstant=true
 - add useReducer:
-  - state: {newOrder : StorageCourse[]}
+  - useState: {newOrder : StorageCourse[]}
   - dispatchActions:
     - ADD_DISH
     - REMOVE_DISH
@@ -720,7 +736,9 @@ InstantCashRegisterConfirmOrder
   - [ ] WaiterOrder 
     - [ ] WaiterOrderCourse
       - [ ] DishRow
-    - [ ] AddCourseModal
+    - [ ] EditOrderModal
+      - CashRegisterCourse
+        - CashRegsiterDish
   - [ ] LinkOrderButton
   - [ ] LinkOrderModal
 
@@ -733,7 +751,7 @@ WaiterPage
 - display table# and orderId
 - display close button, on click set status='completed'
 - display unlink button, on click set status='pending'
-- on click of AddCourseButton trigger AddCourseModal
+- on click of AddCourseButton trigger EditOrderModal
   
 WaiterCourse
 - when Course state == waiting, display sendToKitchen button
@@ -745,9 +763,24 @@ WaiterCourse
 DishRow
 - display dish shortName and qt
 
-AddCourseModal
+EditOrderModal
 - display orderNum
-- display cassa...
+- setup in one-time useEffect a listener for storage doc
+- useState = storage
+- useReducer = newCourse
+  - state=newCourses : ICourse[]
+  - actions:
+    - ADD_DISH
+    - REMOVE_DISH
+    - SEND_ORDER
+
+EditOrderConfirm
+- display total of new courses
+- display confirmButton
+- on click on confirmButton dispatch SEND_ORDER
+
+useReducer actions
+- SEND_ORDER: call cloud function addCoursesToOrder
 
 LinkOrderButton
 - floating '+' button to trigger LinkOrderModal
@@ -792,8 +825,8 @@ SmazzoPage
 
 CourseSection
 - setup listener for courses where kitchen is equal to prop and statua in ['prep','ready']
-- state = array of courses
-- state = array of OrderLinkInfo[]
+- useState = array of courses
+- useState = array of OrderLinkInfo[]
 - foreach document added get from firestore order where ordernum==course.orderNum and insert in OrderLinkInfo[] a new object with infos
 - foreach document deleted get from firestore order where ordernum==course.orderNum and remove in OrderLinkInfo[] a new object with infos
 - map courses to SmazzoCourse and pass Course and OrderLinkInfo
@@ -803,6 +836,7 @@ SmazzoCourse
 - check button, on click set in db course.status='delivered'
 - if status is prep then background is yellowish else greenish
 
+[⮝ back to table of contents](#indice) 
 <div style="page-break-after: always;"></div>
 
 ## Cloud functions
@@ -819,11 +853,15 @@ SmazzoCourse
   5. increase storage qts
   6. increase totalPeople
   7. increase totalOrders
+- #### addCoursesToOrder
+  (orderNum : number, courses : ICourses[]) => {} : boolean
+  1. add new courses in courses collections with orderNum equal to arg
 - #### deleteOrder
-  4. decrease total revenue of service
-  5. decrease storage qts
-  6. decrease totalPeople
-  7. decrease totalOrders
+  (orderNum : number) => {} : boolean
+  1. decrease total revenue of service
+  2. decrease storage qts
+  3. decrease totalPeople
+  4. decrease totalOrders
 
 #### triggers:
 - #### onCreate on instantOrder
@@ -833,7 +871,7 @@ SmazzoCourse
 - #### newUser registration
   1. create new record in userSagraRoles collection with 'roles' field = []
   2. create new reacord in users with empty doc
-- #### ??? user Removes
+- #### user deletion
     a single batch
   1. delete user record from userSagraRole
   2. delete user record from users
@@ -841,10 +879,12 @@ SmazzoCourse
   1. delete all userCostum claims
   2. for each role in user add userCostumClaims 'role' = true
 
+[⮝ back to table of contents](#indice) 
 ## Logging
 L'app deve loggare le evoluzioni degli ordini per avere dati statistici
 
-
+[⮝ back to table of contents](#indice) 
+## Appunti
 db.collection('sagre').where('year','==',thisYear).collection('storage').where('endDate','==',null)
 
 db.collection('sagre').where('year','==',thisYear).collection('storage')s
