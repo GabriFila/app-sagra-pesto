@@ -231,6 +231,7 @@ Ogni pagina ha una top bar con:
 
 <table><tr><td>
   <img src="mockups/cameriere.png" height=380 style="border: 2px solid DimGray; border-radius: 3px">
+</td></tr></table>
 
 <div style="page-break-after: always;"></div>
 
