@@ -669,7 +669,7 @@ ServiceTab
 - setup listener for service where EndDate is null
 - useState = current service
 - if service exists pass isServiceActive=true as prop to serviceStarter else pass false
-- if service exists  display ServiceInfo and pass service as prop
+- if service exists display ServiceInfo and pass service as prop
 
 ServiceStarter (isServiceActive : boolean)
 - if isServiceActive is true show red button to end it, i.e. set endDate where endDate is not defined
