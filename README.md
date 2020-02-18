@@ -280,13 +280,14 @@ Ogni pagina ha una top bar con:
   - il numero del tavolo
   - un tasto per modificare l'ordine
   - le portate dell'ordine, contenente: - un tasto per completare la portata - un tasto per mandare la portata in preparazione - una riga per piatto con nome e quantità
-    <br/>
-    <br/>
-    <p align="center">
-      <img src="mockups/cameriere.png" height=380 style="border: 2px solid DimGray; border-radius: 3px">
-      <img src="mockups/cameriereEdit.png" height=380 style="border: 2px solid DimGray; border-radius: 3px">
-    </p>
-    <div style="page-break-after: always;"></div>
+
+<br/>
+<br/>
+<p align="center">
+  <img src="mockups/cameriere.png" height=380 style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="mockups/cameriereEdit.png" height=380 style="border: 2px solid DimGray; border-radius: 3px">
+</p>
+<div style="page-break-after: always;"></div>
 
 #### Cucine/bar
 
