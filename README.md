@@ -1,8 +1,6 @@
 # App - Sagra del pesto
 Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pesto di Genova. La prima parte descrive il funzionamento dell'app, la seconda descrive la guida per l'implementazione. Si propone che l'app sia una parte di un'infrastuttura più generale per gestire l'IT della sezione di Genova.
 
-
-
 # Indice
 - [Parte I - funzionamento](#parte-i---funzionamento)
   - [Obbiettivi](#obbiettivi)
@@ -19,6 +17,7 @@ Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pes
   - [Typescript Interfaces](#typescript-interfaces)
   - [URLs](#urls)
   - [React Components](#react-components)
+  - [Helper Funcions](#helper-functions)
   - [Logging](#logging)
 
 <div style="page-break-after: always;"></div>
@@ -48,7 +47,7 @@ Alcune nozioni fondamentali riguardo l'app:
 
 L'app prevede che ogni membro attivo durante un servizio possieda un account (a parte forse alcuni camerieri). L'utilizzo è consentito esclusivamente agli utenti loggati, con certe limitazioni in base al ruolo. Un utente può avere più ruoli.
 
-L'elemento minimo dell'app è la portata di un ordine. E' l'oggetto che viene passato tra i vari 'centri' operativi della sagra.
+L'entità minimo dell'app è la portata di un ordine. E' l'oggetto che viene passato tra i vari 'centri' operativi della sagra.
 
 L'evoluzione temporale di un ordine è la seguente:
 1. il cliente arriva alla cassa
@@ -154,16 +153,27 @@ Ogni pagina ha una top bar con:
 
 #### Home
 - Link che portano alle altre pagine
-<table><tr><td>
+
+
+
+<br/>
+<br/>
+<p align="center">
   <img src="mockups/home.png" height=380 style="border: 2px solid DimGray; border-radius: 3px" style="border: 2px solid DimGray; border-radius: 3px">
-</td></tr></table>
+</p>
+
+<div style="page-break-after: always;"></div>
 
 #### Login
 - Tasti per registrarsi o loggarsi
 
-<table><tr><td>
+
+<br/>
+<br/>
+<p align="center">
   <img src="mockups/login.png" height=380 style="border: 2px solid DimGray; border-radius: 3px">
-</td></tr></table>
+</p>
+
 
 <div style="page-break-after: always;"></div>
 
@@ -175,9 +185,13 @@ Ogni pagina ha una top bar con:
 - Un tasto per iniziare/concludere il servizio (verde per aprilo e rosso per chiuderlo)
 - Una sezione per le info su ordini e incassi del servizio corrente
 
-<table><tr><td>
+
+<br/>
+<br/>
+<p align="center">
   <img src="mockups/admin.png" height=380 style="border: 2px solid DimGray; border-radius: 3px">
-</td></tr></table>
+</p>
+
 
 <div style="page-break-after: always;"></div>
 
@@ -192,9 +206,13 @@ Ogni pagina ha una top bar con:
   - il totale dell'ordine
   - un tasto per confermare l'ordine
 
-<table><tr><td>
+
+<br/>
+<br/>
+<p align="center">
   <img src="mockups/cassaBar.png" height=380 style="border: 2px solid DimGray; border-radius: 3px">
-</td></tr></table>
+</p>
+
 
 <div style="page-break-after: always;"></div>
 
@@ -212,9 +230,13 @@ Ogni pagina ha una top bar con:
   - un tasto per stampare l'ordine
   - un tasto per resettare la pagina a zero
 
-<table><tr><td>
+
+<br/>
+<br/>
+<p align="center">
   <img src="mockups/cassa.png" height=380 style="border: 2px solid DimGray; border-radius: 3px">
-</td></tr></table>
+</p>
+
 
 <div style="page-break-after: always;"></div>
 
@@ -228,20 +250,24 @@ Ogni pagina ha una top bar con:
     - un tasto per completare la portata 
     - un tasto per mandare la portata in preparazione
     - una riga per piatto con nome e quantità
-
-<table><tr><td>
+<br/>
+<br/>
+<p align="center">
   <img src="mockups/cameriere.png" height=380 style="border: 2px solid DimGray; border-radius: 3px">
-</td></tr></table>
-
+</p>
 <div style="page-break-after: always;"></div>
 
 #### Cucine/bar
 - Una sezione ampia con tutti gli ordini in preparazione della propria cucina, ognuno con un tasto per segnarli completati
 - Una mini sezione con il totale dei piatti da preparare attualmente
 
-<table><tr><td>
+
+<br/>
+<br/>
+<p align="center">
   <img src="mockups/cucina.png" height=380 style="border: 2px solid DimGray; border-radius: 3px">
-</td></tr></table>
+</p>
+
 
 <div style="page-break-after: always;"></div>
 
@@ -250,9 +276,13 @@ Ogni pagina ha una top bar con:
    - lista dei piatti
    - tasto per concludere la portata
 
-<table><tr><td>
+
+<br/>
+<br/>
+<p align="center">
   <img src="mockups/smazzo.png" height=380 style="border: 2px solid DimGray; border-radius: 3px">
-</td></tr></table>
+</p>
+
 
 [⮝ torna all'indice](#indice) 
 
@@ -482,12 +512,14 @@ interface IDish {
 #### React
 ``` ts
 interface IOrderProp extends IOrder {
-  id: string  
+  // id is added to reach document in firestore faster
+  docId: string  
 }
 ```
 ``` ts
 interface ICourseProp extends ICourse {
-  id: string  
+  // id is added to reach document in firestore faster
+  docId: string  
 }
 ```
 ``` ts
@@ -507,9 +539,7 @@ interface IReducerAction {
 [⮝ back to table of contents](#indice) 
 <div style="page-break-after: always;"></div>
 
-## React Components
-
-#### URLs
+## URLs
 domain = (e.g. sagra.genova.cngei.it)
 - [home](#domain) = domain
 - [login](#domain/login) = domain/login
@@ -520,6 +550,8 @@ domain = (e.g. sagra.genova.cngei.it)
 - [cassa](#domain/cassa) = domain/cassa
 - [cassaBar](#domain/cassaBar) istantanea = domain/cassaBar
 - [cameriere](#domain/cameriere) = domain/cameriere
+
+## React Components
 
 Assumption (need to be checked during development): for all Components where a user event triggers a change in firestore there is no need to add a reducer but only a listener that acts on the state. Actions will pass through firestore on-device cache first and then propagate to other UIs via DB and then trigger the snapshot. In those components where a reducer is needed (cassa, cassBar) there should not be the need also for context, should be maximum 2-level prop-drilling, which doesn't make the use of Context so imminent.
 
@@ -615,9 +647,7 @@ RegisterDialog
     - [ ] ServiceInfo
 
 AdminPage
-- 2 sections: 
-  - Storage
-  - ServiceTab
+- 2 sections: Storage, ServiceTab
 
 Storage
 - setup listener for storage collection
@@ -630,7 +660,6 @@ StorageCourse (storageCourse : IStorageCourse)
 
 StorageDish (storageDish : IStorageDish)
 - render infos from props
-- need to be able to edit qt, price
 - useState = isEditing
 - on editButton click set isEditing to true
 - if isEditing==true dish row grays out and edit icon becomes check icon to finish, text input enables
@@ -761,7 +790,7 @@ WaiterCourse
 - map Dishes to DishRow[]
 - when click a button change state in db appropriately
 
-DishRow
+DishRow (dish : IDish)
 - display dish shortName and qt
 
 EditOrderModal
@@ -795,22 +824,22 @@ LinkOrderModal
 #### domain/(bar,primi,secondi)
   - [ ] KitchenShelf
     - [ ] KitchenCourse
-      - [ ] DishRow
+      - DishRow
   - [ ] KitchenTotal
-      - [ ] DishRow
+      - DishRow
 
 KitchenPage
 - in one-time useEffect setup listener for courses were status='prep' and kitchen is equal to url slug
-- KitchenShelf pass docs asICourseProp[] prop
-- KitchenTotal pass docs as ICourseProp[] prop
+- KitchenShelf pass docs as prop
+- KitchenTotal pass docs as prop
 
-KitchenShelf
+KitchenShelf (courses : ICourseProp[])
 - map props to KitchenCourse
 
-KitchenCourse
+KitchenCourse (course : ICourseProp)
 - map props to DishRow
 
-KitchenTotal
+KitchenTotal (courses : ICourseProp[])
 - reduce arrayProp to an array of IDIsh and map it to DishRow 
 
 <div style="page-break-after: always;"></div>
@@ -824,7 +853,7 @@ KitchenTotal
 SmazzoPage
 - create array with 3 kitchens and map it to a columns in which to render CourseSection and pass kitchen as prop
 
-CourseSection
+CourseSection (kitchen : string)
 - setup listener for courses where kitchen is equal to prop and statua in ['prep','ready']
 - useState = array of courses
 - useState = array of OrderLinkInfo[]
@@ -832,7 +861,7 @@ CourseSection
 - foreach document deleted get from firestore order where ordernum==course.orderNum and remove in OrderLinkInfo[] a new object with infos
 - map courses to SmazzoCourse and pass Course and OrderLinkInfo
 
-SmazzoCourse
+SmazzoCourse (course : ICourseProp)
 - render infos
 - check button, on click set in db course.status='delivered'
 - if status is prep then background is yellowish else greenish
@@ -857,6 +886,7 @@ SmazzoCourse
 - #### addCoursesToOrder
   (orderNum : number, courses : ICourses[]) => {} : boolean
   1. add new courses in courses collections with orderNum equal to arg
+  2. update storage
 - #### deleteOrder
   (orderNum : number) => {} : boolean
   1. decrease total revenue of service
@@ -881,11 +911,15 @@ SmazzoCourse
   2. for each role in user add userCostumClaims 'role' = true
 
 [⮝ back to table of contents](#indice) 
+
+## Helper functions
+#### getCurrentService
+- need to try in order to not use context
+db.collection('sagre').where('year','==',thisYear).collection('storage').where('endDate','==',null)
+
+db.collection('sagre').where('year','==',thisYear).collection('storage')s
 ## Logging
 L'app deve loggare le evoluzioni degli ordini per avere dati statistici
 
 [⮝ back to table of contents](#indice) 
 ## Appunti
-db.collection('sagre').where('year','==',thisYear).collection('storage').where('endDate','==',null)
-
-db.collection('sagre').where('year','==',thisYear).collection('storage')s
