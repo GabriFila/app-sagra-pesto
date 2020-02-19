@@ -10,7 +10,7 @@ Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pes
   - [Ruoli utente](#ruoli-utente)
   - [Attività dei ruoli](#attività-dei-ruoli)
   - [Permessi dei ruoli](#permessi-dei-ruoli)
-  - [Pagine](#pagine)
+  - [Mockup pagine](#mokcup-pagine)
   - [Stima dei costi](#stima-dei-costi)
 - [Parte II - implementazione](#parte-ii---implementazione)
   - [Cloud functions](#cloud-functions)
@@ -171,7 +171,7 @@ L'evoluzione temporale di un ordine è la seguente:
 
 <div style="page-break-after: always;"></div>
 
-## Pagine
+## Mokcup pagine
 
 Ogni pagina ha una top bar con:
 
@@ -399,6 +399,8 @@ ipotesi: 400 r/ordine - 400 w/ordine
 
 Avere dati sull'evoluzione delle quantità in magazzino
 
+[⮝ torna all'indice](#indice)
+
 <div style="page-break-after: always;"></div>
 
 # Parte II - implementazione
@@ -422,7 +424,7 @@ One document for each 'sagra' of type ISagra with 2 subcollections:
 - #### storage
   Only one document which contains an IStorage Object
 - #### services
-  Each document is a single service located in time. Each service has 3 subcollections:
+  Each document is a single service of a 'sagra' with 3 subcollections:
   - #### instantOrders
     - each document is of type IInstantOrder
   - #### orders
