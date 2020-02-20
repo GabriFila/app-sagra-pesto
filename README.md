@@ -19,7 +19,7 @@ Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pes
   - [Typescript Interfaces](#typescript-interfaces)
   - [URLs](#urls)
   - [React Components](#react-components)
-  - [Helper Funcions](#helper-functions)
+  - [Helper Functions](#helper-functions)
   - [Logging](#logging)
 
 <div style="page-break-after: always;"></div>
@@ -68,8 +68,8 @@ L'evoluzione temporale di un ordine è la seguente:
 7. la cucina responsabile della portata vede la presenza di una portata da preparare
 8. la cucina prepara la portata e la segna come 'pronta'
 9. lo smazzo e il cameriere vedono l'update
-10. lo smazzo controlla che l'ordine si stato realizzato correttamente e lo passa al cameriere per portarlo al tavolo
-11. si ripete dal punto 4 al punto 10 per ogni portata
+10. lo smazzo controlla che l'ordine sia stato realizzato correttamente e lo passa al cameriere per portarlo al tavolo
+11. si ripete dal punto 6 al punto 10 per ogni portata
 
 [⮝ torna all'indice](#indice)
 
@@ -114,7 +114,7 @@ L'evoluzione temporale di un ordine è la seguente:
 - mandare una portata di un ordine in preparazione
 - concludere una portata di un ordine
 - aggiungere una portata a un ordine
-- _LAST_ ricevere modifica quando un ordine è pronto
+- _LAST_ ricevere notifica quando un ordine è pronto
 
 #### Bar
 
@@ -334,60 +334,60 @@ Ogni pagina ha una top bar con:
 c+2 r & n+3 w
 
 manca la parte di aggiornamento dell'AdminPage
-| qt | tipo | desc |
+|  qt   | tipo  | desc                                                   |
 | :---: | :---: | ------------------------------------------------------ |
-| 1 | r | service/current per sapere lastOrderID |
-| 1 | w | service/current per aggiornare lastOrderID e prezzo |
-| 1 | w | in service/current/orders per creare un nuovo ordine |
-| n | w | in service/current/courses per creare le nuove portate |
-| 1 | w | per aggiornare le quantità in storage |
-| c | r | per aggiornare le quantità sulle UI della cassa |
-| 1 | r | per aggiornare l'ordine pendente allo smazzo |
+|   1   |   r   | service/current per sapere lastOrderID                 |
+|   1   |   w   | service/current per aggiornare lastOrderID e prezzo    |
+|   1   |   w   | in service/current/orders per creare un nuovo ordine   |
+|   n   |   w   | in service/current/courses per creare le nuove portate |
+|   1   |   w   | per aggiornare le quantità in storage                  |
+|   c   |   r   | per aggiornare le quantità sulle UI della cassa        |
+|   1   |   r   | per aggiornare l'ordine pendente allo smazzo           |
 
 #### Legame cameriere: n+2 r & 1 w
 
-| qt  | tipo | desc                                    |
-| :-: | :--: | --------------------------------------- |
-|  1  |  r   | per collegamento cameriere ordine       |
-|  1  |  r   | per rimozione ordine pendente da smazzo |
-|  1  |  w   | per collegamento cameriere ordine       |
-|  n  |  r   | per visualizzare le portate dell'ordine |
+|  qt   | tipo  | desc                                    |
+| :---: | :---: | --------------------------------------- |
+|   1   |   r   | per collegamento cameriere ordine       |
+|   1   |   r   | per rimozione ordine pendente da smazzo |
+|   1   |   w   | per collegamento cameriere ordine       |
+|   n   |   r   | per visualizzare le portate dell'ordine |
 
 #### ciclo per ordine: n(2a+3b) r & 3n w
 
 #### ciclo singola portata: 2a+3b r & 3 w
 
-|    qt     | tipo | desc                      |
-| :-------: | :--: | ------------------------- |
-| cameriere |      |
-|     1     |  w   | cambio stato wait->prep   |
-|     1     |  r   | cambio stato prep->ready  |
-|     1     |  w   | cambio stato ready->compl |
-|  cucina   |      |
-|     a     |  r   | cambio stato wait->prep   |
-|     1     |  w   | cambio stato prep->ready  |
-|   (a-1)   |  r   | cambio stato prep->ready  |
-|  smazzo   |      |
-|     b     |  r   | cambio stato wait->prep   |
-|     b     |  r   | cambio stato prep->ready  |
-|     b     |  r   | cambio stato ready->compl |
+|    qt     | tipo  | desc                      |
+| :-------: | :---: | ------------------------- |
+| cameriere |       |
+|     1     |   w   | cambio stato wait->prep   |
+|     1     |   r   | cambio stato prep->ready  |
+|     1     |   w   | cambio stato ready->compl |
+|  cucina   |       |
+|     a     |   r   | cambio stato wait->prep   |
+|     1     |   w   | cambio stato prep->ready  |
+|   (a-1)   |   r   | cambio stato prep->ready  |
+|  smazzo   |       |
+|     b     |   r   | cambio stato wait->prep   |
+|     b     |   r   | cambio stato prep->ready  |
+|     b     |   r   | cambio stato ready->compl |
 
 #### Totale
 
-| qt           |       r        |  w   |
-| :----------- | :------------: | :--: |
-| creazione    |      c+2       | n+3  |
-| collegamento |      n+2       |  1   |
-| ciclo        |    n(2a+3b)    |  3n  |
-| totale       | n(1+2a+3b)+c+4 | 4n+4 |
+| qt           |       r        |   w   |
+| :----------- | :------------: | :---: |
+| creazione    |      c+2       |  n+3  |
+| collegamento |      n+2       |   1   |
+| ciclo        |    n(2a+3b)    |  3n   |
+| totale       | n(1+2a+3b)+c+4 | 4n+4  |
 
-#### Caso reale:
+#### Ipotesi reale:
 
 n=4 a=2 b=1 c=2 => 38r & 20w
 
 4000 ordini = 152000 r & 80000 w ~ €0.09 & €0.27
 
-#### Caso limite assurdo
+#### Ipotesi assurda
 
 ipotesi: 400 r/ordine - 400 w/ordine
 
@@ -997,7 +997,7 @@ SmazzoCourse (course : ICourseWithId)
 
 #### callables:
 
-- #### createOrder
+- [ ] createOrder
 
   (order : IOrder) => {} : number
 
@@ -1011,11 +1011,11 @@ SmazzoCourse (course : ICourseWithId)
   6. increase totalPeople
   7. increase totalOrders
 
-- #### addCoursesToOrder
+- [ ] addCoursesToOrder
   (orderNum : number, courses : ICourses[]) => {} : boolean
   1. add new courses in courses collections with orderNum equal to arg
   2. update storage
-- #### deleteOrder
+- [ ] deleteOrder
   (orderNum : number) => {} : boolean
   1. decrease total revenue of service
   2. decrease storage qts
@@ -1024,18 +1024,18 @@ SmazzoCourse (course : ICourseWithId)
 
 #### triggers:
 
-- #### onCreate on instantOrder
+- [ ] onCreate on instantOrder
   1. update totalRevenue of current service
   2. update totalInstantOrders of current service
   3. update qts in storage
-- #### newUser registration
+- [ ] newUser registration
   1. create new record in userSagraRoles collection with 'roles' field = []
   2. create new reacord in users with empty doc
-- #### user deletion
+- [ ] user deletion
   a single batch
   1. delete user record from userSagraRole
   2. delete user record from users
-- #### onUpdate on sagraUserRoles
+- [ ] onUpdate on sagraUserRoles
   1. delete all userCostum claims
   2. for each role in user add userCostumClaims 'role' = true
 
@@ -1043,10 +1043,11 @@ SmazzoCourse (course : ICourseWithId)
 
 ## Helper functions
 
-#### getCurrentService
+- [ ] getCurrentService
 
-- need to try in order to not use context
-  db.collection('sagre').where('year','==',thisYear).collection('storage').where('endDate','==',null)
+need to try in order to not use context 
+
+db.collection('sagre').where('year','==',thisYear).collection('storage').where('endDate','==',null)
 
 db.collection('sagre').where('year','==',thisYear).collection('storage')s
 
