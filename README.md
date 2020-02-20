@@ -1058,3 +1058,23 @@ L'app deve loggare le evoluzioni degli ordini per avere dati statistici
 [⮝ back to table of contents](#indice)
 
 ## Appunti
+```ts
+  db.collection('prova')
+    .where('cond1', '==', true)
+    .limit(1)
+    .get()
+    .then(snaps =>
+      snaps.forEach(snap => {
+        console.log(snap.data());
+        snap.ref
+          .collection('coll2')
+          .where('cond2', '==', true)
+          .get()
+          .then(snapshots =>
+            snapshots.forEach(snap => console.log('result', snap.data()))
+          );
+      })
+    )
+    .catch(err => console.log(err.message.red));
+
+```
