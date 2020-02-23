@@ -654,7 +654,7 @@ App
 - router with all PrivateRoute for pages except for login
 - useState = {isLoggedIn : boolean, roles: string[], name: string}
 - useState = {serviceDbRef: string, storageDbRef: string}
-- in useEffect setup onetime listener for firebase.auth() to change state and set serviceDbRef and storageDbRef in SagraContext
+- in useEffect setup onetime listener for firebase.auth() to change state and set serviceDbRef and storageDbRef in SagraContext. Catch error and log it to console
 
 SagraContext
 - context with state serviceDbRef and storageDbRef
@@ -663,7 +663,7 @@ AppBar (isUserLoggedIn, userRoles)
 - if userLoggedIn show name, role, logout button
 - if userRoles includes 'smazzo' and url is '/smazzo' show also search button and pending orders
 - if userRoles includes 'cassa' and url is '/cassa' show also search button
-- on logoutButton click redirect to login page
+- on logoutButton click log out user and redirect to login page
 
 PendingOrders
 - use SagraContextConsumer to get Firestore Storage
@@ -713,13 +713,16 @@ LoginPage
 - registerButton to trigger RegisterDialog
 
 LoginDialog
+- state = loginError (false)
 - fields: email and password
 - on login if user has at least a role redirect to role page else to home
-- if login error show
+- if loginError show message under form
 
 RegisterDialog
+- state = registerError (false)
 - fields: email, password, confirm password, name
 - on register if user has at least a role redirect to home
+- if registerError show message under form
 
 <div style="page-break-after: always;"></div>
 
