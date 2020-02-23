@@ -639,9 +639,7 @@ domain = (e.g. sagra.genova.cngei.it)
 Assumption (need to be checked during development): for all Components where a user event triggers a change in firestore there is no need to add a reducer but only a listener that acts on the state. Actions will pass through firestore on-device cache first and then propagate to other UIs via DB and then trigger the snapshot. In those components where a reducer is needed (cassa, cassBar) there should not be the need also for context, should be maximum 2-level prop-drilling, which doesn't make the use of Context so imminent.
 
 Base structure:
-
 - [ ] App
-
   - [ ] SagraContextProvider
   - [ ] AppBar
     - [ ] MenuDrawer
@@ -650,7 +648,6 @@ Base structure:
   - [ ] PrivateRoute
 
 App
-
 - material UI theme builder
 - CSS Baseline
 - AppBar
@@ -660,18 +657,15 @@ App
 - in useEffect setup onetime listener for firebase.auth() to change state and set serviceDbRef and storageDbRef in SagraContext
 
 SagraContext
-
 - context with state serviceDbRef and storageDbRef
 
 AppBar (isUserLoggedIn, userRoles)
-
 - if userLoggedIn show name, role, logout button
 - if userRoles includes 'smazzo' and url is '/smazzo' show also search button and pending orders
 - if userRoles includes 'cassa' and url is '/cassa' show also search button
 - on logoutButton click redirect to login page
 
 PendingOrders
-
 - use SagraContextConsumer to get Firestore Storage
 - setup firebase snapshot on orders collection where state='pending'
 - useState = orders where state='pending'
@@ -680,11 +674,9 @@ PendingOrders
 - _LAST_ could signal if an order is waiting for too long
 
 MenuDrawer (userRoles)
-
 - contains links to reachable pages by user based on userRoles
 
 PrivateRoute
-
 ```ts
 const PrivateRoute = ({component, authed, userRoles, requiredRoles, otherProps}) => {
   return (
@@ -706,7 +698,6 @@ const PrivateRoute = ({component, authed, userRoles, requiredRoles, otherProps})
 - [ ] HomePage
 
 HomePage (userRoles)
-
 - display a link buttons for each route reachable by user based on userRoles
 - if userRole is empty show message to go to superAdmin and give role
 
@@ -717,18 +708,16 @@ HomePage (userRoles)
   - [ ] RegisterDialog
 
 LoginPage
-
 - notLoggedIn messagge
 - loginButton to trigger LoginDialog
 - registerButton to trigger RegisterDialog
 
 LoginDialog
-
 - fields: email and password
 - on login if user has at least a role redirect to role page else to home
+- if login error show
 
 RegisterDialog
-
 - fields: email, password, confirm password, name
 - on register if user has at least a role redirect to home
 
@@ -746,22 +735,18 @@ RegisterDialog
     - [ ] ServiceInfo
 
 AdminPage
-
 - 2 sections: Storage, ServiceTab
 
 Storage
-
 - setup listener for storage collection
 - useState = storage
 - map courses of storage to StorageCourse and pass single course as prop
 
 StorageCourse (storageCourse : IStorageCourse)
-
 - map dishes in storageCourse to StorageDish and pass single dish as prop
 - _LAST_ plus button to add dish
 
 StorageDish (storageDish : IStorageDish)
-
 - render infos from props
 - useState = isEditing
 - on editButton click set isEditing to true
@@ -769,19 +754,16 @@ StorageDish (storageDish : IStorageDish)
 - on checkButton click, update strogae in DB and set isEditing=false
 
 ServiceTab
-
 - setup listener for service where EndDate is null
 - useState = current service
 - if service exists pass isServiceActive=true as prop to serviceStarter else pass false
 - if service exists display ServiceInfo and pass service as prop
 
 ServiceStarter (isServiceActive : boolean)
-
 - if isServiceActive is true show red button to end it, i.e. set endDate where endDate is not defined
 - if isServiceActive is not active show green button to start it, i.e. create new service with endDate undefined
 
 ServiceInfo (service : IService)
-
 - display current service info from props
 
 <div style="page-break-after: always;"></div>
@@ -796,7 +778,6 @@ ServiceInfo (service : IService)
     - [ ] DeleteOrderModal
 
 CashRegisterPage
-
 - setup listener for storage
 - filter courses from storage where inMenu==true and set them to state(storage)
 - useState = storage : IStorageCourse[]
@@ -812,16 +793,13 @@ CashRegisterPage
 - one card with CashRegisterConfirmOrder pass newOrder revenue
 
 CashRegisterCourse (courseInMenu : IStorageCourse, courseInOrder ?: IStorageCourse, dispatch)
-
 - map dishes to CashRegisterDish, if in courseInOrder there is a dish with the same name pass the qt as prop as prop
 
-CashRegisterDish (courseInMenu : IDish, newOrderQt : number, dispatch)
-
+CashRegisterDish (courseInMenu : IDish, newOrderQt : number, dispatch
 - a row with dish name, qt in storage, '-'. '+' and newOrderQt
 - on click of '-' and '+' trigger dispatch action with name of dish
 
 CashRegisterConfirmOrder (revenue: number, orderNum ?: number )
-
 - display revenue from props
 - display sendButton, on click of sendButton dispatch SEND_ORDER action
 - display send button on click of printButton dispatch PRINT_ORDER action
@@ -829,7 +807,6 @@ CashRegisterConfirmOrder (revenue: number, orderNum ?: number )
 - display resetOrderButton
 
 cash register reducer actions:
-
 - ADD_DISH: (payload = dishName)
   - copy state and find course where dishes includes a dish==payload, increment qt and recalculate revenue
 - REMOVE_DISH:
@@ -842,11 +819,9 @@ cash register reducer actions:
 - set newOrder to [] and orderNum to undefined
 
 CashRegisterDeleteButton
-
 - on click trigger DeleteOrderModal
 
 DeleteOrderModal
-
 - text input for number of order to delete
 - on click deleteButton call deleteOrder cloud function
 
@@ -860,7 +835,6 @@ DeleteOrderModal
   - [ ] InstantCashRegisterConfirmOrder
 
 InstantCashRegisterPage
-
 - setup firestore listener for storage
 - useState = all courses in storage where isInstant=true
 - add useReducer:
@@ -872,7 +846,6 @@ InstantCashRegisterPage
 - map state to CashRegisterCourse and pass single course as props
 
 InstantCashRegisterConfirmOrder
-
 - display total from props
 - on click of sendButton dispatch SEND_ORDER action
 
@@ -892,18 +865,15 @@ InstantCashRegisterConfirmOrder
   - [ ] LinkOrderModal
 
 WaiterPage
-
 - in one-time useEffect listen for orders with waiterId == userID.uuid and status='active' (get from firebase.auth().currentUser)
 - map orders to WaiterOrders and pass order as prop + firestoreId
 
 WaiterOrder (order : IOrderWithId)
-
 - in one-time useEffect listen for courses with orderId equal to prop one and pass Course obj as prop + docId
 - display table# and orderId
 - display close button, on click set status='completed'
 - display unlink button, on click set status='pending'
 - on click of AddCourseButton trigger EditOrderModal
-
 WaiterCourse (course : ICourseWithId)
 
 - when Course state == waiting, display sendToKitchen button
@@ -913,11 +883,9 @@ WaiterCourse (course : ICourseWithId)
 - when click a button change state in db appropriately
 
 DishRow (dish : IDish)
-
 - display dish shortName and qt
 
 EditOrderModal (orderNum : number)
-
 - display orderNum to edit
 - setup in one-time useEffect a listener for storage doc
 - useState = storage
@@ -929,21 +897,17 @@ EditOrderModal (orderNum : number)
     - SEND_ORDER
 
 WaiterEditOrderConfirm
-
 - display total of new courses
 - display confirmButton
 - on click on confirmButton dispatch SEND_ORDER
 
 useReducer actions
-
 - SEND_ORDER: call cloud function addCoursesToOrder
 
 LinkOrderButton
-
 - floating '+' button to trigger LinkOrderModal
 
 LinkOrderModal
-
 - 2 number inputs, orderNum and tableNum
 - 1 'confirm' button, onClick change tableNum in DB order
 
@@ -958,21 +922,17 @@ LinkOrderModal
   - DishRow
 
 KitchenPage
-
 - in one-time useEffect setup listener for courses were status='prep' and kitchen is equal to url slug
 - KitchenShelf pass docs as prop
 - KitchenTotal pass docs as prop
 
 KitchenShelf (courses : ICourseWithId[])
-
 - map props to KitchenCourse
 
 KitchenCourse (course : ICourseWithId)
-
 - map props to DishRow
 
 KitchenTotal (courses : ICourseWithId[])
-
 - reduce arrayProp to an array of IDIsh and map it to DishRow
 
 <div style="page-break-after: always;"></div>
@@ -984,11 +944,9 @@ KitchenTotal (courses : ICourseWithId[])
     - [ ] SmazzoCourse
 
 SmazzoPage
-
 - create array with 3 kitchens and map it to a columns in which to render CourseSection and pass kitchen as prop
 
 CourseSection (kitchen : string)
-
 - setup listener for courses where kitchen is equal to prop and statua in ['prep','ready']
 - useState = array of courses
 - useState = array of OrderLinkInfo[]
@@ -997,7 +955,6 @@ CourseSection (kitchen : string)
 - map courses to SmazzoCourse and pass Course and OrderLinkInfo
 
 SmazzoCourse (course : ICourseWithId)
-
 - render infos
 - check button, on click set in db course.status='delivered'
 - if status is prep then background is yellowish else greenish
