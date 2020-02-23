@@ -1,6 +1,8 @@
 # App - Sagra del pesto
 
-Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pesto di Genova. La prima parte descrive il funzionamento dell'app, la seconda descrive la guida per l'implementazione. Si propone che l'app sia una parte di un'infrastuttura più generale per gestire l'IT della sezione di Genova.
+Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pesto di Genova. La prima parte descrive il funzionamento dell'app, la seconda descrive la guida per l'implementazione. L'app è pensata come parte di un'infrastuttura più generale per gestire l'IT della sezione di Genova.
+
+Le parti accompagnate da *LAST* sono funzioni non essenziali che potrebbero non essere presenti nell'app entro giugno.
 
 # Indice
 
@@ -33,7 +35,7 @@ L'applicazione ha l'obbiettivo di migliorare la gestione degli ordini della sagr
 - miglior interazione tra i vari organi operativi
 - aggiornamenti in tempo reale sullo stato degli ordini
 - maggiore visione d'insieme da parte di smazzo e responsabili
-- interfacce personalizzate per ciascun utente in base al ruolo
+- interfacce personalizzate per ciascun componente in base al ruolo
 - possibilità di analisi dei dati post-sagra per poter migliorare le spese e l'organizzazione
 - un'architettura google cloud per una maggiore affidabilità e resilienza dei dati
 - un prodotto espandibile e modificabile per fondare le basi dell'informatizzazione della sezione di Genova
@@ -44,32 +46,32 @@ L'applicazione ha l'obbiettivo di migliorare la gestione degli ordini della sagr
 
 ## Evoluzione di un ordine
 
-Alcune nozioni fondamentali riguardo l'app:
+Alcune nozioni fondamentali sull'app:
 
-- servizio: sessione di pasto (pranzo, cena)
-- ordine istantaneo: ordine fatto dal bar che viene consegnato al cliente direttamente
-- ordine (classico): ordine normale fatto dalla cassa che deve passare attraverso cameriere -> cucina -> smazzo
-- portata: elemento dell'ordine elaborato da una singola cucina
-- piatto: elemento di una portata
-- ogni piatto deve possedere un nome 'corto' di massimo 7 lettere per facilitare la visualizzazione su certe pagine
+- *servizio*: sessione di pasto (pranzo, cena)
+- *ordine* istantaneo: ordine fatto dal bar che viene consegnato al cliente direttamente
+- *ordine* (classico): ordine normale fatto dalla cassa che deve passare attraverso cameriere -> cucina -> smazzo
+- *portata*: elemento dell'ordine preparato da una singola cucina
+- *piatto*: elemento di una portata
+- *ogni* piatto deve possedere un nome 'corto' di massimo 7 lettere per facilitare la visualizzazione su certe pagine
 
 L'app prevede che ogni membro attivo durante un servizio possieda un account (a parte forse alcuni camerieri). L'utilizzo è consentito esclusivamente agli utenti loggati, con certe limitazioni in base al ruolo. Un utente può avere più ruoli.
 
-L'entità minimo dell'app è la portata di un ordine. E' l'oggetto che viene passato tra i vari 'centri' operativi della sagra.
+La minima entità dell'app è la portata di un ordine. E' l'oggetto che viene passato tra i vari 'centri' operativi della sagra (cameriere, cucina, smazzo).
 
 L'evoluzione temporale di un ordine è la seguente:
 
-1. il cliente arriva alla cassa
-2. il cassiere manda l'ordine al sistema
-3. lo smazzo vede la presenza di un ordine non ancora collegato a un cameriere
-4. il cliente si siede
-5. il cameriere collega l'ordine al suo tavolo
-6. il cameriere invia una portata alle cucine
-7. la cucina responsabile della portata vede la presenza di una portata da preparare
-8. la cucina prepara la portata e la segna come 'pronta'
-9. lo smazzo e il cameriere vedono l'update
-10. lo smazzo controlla che l'ordine sia stato realizzato correttamente e lo passa al cameriere per portarlo al tavolo
-11. si ripete dal punto 6 al punto 10 per ogni portata
+1. il cliente arriva alla cassa;
+2. il cassiere manda l'ordine al sistema;
+3. lo smazzo vede la presenza di un ordine non ancora collegato a un cameriere;
+4. il cliente si siede;
+5. il cameriere collega l'ordine al suo tavolo;
+6. il cameriere invia una portata alle cucine;
+7. la cucina responsabile della portata vede la presenza di una portata da preparare;
+8. la cucina prepara la portata e la segna come 'pronta';
+9. lo smazzo e il cameriere vedono l'update;
+10. lo smazzo controlla che l'ordine sia stato realizzato correttamente e lo passa al cameriere per portarlo al tavolo;
+11. si ripete dal punto 6 al punto 10 per ogni portata.
 
 [⮝ torna all'indice](#indice)
 
@@ -111,26 +113,28 @@ L'evoluzione temporale di un ordine è la seguente:
 #### Cameriere
 
 - associare ordine e tavolo
-- mandare una portata di un ordine in preparazione
+- mandare una portata di un ordine in cucina per la preparazione
 - concludere una portata di un ordine
 - aggiungere una portata a un ordine
-- _LAST_ ricevere notifica quando un ordine è pronto
+- ricevere notifica quando un ordine è pronto
 
 #### Bar
 
 - visualizzare il bere e i dolci degli ordini che sono in preparazione
-- cambiare lo stato del bere e dei dolci quando sono pronti
+- segnare il bere e dei dolci come pronti
 - creare ordini istantanei
+<br per identazione pagina in pdf>
+<br per identazione pagina in pdf>
 
 #### Primi
 
 - visualizzare i primi degli ordini che sono in preparazione
-- cambiare lo stato dei primi quando sono pronti
+- segnare i primi come pronti
 
 #### Secondi
 
 - visualizzare i secondi degli ordini che sono in preparazione
-- cambiare lo stato dei secondi quando sono pronti
+- segnare i secondi come pronti
 
 #### Smazzo
 
@@ -162,8 +166,8 @@ L'evoluzione temporale di un ordine è la seguente:
 
 #### Modifica ordine
 
-- Cassa modifica tutto
-- Smazzo modifica solo lo stato
+- Cassa
+- Smazzo
 - Cameriere modifica tutto solo i propri ordini
 - Cucine modificano solo le proprie portate
 
@@ -172,17 +176,18 @@ L'evoluzione temporale di un ordine è la seguente:
 <div style="page-break-after: always;"></div>
 
 ## Mokcup pagine
+Le immagini mostrate sono delle bozze, non è detto che rispettino fedelmente il prodotto finale.
 
 Ogni pagina ha una top bar con:
 
 - se loggato:
-  - il nome dell'utente e il tipo di interfaccia (es: Furio-admim)
+  - il nome dell'utente e la pagina (es: Alice-cassa)
   - un'icona per mostrare il menu con i link alle pagine accessibili dall'utente
   - un tasto per uscire dall'app
-  - se ruolo è 'smazzo'
+  - se il ruolo è 'smazzo'
     - una sezione con gli ordini pendenti
     - un tasto cerca per visualizzare una portata di un ordine
-  - se ruolo è cassa:
+  - se il ruolo è cassa:
     - un tasto 'cestino' per eliminare un ordine già fatto
     - _LAST_ un tasto 'matita' per modificare un ordine già fatto
 
@@ -190,7 +195,7 @@ Ogni pagina ha una top bar con:
 
 #### Home
 
-- Link che portano alle altre pagine
+- Link che portano alle altre pagine accessibili dall'utente
 
 <br/>
 <br/>
@@ -218,8 +223,8 @@ Ogni pagina ha una top bar con:
   - modificare il menu
   - modificare le quantità in magazzino
   - aggiungere e modificare piatti
-- Un tasto per iniziare/concludere il servizio (verde per aprilo e rosso per chiuderlo)
-- Una sezione per le info su ordini e incassi del servizio corrente
+- Un tasto per iniziare/concludere il servizio
+- Una sezione con le info su ordini e incassi del servizio corrente
 
 <br/>
 <br/>
@@ -262,7 +267,7 @@ Ogni pagina ha una top bar con:
   - un tasto per inviarlo al sistema
   - una box per vedere il numero dell'ordine
   - un tasto per stampare l'ordine
-  - un tasto per resettare la pagina a zero
+  - un tasto per resettare l'ordine per farne uno nuovo
 
 <br/>
 <br/>
@@ -274,12 +279,15 @@ Ogni pagina ha una top bar con:
 
 #### Cameriere
 
-- Un tasto '+' per collegare ordine-cameriere-tavolo
+- Un tasto '+' per collegare ordine e tavolo
 - Una sezione per ogni ordine con:
   - il numero dell'ordine
   - il numero del tavolo
   - un tasto per modificare l'ordine
-  - le portate dell'ordine, contenente: - un tasto per completare la portata - un tasto per mandare la portata in preparazione - una riga per piatto con nome e quantità
+  - le portate dell'ordine, contenente: 
+    - un tasto per completare la portata
+    - un tasto per mandare la portata in preparazione 
+    - una riga per piatto con nome e quantità
 
 <br/>
 <br/>
@@ -319,77 +327,82 @@ Ogni pagina ha una top bar con:
 <div style="page-break-after: always;"></div>
 
 ## Stima dei costi
+Le informazioni di seguto sono indicative. Le letture (r) e scritture (w) si riferiscono ai documenti nel Firestore DB e dipendono dall'implementazione descritta nella seconda parte di questo documento. 
 
 #### Condizioni e ipotesi
 
-- Prezzi: 0,06/100000r & 0,18/100000w
+- Prezzi: €0,06/100000r & €0,18/100000w
 - n = # portate per ordine ~ 4
-- c = # casse collegate ~ 2
-- a = # cucine per stessa portata ~ 1,3
-- b smazzi collegati ~ 1
+- a = # admin collegati ~ 1 (è improbabile che l'admin resti attivi continuamente)
+- s = # smazzi collegati ~ 1
+- ca = # casse collegate ~ 2
+- cu = # cucine per portata ~ 1,2 (1 per la cucina in se + 1 per il galoppino)
 - il cameriere conclude l'ordine, non lo smazzo
 
 #### Creazione ordine:
 
-c+2 r & n+3 w
+2a+ca+2 r & n+3 w
 
-manca la parte di aggiornamento dell'AdminPage
-|  qt   | tipo  | desc                                                   |
-| :---: | :---: | ------------------------------------------------------ |
-|   1   |   r   | service/current per sapere lastOrderID                 |
-|   1   |   w   | service/current per aggiornare lastOrderID e prezzo    |
-|   1   |   w   | in service/current/orders per creare un nuovo ordine   |
-|   n   |   w   | in service/current/courses per creare le nuove portate |
-|   1   |   w   | per aggiornare le quantità in storage                  |
-|   c   |   r   | per aggiornare le quantità sulle UI della cassa        |
-|   1   |   r   | per aggiornare l'ordine pendente allo smazzo           |
+|  qt   | tipo  | desc                                                                         |
+| :---: | :---: | ---------------------------------------------------------------------------- |
+|   1   |   r   | in service/current per sapere lastOrderID                                    |
+|   1   |   w   | in service/current per aggiornare lastOrderID e altri parametri del servizio |
+|   1   |   w   | in service/current/orders per creare un nuovo ordine                         |
+|   n   |   w   | in service/current/courses per creare le nuove portate                       |
+|   1   |   w   | in service/current/storage per aggiornare le quantità in storage             |
+|  ca   |   r   | per aggiornare le quantità della cassa                                       |
+|   a   |   r   | per aggiornare le quantità in magazzino dell'admin                           |
+|   a   |   r   | per aggiornare le info sul servizio dell'admin                               |
+|   1   |   r   | per aggiornare l'ordine pendente dello smazzo                                |
 
 #### Legame cameriere: n+2 r & 1 w
 
-|  qt   | tipo  | desc                                    |
-| :---: | :---: | --------------------------------------- |
-|   1   |   r   | per collegamento cameriere ordine       |
-|   1   |   r   | per rimozione ordine pendente da smazzo |
-|   1   |   w   | per collegamento cameriere ordine       |
-|   n   |   r   | per visualizzare le portate dell'ordine |
+|  qt   | tipo  | desc                                                           |
+| :---: | :---: | -------------------------------------------------------------- |
+|   1   |   w   | in service/current/orders per segnare il cameriere nell'ordine |
+|   1   |   r   | per mostrare il proprio ordine al cameriere                    |
+|   1   |   r   | per rimozione dell'ordine pendente dallo smazzo                |
+|   n   |   r   | per la visualizzazione delle portate dell'ordine al cameriere  |
 
-#### ciclo per ordine: n(2a+3b) r & 3n w
+<div style="page-break-after: always;"></div>
 
-#### ciclo singola portata: 2a+3b r & 3 w
+#### ciclo cameriere -> cucina -> smazzo : n(3+2cu+3s) r & 3n w
 
 |    qt     | tipo  | desc                      |
 | :-------: | :---: | ------------------------- |
-| cameriere |       |
+| cameriere |
 |     1     |   w   | cambio stato wait->prep   |
-|     1     |   r   | cambio stato prep->ready  |
-|     1     |   w   | cambio stato ready->compl |
-|  cucina   |       |
-|     a     |   r   | cambio stato wait->prep   |
-|     1     |   w   | cambio stato prep->ready  |
-|   (a-1)   |   r   | cambio stato prep->ready  |
-|  smazzo   |       |
-|     b     |   r   | cambio stato wait->prep   |
-|     b     |   r   | cambio stato prep->ready  |
-|     b     |   r   | cambio stato ready->compl |
+|     1     |   r   | cambio stato wait->prep   |
+|     1     |   r   | cambio stato prep->pronto |
+|     1     |   w   | cambio stato pronto->cons |
+|     1     |   r   | cambio stato pronto->cons |
+|  cucina   |
+|    cu     |   r   | cambio stato wait->prep   |
+|     1     |   w   | cambio stato prep->pronto |
+|    cu     |   r   | cambio stato prep->pronto |
+|  smazzo   |
+|     s     |   r   | cambio stato wait->prep   |
+|     s     |   r   | cambio stato prep->pronto |
+|     s     |   r   | cambio stato pronto->cons |
 
 #### Totale
 
-| qt           |       r        |   w   |
-| :----------- | :------------: | :---: |
-| creazione    |      c+2       |  n+3  |
-| collegamento |      n+2       |   1   |
-| ciclo        |    n(2a+3b)    |  3n   |
-| totale       | n(1+2a+3b)+c+4 | 4n+4  |
+| qt           |          r          |   w   |
+| :----------- | :-----------------: | :---: |
+| creazione    |       2a+ca+2       |  n+3  |
+| collegamento |         n+2         |   1   |
+| ciclo        |     n(3+2cu+3s)     |  3n   |
+| totale       | n(4+2cu+3s)+2a+ca+4 | 4n+4  |
 
 #### Ipotesi reale:
 
-n=4 a=2 b=1 c=2 => 38r & 20w
+n=4 a=1 s=1 ca=2 cu=2 => 52r/ord & 18w/ord
 
-4000 ordini = 152000 r & 80000 w ~ €0.09 & €0.27
+4000 ordini = 208000 r & 72000 w ~ €0.13 & €0.13
 
-#### Ipotesi assurda
+#### Ipotesi assurda:
 
-ipotesi: 400 r/ordine - 400 w/ordine
+ipotesi: 400 r/ord - 400 w/ord
 
 4000 ordini = 1600000 r - 1600000 w = $0,96 + $2,56
 
@@ -1025,6 +1038,8 @@ SmazzoCourse (course : ICourseWithId)
 #### triggers:
 
 - [ ] onCreate on instantOrder
+  - change timeout ~ 90s
+  - need to get more info on idempotency
   1. update totalRevenue of current service
   2. update totalInstantOrders of current service
   3. update qts in storage
