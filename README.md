@@ -338,6 +338,8 @@ Le informazioni di seguto sono indicative. Le letture (r) e scritture (w) si rif
 - ca = # casse collegate ~ 2
 - cu = # cucine per portata ~ 1,2 (1 per la cucina in se + 1 per il galoppino)
 - il cameriere conclude l'ordine, non lo smazzo
+- le prime 50K r e 20k letture del giorno sono gratis
+
 
 #### Creazione ordine:
 
@@ -395,6 +397,11 @@ Le informazioni di seguto sono indicative. Le letture (r) e scritture (w) si rif
 | totale       | n(4+2cu+3s)+2a+ca+4 | 4n+4  |
 
 #### Ipotesi reale:
+n=4 a=1 s=1 ca=2 cu=2 => 52r/ord & 18w/ord
+
+Considerato questa assunzione corretta, al giorno si possono fare gratis poco più di 900 ordini
+
+Senza contare la parte gratita al giorno:
 
 n=4 a=1 s=1 ca=2 cu=2 => 52r/ord & 18w/ord
 
@@ -403,6 +410,10 @@ n=4 a=1 s=1 ca=2 cu=2 => 52r/ord & 18w/ord
 #### Ipotesi assurda:
 
 ipotesi: 400 r/ord - 400 w/ord
+
+Considerato questa assunzione corretta, al giorno si possono fare gratis poco più di 50 ordini
+
+Senza contare la parte gratuita
 
 4000 ordini = 1600000 r - 1600000 w = $0,96 + $2,56
 
@@ -422,7 +433,7 @@ App relies on 2 main technologies:
 
 - [Firebase](https://firebase.google.com/): a BaaS(Back-end as a Service) supported by Google. It will be used for:
   - hosting
-  - DB
+  - real time DB
   - server-side functions
 - [React](https://reactjs.org/): a UI library created and maintained by Facebook to build user interfaces based on components and state.
 
