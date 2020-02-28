@@ -663,10 +663,7 @@ App
 - router and switch with all PrivateRoute for pages except for login
 - useState = {isLoggedIn : boolean, roles: string[], name: string}
 - useState = {serviceDbRef: string, storageDbRef: string}
-- in useEffect setup onetime listener for firebase.auth() to change state and set serviceDbRef and storageDbRef in SagraContext. Catch error and log it to console
-
-SagraContext - could be done in a function
-- context with state serviceDbRef and storageDbRef
+- in useEffect setup onetime listener for firebase.auth() to change state
 
 AppBar (isUserLoggedIn : boolean, userRoles: string[])
 - if userLoggedIn show name, role, logout button
@@ -675,7 +672,7 @@ AppBar (isUserLoggedIn : boolean, userRoles: string[])
 - on logoutButton click log out user and redirect to login page
 
 PendingOrders
-- use SagraContextConsumer to get Firestore Storage
+- getCurrentService
 - setup firebase snapshot on orders collection where state='pending'
 - useState = orders where state='pending'
 - if there are more than 1 order show attention icon
@@ -793,6 +790,8 @@ ServiceInfo (service : IService)
     - [ ] DeleteOrderModal
 
 CashRegisterPage
+- getCurrentService
+- getCurrentStorage
 - setup listener for storage
 - filter courses from storage where inMenu==true and set them to state(storage)
 - useState = storage : IStorageCourse[]
@@ -850,6 +849,8 @@ DeleteOrderModal
   - [ ] InstantCashRegisterConfirmOrder
 
 InstantCashRegisterPage
+- getCurrentStorage
+- getCurrentService
 - setup firestore listener for storage
 - useState = all courses in storage where isInstant=true
 - add useReducer:
@@ -880,6 +881,7 @@ InstantCashRegisterConfirmOrder
   - [ ] LinkOrderModal
 
 WaiterPage
+- getCurrentService
 - in one-time useEffect listen for orders with waiterId == userID.uuid and status='active' (get from firebase.auth().currentUser)
 - map orders to WaiterOrders and pass order as prop + firestoreId order by orderNum Desc
 
@@ -893,7 +895,6 @@ WaiterOrder (order : IOrderWithId)
 - on click of AddCourseButton trigger AddDishModal
 - if isExpanded = true map courses to WaiterCourse[]
 
-
 WaiterCourse (course : ICourseWithId)
 - when Course state == waiting, display pot button
 - when Course state == prep, display cancelPot button and turn bkg yellowish
@@ -906,6 +907,7 @@ DishRow (dish : IDish)
 
 AddDishModal (orderNum : number)
 - display orderNum to edit
+- getCurrentStorage
 - setup in one-time useEffect a listener for storage doc
 - useState = storage
 - useReducer:
@@ -941,6 +943,7 @@ LinkOrderModal
   - DishRow
 
 KitchenPage
+- getCurrentService
 - in one-time useEffect setup listener for courses were status='prep' and kitchen is equal to url slug
 - KitchenShelf pass docs as prop
 - KitchenTotal pass docs as prop
@@ -963,6 +966,7 @@ KitchenTotal (courses : ICourseWithId[])
     - [ ] SmazzoCourse
 
 SmazzoPage
+- getCurrentService
 - create array with 3 kitchens and map it to a columns in which to render CourseSection and pass kitchen as prop
 
 CourseSection (kitchen : string)
@@ -1038,14 +1042,19 @@ SmazzoCourse (course : ICourseWithId)
 
 ## Helper functions
 
-- [ ] getCurrentService
+- [ ] getCurrentStorageRef
+- [ ] getCurrentServiceRef
+```ts
+// to get current service
 
-need to try in order to not use context 
+  db.collection('sagre')
+    .doc(`${currentYear}`)
+    .collection('services').where('endDate', '>=','')
+    .limit()
+    )
+    .catch(err => console.log(err.message.red));
 
-db.collection('sagre').where('year','==',thisYear).collection('storage').where('endDate','==',null)
-
-db.collection('sagre').where('year','==',thisYear).collection('storage')s
-
+```
 ## Logging
 
 L'app deve loggare le evoluzioni degli ordini per avere dati statistici
@@ -1053,25 +1062,3 @@ L'app deve loggare le evoluzioni degli ordini per avere dati statistici
 [⮝ back to table of contents](#indice)
 
 ## Appunti
-```ts
-// to get current service
-
-  db.collection('prova')
-    .where('cond1', '==', true)
-    .limit(1)
-    .get()
-    .then(snaps =>
-      snaps.forEach(snap => {
-        console.log(snap.data());
-        snap.ref
-          .collection('coll2')
-          .where('cond2', '==', true)
-          .get()
-          .then(snapshots =>
-            snapshots.forEach(snap => console.log('result', snap.data()))
-          );
-      })
-    )
-    .catch(err => console.log(err.message.red));
-
-```
