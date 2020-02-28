@@ -93,51 +93,44 @@ L'evoluzione temporale di un ordine è la seguente:
 ## Attività dei ruoli
 
 #### Super admin
-
 - modificare i ruoli degli utenti
 
 #### Admin
-
-- modificare il 'magazzino'
+- modificare le quantità in 'magazzino'
+- _LAST_ aggiungere piatti al magazzino
 - modificare il menu
 - iniziare e concludere il servizio
 - vedere info su incassi e ordini correnti
 
 #### Cassiere
-
 - creare un ordine
+- aggiungere una nota a ogni portata dell'ordine
 - stampare un ordine
 - cancellare un ordine già creato
 - _LAST_ modificare un ordine già creato
 
 #### Cameriere
-
 - associare ordine e tavolo
+- aggiungere una nota personale all'ordine per aiutare l'identificatione dei clienti
 - mandare una portata di un ordine in cucina per la preparazione
 - concludere una portata di un ordine
 - aggiungere una portata a un ordine
-- ricevere notifica quando un ordine è pronto
+- _LAST_ ricevere notifica quando un ordine è pronto
 
 #### Bar
-
 - visualizzare il bere e i dolci degli ordini che sono in preparazione
-- segnare il bere e dei dolci come pronti
+- segnare il bere e i dolci come pronti
 - creare ordini istantanei
-<br per identazione pagina in pdf>
-<br per identazione pagina in pdf>
 
 #### Primi
-
 - visualizzare i primi degli ordini che sono in preparazione
 - segnare i primi come pronti
 
 #### Secondi
-
 - visualizzare i secondi degli ordini che sono in preparazione
 - segnare i secondi come pronti
 
 #### Smazzo
-
 - vedere gli ordini non collegati a un cameriere
 - vedere le portate degli ordini in corso e il loro stato (in preparazione, pronto)
 - concludere una portata di un ordine
@@ -194,7 +187,6 @@ Ogni pagina ha una top bar con:
 <div style="page-break-after: always;"></div>
 
 #### Home
-
 - Link che portano alle altre pagine accessibili dall'utente
 
 <br/>
@@ -206,11 +198,10 @@ Ogni pagina ha una top bar con:
 <div style="page-break-after: always;"></div>
 
 #### Login
-
 - Tasti per registrarsi o loggarsi
 
-<br/>
-<br/>
+<br per lasciare spazio tra testo e immagine >
+<br per lasciare spazio tra testo e immagine >
 <p align="center">
   <img src="mockups/login.png" height=380 style="border: 2px solid DimGray; border-radius: 3px">
 </p>
@@ -218,7 +209,6 @@ Ogni pagina ha una top bar con:
 <div style="page-break-after: always;"></div>
 
 #### Admin
-
 - Una sezione per:
   - modificare il menu
   - modificare le quantità in magazzino
@@ -226,8 +216,8 @@ Ogni pagina ha una top bar con:
 - Un tasto per iniziare/concludere il servizio
 - Una sezione con le info su ordini e incassi del servizio corrente
 
-<br/>
-<br/>
+<br per lasciare spazio tra testo e immagine >
+<br per lasciare spazio tra testo e immagine >
 <p align="center">
   <img src="mockups/admin.png" height=380 style="border: 2px solid DimGray; border-radius: 3px">
 </p>
@@ -235,7 +225,6 @@ Ogni pagina ha una top bar con:
 <div style="page-break-after: always;"></div>
 
 #### Cassa istantanea
-
 - Una sezione per ogni portata con i piatti istantanei nel menu. Ogni piatto è una riga con:
   - la quantità rimanente in magazzino
   - il prezzo
@@ -246,8 +235,8 @@ Ogni pagina ha una top bar con:
   - il totale dell'ordine
   - un tasto per confermare l'ordine
 
-<br/>
-<br/>
+<br per lasciare spazio tra testo e immagine >
+<br per lasciare spazio tra testo e immagine >
 <p align="center">
   <img src="mockups/cassaBar.png" height=380 style="border: 2px solid DimGray; border-radius: 3px">
 </p>
@@ -255,7 +244,6 @@ Ogni pagina ha una top bar con:
 <div style="page-break-after: always;"></div>
 
 #### Cassa
-
 - Una sezione per ogni portata con i piatti nel menu. Ogni piatto è una riga con:
   - la quantità rimanente in magazzino
   - il prezzo
@@ -269,8 +257,8 @@ Ogni pagina ha una top bar con:
   - un tasto per stampare l'ordine
   - un tasto per resettare l'ordine per farne uno nuovo
 
-<br/>
-<br/>
+<br per lasciare spazio tra testo e immagine >
+<br per lasciare spazio tra testo e immagine >
 <p align="center">
   <img src="mockups/cassa.png" height=380 style="border: 2px solid DimGray; border-radius: 3px">
 </p>
@@ -278,32 +266,34 @@ Ogni pagina ha una top bar con:
 <div style="page-break-after: always;"></div>
 
 #### Cameriere
-
 - Un tasto '+' per collegare ordine e tavolo
 - Una sezione per ogni ordine con:
   - il numero dell'ordine
   - il numero del tavolo
-  - un tasto per modificare l'ordine
+  - un tasto per aggiungere portate all'ordine
+  - un tasto per espandere comprimere l'ordine per non occupare inutile spazio
   - le portate dell'ordine, contenente: 
     - un tasto per completare la portata
     - un tasto per mandare la portata in preparazione 
     - una riga per piatto con nome e quantità
 
-<br/>
-<br/>
+<br per lasciare spazio tra testo e immagine >
+<br per lasciare spazio tra testo e immagine >
 <p align="center">
-  <img src="mockups/cameriere.png" height=380 style="border: 2px solid DimGray; border-radius: 3px">
-  <img src="mockups/cameriereEdit.png" height=380 style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="mockups/cameriere.png" height=300 style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="mockups/cameriereInPrep.png" height=300 style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="mockups/camerierePronto.png" height=300 style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="mockups/cameriereCons.png" height=300 style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="mockups/cameriereEdit.png" height=300 style="border: 2px solid DimGray; border-radius: 3px">
 </p>
 <div style="page-break-after: always;"></div>
 
 #### Cucine/bar
-
 - Una sezione ampia con tutti gli ordini in preparazione della propria cucina, ognuno con un tasto per segnarli completati
 - Una mini sezione con il totale dei piatti da preparare attualmente
 
-<br/>
-<br/>
+<br per lasciare spazio tra testo e immagine >
+<br per lasciare spazio tra testo e immagine >
 <p align="center">
   <img src="mockups/cucina.png" height=380 style="border: 2px solid DimGray; border-radius: 3px">
 </p>
@@ -311,13 +301,12 @@ Ogni pagina ha una top bar con:
 <div style="page-break-after: always;"></div>
 
 #### Smazzo
-
 - 3 colonne (bar, primi, secondi), contentti le portate degli ordini in corso e il loro stato (preparazione, pronto). Ogni portata contiene:
   - lista dei piatti
   - tasto per concludere la portata
 
-<br/>
-<br/>
+<br per lasciare spazio tra testo e immagine >
+<br per lasciare spazio tra testo e immagine >
 <p align="center">
   <img src="mockups/smazzo.png" height=380 style="border: 2px solid DimGray; border-radius: 3px">
 </p>
@@ -558,6 +547,13 @@ interface IService {
   lastOrderNum: number; // progressive counter for orders
   totalInstantOrders: number;
   totalOrders: number;
+  consumedCourses : IRemainingCourse[]
+}
+```
+```ts
+interface IRemainingCourse {
+  name: string;
+  dishes: IDish[];
 }
 ```
 
@@ -576,6 +572,7 @@ interface IOrder {
   waiterId: string; // id of waiter to link
   table: number;
   revenue: number;
+  notes: string;
 }
 ```
 
@@ -586,6 +583,7 @@ interface ICourse {
   kitchen: string;
   status: string; // (wait,prep,ready,delivered)
   dishes: IDish[];
+  notes : string;
 }
 ```
 
@@ -662,15 +660,15 @@ App
 - material UI theme builder
 - CSS Baseline
 - AppBar
-- router with all PrivateRoute for pages except for login
+- router and switch with all PrivateRoute for pages except for login
 - useState = {isLoggedIn : boolean, roles: string[], name: string}
 - useState = {serviceDbRef: string, storageDbRef: string}
 - in useEffect setup onetime listener for firebase.auth() to change state and set serviceDbRef and storageDbRef in SagraContext. Catch error and log it to console
 
-SagraContext
+SagraContext - could be done in a function
 - context with state serviceDbRef and storageDbRef
 
-AppBar (isUserLoggedIn, userRoles)
+AppBar (isUserLoggedIn : boolean, userRoles: string[])
 - if userLoggedIn show name, role, logout button
 - if userRoles includes 'smazzo' and url is '/smazzo' show also search button and pending orders
 - if userRoles includes 'cassa' and url is '/cassa' show also search button
@@ -684,7 +682,7 @@ PendingOrders
 - display id of each order
 - _LAST_ could signal if an order is waiting for too long
 
-MenuDrawer (userRoles)
+MenuDrawer (userRoles : string[])
 - contains links to reachable pages by user based on userRoles
 
 PrivateRoute
@@ -708,9 +706,9 @@ const PrivateRoute = ({component, authed, userRoles, requiredRoles, otherProps})
 
 - [ ] HomePage
 
-HomePage (userRoles)
-- display a link buttons for each route reachable by user based on userRoles
-- if userRole is empty show message to go to superAdmin and give role
+HomePage (userRoles : string[])
+- display a link button for each route reachable by user based on userRoles
+- if userRoles is empty show message to go to superAdmin and get role
 
 #### domain/login
 
@@ -719,21 +717,24 @@ HomePage (userRoles)
   - [ ] RegisterDialog
 
 LoginPage
-- notLoggedIn messagge
-- loginButton to trigger LoginDialog
-- registerButton to trigger RegisterDialog
+- if user is logged in redirect to home
+- else
+  - notLoggedIn messagge
+  - loginButton to trigger LoginDialog
+  - registerButton to trigger RegisterDialog
 
 LoginDialog
 - state = loginError (false)
 - fields: email and password
-- on login if user has at least a role redirect to role page else to home
+- on login if user redirect to home
+- _LAST_ on login if user has at least a role redirect to role page else to home
 - if loginError show message under form
 
 RegisterDialog
 - state = registerError (false)
 - fields: email, password, confirm password, name
-- on register if user has at least a role redirect to home
-- if registerError show message under form
+- on register if user redirect to home
+- _LAST_ on register if user has at least a role redirect to role page else to home- if registerError show message under form
 
 <div style="page-break-after: always;"></div>
 
@@ -750,25 +751,25 @@ RegisterDialog
 
 AdminPage
 - 2 sections: Storage, ServiceTab
+- setup listener for service where EndDate = null
 
 Storage
-- setup listener for storage collection
+- setup listener for storage document
 - useState = storage
 - map courses of storage to StorageCourse and pass single course as prop
 
-StorageCourse (storageCourse : IStorageCourse)
+StorageCourse (storageCourse : IStorageCourse, consumedCourse : IConsumedCourse)
 - map dishes in storageCourse to StorageDish and pass single dish as prop
 - _LAST_ plus button to add dish
 
-StorageDish (storageDish : IStorageDish)
+StorageDish (storageDish : IStorageDish, consumedDish : IDish)
 - render infos from props
 - useState = isEditing
 - on editButton click set isEditing to true
-- if isEditing==true dish row grays out and edit icon becomes check icon to finish, text input enables
-- on checkButton click, update strogae in DB and set isEditing=false
+- if isEditing==true becomes check icon to finish, text inputs enables
+- on checkButton click, update stroage in DB and set isEditing=false
 
-ServiceTab
-- setup listener for service where EndDate is null
+ServiceTab (service : IService)
 - useState = current service
 - if service exists pass isServiceActive=true as prop to serviceStarter else pass false
 - if service exists display ServiceInfo and pass service as prop
@@ -871,7 +872,7 @@ InstantCashRegisterConfirmOrder
   - [ ] WaiterOrder
     - [ ] WaiterOrderCourse
       - [ ] DishRow
-    - [ ] EditOrderModal
+    - [ ] AddDishModal
       - CashRegisterCourse
         - CashRegsiterDish
       - [ ] WaiterEditOrderConfirm
@@ -880,18 +881,22 @@ InstantCashRegisterConfirmOrder
 
 WaiterPage
 - in one-time useEffect listen for orders with waiterId == userID.uuid and status='active' (get from firebase.auth().currentUser)
-- map orders to WaiterOrders and pass order as prop + firestoreId
+- map orders to WaiterOrders and pass order as prop + firestoreId order by orderNum Desc
 
 WaiterOrder (order : IOrderWithId)
 - in one-time useEffect listen for courses with orderId equal to prop one and pass Course obj as prop + docId
+- useState = isExpanded (false)
 - display table# and orderId
 - display close button, on click set status='completed'
 - display unlink button, on click set status='pending'
-- on click of AddCourseButton trigger EditOrderModal
-WaiterCourse (course : ICourseWithId)
+- display expand button toggle isExpanded
+- on click of AddCourseButton trigger AddDishModal
+- if isExpanded = true map courses to WaiterCourse[]
 
-- when Course state == waiting, display sendToKitchen button
-- when Course state == prep, display cancelKitchen button
+
+WaiterCourse (course : ICourseWithId)
+- when Course state == waiting, display pot button
+- when Course state == prep, display cancelPot button and turn bkg yellowish
 - when Course state == ready, display conclude button
 - map Dishes to DishRow[]
 - when click a button change state in db appropriately
@@ -899,11 +904,11 @@ WaiterCourse (course : ICourseWithId)
 DishRow (dish : IDish)
 - display dish shortName and qt
 
-EditOrderModal (orderNum : number)
+AddDishModal (orderNum : number)
 - display orderNum to edit
 - setup in one-time useEffect a listener for storage doc
 - useState = storage
-- useReducer = newCourse
+- useReducer:
   - state=newCourses : ICourse[]
   - actions:
     - ADD_DISH
@@ -911,7 +916,7 @@ EditOrderModal (orderNum : number)
     - SEND_ORDER
 
 WaiterEditOrderConfirm
-- display total of new courses
+- display total price of new courses
 - display confirmButton
 - on click on confirmButton dispatch SEND_ORDER
 
@@ -999,6 +1004,7 @@ SmazzoCourse (course : ICourseWithId)
   (orderNum : number, courses : ICourses[]) => {} : boolean
   1. add new courses in courses collections with orderNum equal to arg
   2. update storage
+
 - [ ] deleteOrder
   (orderNum : number) => {} : boolean
   1. decrease total revenue of service
@@ -1014,13 +1020,16 @@ SmazzoCourse (course : ICourseWithId)
   1. update totalRevenue of current service
   2. update totalInstantOrders of current service
   3. update qts in storage
-- [ ] newUser registration
+
+- [ ] new user registration
   1. create new record in userSagraRoles collection with 'roles' field = []
   2. create new reacord in users with empty doc
+
 - [ ] user deletion
   a single batch
   1. delete user record from userSagraRole
   2. delete user record from users
+
 - [ ] onUpdate on sagraUserRoles
   1. delete all userCostum claims
   2. for each role in user add userCostumClaims 'role' = true
@@ -1045,6 +1054,8 @@ L'app deve loggare le evoluzioni degli ordini per avere dati statistici
 
 ## Appunti
 ```ts
+// to get current service
+
   db.collection('prova')
     .where('cond1', '==', true)
     .limit(1)
