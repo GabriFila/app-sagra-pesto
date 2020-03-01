@@ -141,28 +141,34 @@ L'evoluzione temporale di un ordine è la seguente:
 ## Permessi dei ruoli
 
 #### Modifica ruoli utente
-
 - Super admin
 
 #### Modifica menu
+- Admin
 
+#### Modifica magazzino
 - Admin
 
 #### Inizio/fine servizio
-
 - Admin
 
 #### Creazione ordine
+- Ordini classici solo cassa
+- Ordini istantanei solo bar
 
-- Cassa solo ordini classici
-- Bar solo ordini istantanei
-
-#### Modifica ordine
-
+#### Modifica stato ordine
 - Cassa
 - Smazzo
 - Cameriere modifica tutto solo i propri ordini
+
+#### Cancellazione ordine
+- Cassa
+
+#### Modifica portate ordine
+- Smazzo
+- Cameriere modifica tutto solo i propri ordini
 - Cucine modificano solo le proprie portate
+
 
 [⮝ torna all'indice](#indice)
 
@@ -459,7 +465,7 @@ Each document corresponds to a user and contains a 'roles' property which is a s
 
 ## Security rules
 
-```js
+```ts
 match / {
   function isLoggedIn() {
     return request.auth.id != null;
@@ -469,27 +475,48 @@ match / {
     request.auth.token.reqRole == true;
   }
 
+  function notUpdating(field) {
+    return !(field in request.resource.data) || resource.data[field] == request.resource.data[field]
+  }
   match /userRoles {
-    allow read: if false;
-    allow write: if false;
+    allow read: if false; // only cloud functions
+    allow write: if false; // only cloud functions
   }
-
   match /users  {
-    allow read: if false;
-    allow write: if false;
+    allow read: if false; // only cloud functions
+    allow write: if false; // only cloud functions
   }
-
-  match /storage {
-    allow read: if isLoggedIn() && hasRole(admin) || hasRole(cassa);
-    allow write: if isLoggedIn();
-  }
-  match /services/{serviceID} {
-    match /orders/{orderID} {}
-    match /courses/{courseID} {}
-    match /instantOrders/{instantOrderID} {}
+  match /sagre {
+    match /storage/{storageId} {
+      allow get: if isLoggedIn() && hasRole(admin) || hasRole(cassa) || hasRole(cameriere);     
+      allow list: if false;
+      allow create: if false; // only cloud functions
+      allow update: if isLoggedIn() && hasRole(admin);
+      allow delete: if false; // only cloud functions
+    }
+    match /services/{serviceID} {
+      allow create: if isLoggedIn() && hasRole(admin);
+      allow update: if isLoggedIn() && hasRole(admin); // add not updating property
+      match /orders/{orderID} {
+        allow read: if isLoggedIn() && hasRole(smazzo) || hasRole(cameriere) && waiterID == user.uid;
+        allow create: if false; // only cloud functions
+        allow update: if isLoggedIn() && hasRole(cassa) || hasRole(cameriere) && waiterID == user.uid;
+      }
+      match /courses/{courseID} {
+        allow read: if isLoggedIn() && hasRole(smazzo) || hasRole(cameriere); // problem: waiter can read other waiter's courses
+        allow create: if false; // only cloud functions
+        allow update: if isLoggedIn() && hasRole(cassa) || hasRole(cameriere); // problem: waiter can update other waiter's courses
+      }
+      match /instantOrders/{instantOrderID} {
+        allow read: if false; 
+        allow create: if isLoggedIn() && hasRole(cassaBar);
+        allow update: if false;
+        allow delete: if false;
+      }
+    }
   }
   allow read: if false;
-  allow write: if true;
+  allow write: if false;
 }
 ```
 
@@ -654,13 +681,13 @@ Base structure:
     - [ ] MenuDrawer
     - [ ] PendingOrders
     - [ ] SearchButton
-  - [ ] PrivateRoute
+  - [ ] PrivateRoleRoute
 
 App
 - material UI theme builder
 - CSS Baseline
 - AppBar
-- router and switch with all PrivateRoute for pages except for login
+- router and switch with all PrivateRoleRoute for pages except for login
 - useState = {isLoggedIn : boolean, roles: string[], name: string}
 - useState = {serviceDbRef: string, storageDbRef: string}
 - in useEffect setup onetime listener for firebase.auth() to change state
@@ -668,7 +695,7 @@ App
 AppBar (isUserLoggedIn : boolean, userRoles: string[])
 - if userLoggedIn show name, role, logout button
 - if userRoles includes 'smazzo' and url is '/smazzo' show also search button and pending orders
-- if userRoles includes 'cassa' and url is '/cassa' show also search button
+- if userRoles includes 'cassa' and url is '/cassa' show also delete button
 - on logoutButton click log out user and redirect to login page
 
 PendingOrders
@@ -682,20 +709,14 @@ PendingOrders
 MenuDrawer (userRoles : string[])
 - contains links to reachable pages by user based on userRoles
 
-PrivateRoute
-```ts
-const PrivateRoute = ({component, authed, userRoles, requiredRoles, otherProps}) => {
-  return (
-    <Route
-      render={(otherProps) => authed !== true  ?
-      <Redirect to={{pathname: '/login'}}} />}
-        : userRoles.some(role => requiredRoles.includes(role)) ?
-        <component {...props} />
-        // modal for not right role and then redirect to home
-    />
-  )
-}
-```
+PrivateRoleRoute (component : FCComponent, authed : boolean, required roles : string[])
+- if user not logged in redirect to login
+- if user logged in but urel not in role redirect to home
+- else return route to page page
+
+DeleteOrderModal
+- text input for number of order to delete
+- on click deleteButton call deleteOrder cloud function
 
 <div style="page-break-after: always;"></div>
 
@@ -703,7 +724,8 @@ const PrivateRoute = ({component, authed, userRoles, requiredRoles, otherProps})
 
 - [ ] HomePage
 
-HomePage (userRoles : string[])
+HomePage
+- loop through user costum claims and display buttons
 - display a link button for each route reachable by user based on userRoles
 - if userRoles is empty show message to go to superAdmin and get role
 
@@ -748,12 +770,14 @@ RegisterDialog
 
 AdminPage
 - 2 sections: Storage, ServiceTab
+- getCurrentService
 - setup listener for service where EndDate = null
 
 Storage
+- getCurrentStorage
 - setup listener for storage document
 - useState = storage
-- map courses of storage to StorageCourse and pass single course as prop
+- map courses of storage to StorageCourse and remove 
 
 StorageCourse (storageCourse : IStorageCourse, consumedCourse : IConsumedCourse)
 - map dishes in storageCourse to StorageDish and pass single dish as prop
@@ -790,7 +814,6 @@ ServiceInfo (service : IService)
     - [ ] DeleteOrderModal
 
 CashRegisterPage
-- getCurrentService
 - getCurrentStorage
 - setup listener for storage
 - filter courses from storage where inMenu==true and set them to state(storage)
@@ -809,7 +832,7 @@ CashRegisterPage
 CashRegisterCourse (courseInMenu : IStorageCourse, courseInOrder ?: IStorageCourse, dispatch)
 - map dishes to CashRegisterDish, if in courseInOrder there is a dish with the same name pass the qt as prop as prop
 
-CashRegisterDish (courseInMenu : IDish, newOrderQt : number, dispatch
+CashRegisterDish (courseInMenu : IDish, newOrderQt : number, dispatch)
 - a row with dish name, qt in storage, '-'. '+' and newOrderQt
 - on click of '-' and '+' trigger dispatch action with name of dish
 
@@ -834,10 +857,6 @@ cash register reducer actions:
 
 CashRegisterDeleteButton
 - on click trigger DeleteOrderModal
-
-DeleteOrderModal
-- text input for number of order to delete
-- on click deleteButton call deleteOrder cloud function
 
 <div style="page-break-after: always;"></div>
 
@@ -995,6 +1014,7 @@ SmazzoCourse (course : ICourseWithId)
   (order : IOrder) => {} : number
 
   in a single transaction
+  - change timeout ~ 90s
 
   1. read lastOrderNum of current service
   2. create a new order with lastOrderNum++
@@ -1019,7 +1039,6 @@ SmazzoCourse (course : ICourseWithId)
 #### triggers:
 
 - [ ] onCreate on instantOrder
-  - change timeout ~ 90s
   - need to get more info on idempotency
   1. update totalRevenue of current service
   2. update totalInstantOrders of current service
@@ -1051,7 +1070,6 @@ SmazzoCourse (course : ICourseWithId)
     .doc(`${currentYear}`)
     .collection('services').where('endDate', '>=','')
     .limit()
-    )
     .catch(err => console.log(err.message.red));
 
 ```
