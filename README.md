@@ -538,13 +538,11 @@ interface ISagra {
   totalInstantOrders: number;
 }
 ```
-
 ```ts
 interface IStorage {
   courses: IStorageCourse[];
 }
 ```
-
 ```ts
 interface IStorageCourse {
   name: string;
@@ -553,7 +551,6 @@ interface IStorageCourse {
   isInstant: boolean;
 }
 ```
-
 ```ts
 interface IStorageDish {
   name: string;
@@ -563,7 +560,6 @@ interface IStorageDish {
   inMenu: boolean;
 }
 ```
-
 ```ts
 interface IService {
   start: Date;
@@ -583,14 +579,12 @@ interface IRemainingCourse {
   dishes: IDish[];
 }
 ```
-
 ```ts
 interface IInstantOrder {
   revenue: number;
   dishes: IDish[];
 }
 ```
-
 ```ts
 interface IOrder {
   orderNum: number;
@@ -602,7 +596,6 @@ interface IOrder {
   notes: string;
 }
 ```
-
 ```ts
 interface ICourse {
   orderNum: number;
@@ -613,7 +606,6 @@ interface ICourse {
   notes : string;
 }
 ```
-
 ```ts
 interface IDish {
   shortName: string;
@@ -629,14 +621,12 @@ interface IOrderWithId extends IOrder {
   docId: string;
 }
 ```
-
 ```ts
 interface ICourseWithId extends ICourse {
   // id is added to reach document in firestore faster
   docId: string;
 }
 ```
-
 ```ts
 interface IOrderLinkInfo {
   orderNum: number;
@@ -644,14 +634,12 @@ interface IOrderLinkInfo {
   waiterName: string;
 }
 ```
-
 ```ts
 interface IReducerAction {
   type: string;
   payload: unknown;
 }
 ```
-
 [⮝ back to table of contents](#indice)
 
 <div style="page-break-after: always;"></div>
@@ -680,7 +668,11 @@ Base structure:
   - [ ] AppBar
     - [ ] MenuDrawer
     - [ ] PendingOrders
-    - [ ] SearchButton
+    - [ ] DeleteOrderButton
+      - [ ] DeleteOrderModal
+    - [ ] SearchOrderButton
+      - [ ] SearchOrderModal 
+        - [ ] SearchOrderModalCourse 
   - [ ] PrivateRoleRoute
 
 App
@@ -709,14 +701,33 @@ PendingOrders
 MenuDrawer (userRoles : string[])
 - contains links to reachable pages by user based on userRoles
 
-PrivateRoleRoute (component : FCComponent, authed : boolean, required roles : string[])
-- if user not logged in redirect to login
-- if user logged in but urel not in role redirect to home
-- else return route to page page
+DeleteOrderButton
+- on click trigger DeleteOrderModal
 
 DeleteOrderModal
 - text input for number of order to delete
 - on click deleteButton call deleteOrder cloud function
+
+SearchOrderButton
+- display a text input and a button
+- on click trigger SearchOrderModal
+
+SearchOrderModal (orderNum : number)
+- useState = {order : IOrderWithId, courses : ICoursesWithId[]}
+- listen to order by orderNum and coures with orderNum = arg
+- map courses to SearchOrderModalCourse
+
+SearchOrderModalCourse (course : ICourseWithID)
+- display course name
+- create obj iconState {state : icon}
+- display icon different from state
+- on click modifiy set state in db accordingly
+- map dishes to DishRow
+
+PrivateRoleRoute (component : FComponent, authed : boolean, required roles : string[])
+- if user not logged in redirect to login
+- if user logged in but urel not in role redirect to home
+- else return route to page page
 
 <div style="page-break-after: always;"></div>
 
@@ -810,8 +821,6 @@ ServiceInfo (service : IService)
   - [ ] CashRegisterCourse
     - [ ] CashRegisterDish
   - [ ] CashRegisterConfirmOrder
-  - [ ] CashRegisteeDeleteButton
-    - [ ] DeleteOrderModal
 
 CashRegisterPage
 - getCurrentStorage
@@ -854,9 +863,6 @@ cash register reducer actions:
   - trigger print function
 - RESET_ORDER:
 - set newOrder to [] and orderNum to undefined
-
-CashRegisterDeleteButton
-- on click trigger DeleteOrderModal
 
 <div style="page-break-after: always;"></div>
 
@@ -971,7 +977,9 @@ KitchenShelf (courses : ICourseWithId[])
 - map props to KitchenCourse
 
 KitchenCourse (course : ICourseWithId)
+- display order num
 - map props to DishRow
+- display note
 
 KitchenTotal (courses : ICourseWithId[])
 - reduce arrayProp to an array of IDIsh and map it to DishRow
