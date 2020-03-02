@@ -53,7 +53,7 @@ Alcune nozioni fondamentali sull'app:
 - *ordine* (classico): ordine normale fatto dalla cassa che deve passare attraverso cameriere -> cucina -> smazzo
 - *portata*: elemento dell'ordine preparato da una singola cucina
 - *piatto*: elemento di una portata
-- *ogni* piatto deve possedere un nome 'corto' di massimo 7 lettere per facilitare la visualizzazione su certe pagine
+- ogni piatto deve possedere un nome 'corto' di massimo 7 lettere per facilitare la visualizzazione su certe pagine
 
 L'app prevede che ogni membro attivo durante un servizio possieda un account (a parte forse alcuni camerieri). L'utilizzo è consentito esclusivamente agli utenti loggati, con certe limitazioni in base al ruolo. Un utente può avere più ruoli.
 
@@ -198,7 +198,7 @@ Ogni pagina ha una top bar con:
 <br/>
 <br/>
 <p align="center">
-  <img src="docs/mockups/home.png" height=380 style="border: 2px solid DimGray; border-radius: 3px" style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="docs/mockups/home.png" height=360 style="border: 2px solid DimGray; border-radius: 3px" style="border: 2px solid DimGray; border-radius: 3px">
 </p>
 
 <div style="page-break-after: always;"></div>
@@ -209,7 +209,7 @@ Ogni pagina ha una top bar con:
 <br per lasciare spazio tra testo e immagine >
 <br per lasciare spazio tra testo e immagine >
 <p align="center">
-  <img src="docs/mockups/login.png" height=380 style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="docs/mockups/login.png" height=360 style="border: 2px solid DimGray; border-radius: 3px">
 </p>
 
 <div style="page-break-after: always;"></div>
@@ -225,7 +225,7 @@ Ogni pagina ha una top bar con:
 <br per lasciare spazio tra testo e immagine >
 <br per lasciare spazio tra testo e immagine >
 <p align="center">
-  <img src="docs/mockups/admin.png" height=380 style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="docs/mockups/admin.png" height=360 style="border: 2px solid DimGray; border-radius: 3px">
 </p>
 
 <div style="page-break-after: always;"></div>
@@ -244,7 +244,7 @@ Ogni pagina ha una top bar con:
 <br per lasciare spazio tra testo e immagine >
 <br per lasciare spazio tra testo e immagine >
 <p align="center">
-  <img src="docs/mockups/cassaBar.png" height=380 style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="docs/mockups/cassaBar.png" height=360 style="border: 2px solid DimGray; border-radius: 3px">
 </p>
 
 <div style="page-break-after: always;"></div>
@@ -263,10 +263,9 @@ Ogni pagina ha una top bar con:
   - un tasto per stampare l'ordine
   - un tasto per resettare l'ordine per farne uno nuovo
 
-<br per lasciare spazio tra testo e immagine >
-<br per lasciare spazio tra testo e immagine >
 <p align="center">
-  <img src="docs/mockups/cassa.png" height=380 style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="docs/mockups/cassa.png" height=320 style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="docs/mockups/cassaDelete.png" height=320 style="border: 2px solid DimGray; border-radius: 3px">
 </p>
 
 <div style="page-break-after: always;"></div>
@@ -287,10 +286,10 @@ Ogni pagina ha una top bar con:
 <br per lasciare spazio tra testo e immagine >
 <p align="center">
   <img src="docs/mockups/cameriere.png" height=300 style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="docs/mockups/cameriereClosed.png" height=300 style="border: 2px solid DimGray; border-radius: 3px">
   <img src="docs/mockups/cameriereInPrep.png" height=300 style="border: 2px solid DimGray; border-radius: 3px">
   <img src="docs/mockups/camerierePronto.png" height=300 style="border: 2px solid DimGray; border-radius: 3px">
   <img src="docs/mockups/cameriereCons.png" height=300 style="border: 2px solid DimGray; border-radius: 3px">
-  <img src="docs/mockups/cameriereEdit.png" height=300 style="border: 2px solid DimGray; border-radius: 3px">
 </p>
 <div style="page-break-after: always;"></div>
 
@@ -301,7 +300,8 @@ Ogni pagina ha una top bar con:
 <br per lasciare spazio tra testo e immagine >
 <br per lasciare spazio tra testo e immagine >
 <p align="center">
-  <img src="docs/mockups/cucina.png" height=380 style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="docs/mockups/cucina.png" height=360 style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="docs/mockups/cassaBar.png" height=360 style="border: 2px solid DimGray; border-radius: 3px">
 </p>
 
 <div style="page-break-after: always;"></div>
@@ -314,7 +314,8 @@ Ogni pagina ha una top bar con:
 <br per lasciare spazio tra testo e immagine >
 <br per lasciare spazio tra testo e immagine >
 <p align="center">
-  <img src="docs/mockups/smazzo.png" height=380 style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="docs/mockups/smazzo.png" height=360 style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="docs/mockups/smazzoSearch.png" height=360 style="border: 2px solid DimGray; border-radius: 3px">
 </p>
 
 [⮝ torna all'indice](#indice)
@@ -1031,18 +1032,20 @@ SmazzoCourse (course : ICourseWithId)
   5. increase storage qts
   6. increase totalPeople
   7. increase totalOrders
+  8. update service consumed props
 
 - [ ] addCoursesToOrder
   (orderNum : number, courses : ICourses[]) => {} : boolean
-  1. add new courses in courses collections with orderNum equal to arg
-  2. update storage
+  2. add new courses in courses collections with orderNum equal to arg
+  3. update storage
 
 - [ ] deleteOrder
   (orderNum : number) => {} : boolean
-  1. decrease total revenue of service
+  2. decrease total revenue of service
   2. decrease storage qts
   3. decrease totalPeople
   4. decrease totalOrders
+  5. update service consumed props
 
 #### triggers:
 

@@ -9,6 +9,13 @@ h1 {
   font-weight: 700;
   line-height: 26.4px;
 }
+h2 {
+  font-size: 20px;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: 700;
+  line-height: 21.4px;
+}
 h3 {
   font-size: 14px;
   font-style: normal;
@@ -40,4 +47,20 @@ pre {
 }
 code {
   font-family: 'Courier New', Courier, monospace !important;
+}
+a {
+  color: #f66969;
+  font-weight: 700;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  color: #4caf50;
+}
+
+thead {
+  color: #f66969;
 }
