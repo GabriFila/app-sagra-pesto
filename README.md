@@ -2,7 +2,7 @@
 
 Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pesto di Genova. La prima parte descrive il funzionamento dell'app, la seconda descrive la guida per l'implementazione. L'app è pensata come parte di un'infrastuttura più generale per gestire l'IT della sezione di Genova.
 
-Le parti accompagnate da *LAST* sono funzioni non essenziali che potrebbero non essere presenti nell'app entro giugno.
+Le parti precedute da *LAST* sono funzioni non essenziali che potrebbero non essere presenti nell'app entro giugno.
 
 # Indice
 
@@ -198,7 +198,7 @@ Ogni pagina ha una top bar con:
 <br/>
 <br/>
 <p align="center">
-  <img src="mockups/home.png" height=380 style="border: 2px solid DimGray; border-radius: 3px" style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="docs/mockups/home.png" height=380 style="border: 2px solid DimGray; border-radius: 3px" style="border: 2px solid DimGray; border-radius: 3px">
 </p>
 
 <div style="page-break-after: always;"></div>
@@ -209,7 +209,7 @@ Ogni pagina ha una top bar con:
 <br per lasciare spazio tra testo e immagine >
 <br per lasciare spazio tra testo e immagine >
 <p align="center">
-  <img src="mockups/login.png" height=380 style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="docs/mockups/login.png" height=380 style="border: 2px solid DimGray; border-radius: 3px">
 </p>
 
 <div style="page-break-after: always;"></div>
@@ -225,7 +225,7 @@ Ogni pagina ha una top bar con:
 <br per lasciare spazio tra testo e immagine >
 <br per lasciare spazio tra testo e immagine >
 <p align="center">
-  <img src="mockups/admin.png" height=380 style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="docs/mockups/admin.png" height=380 style="border: 2px solid DimGray; border-radius: 3px">
 </p>
 
 <div style="page-break-after: always;"></div>
@@ -244,7 +244,7 @@ Ogni pagina ha una top bar con:
 <br per lasciare spazio tra testo e immagine >
 <br per lasciare spazio tra testo e immagine >
 <p align="center">
-  <img src="mockups/cassaBar.png" height=380 style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="docs/mockups/cassaBar.png" height=380 style="border: 2px solid DimGray; border-radius: 3px">
 </p>
 
 <div style="page-break-after: always;"></div>
@@ -266,7 +266,7 @@ Ogni pagina ha una top bar con:
 <br per lasciare spazio tra testo e immagine >
 <br per lasciare spazio tra testo e immagine >
 <p align="center">
-  <img src="mockups/cassa.png" height=380 style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="docs/mockups/cassa.png" height=380 style="border: 2px solid DimGray; border-radius: 3px">
 </p>
 
 <div style="page-break-after: always;"></div>
@@ -286,11 +286,11 @@ Ogni pagina ha una top bar con:
 <br per lasciare spazio tra testo e immagine >
 <br per lasciare spazio tra testo e immagine >
 <p align="center">
-  <img src="mockups/cameriere.png" height=300 style="border: 2px solid DimGray; border-radius: 3px">
-  <img src="mockups/cameriereInPrep.png" height=300 style="border: 2px solid DimGray; border-radius: 3px">
-  <img src="mockups/camerierePronto.png" height=300 style="border: 2px solid DimGray; border-radius: 3px">
-  <img src="mockups/cameriereCons.png" height=300 style="border: 2px solid DimGray; border-radius: 3px">
-  <img src="mockups/cameriereEdit.png" height=300 style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="docs/mockups/cameriere.png" height=300 style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="docs/mockups/cameriereInPrep.png" height=300 style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="docs/mockups/camerierePronto.png" height=300 style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="docs/mockups/cameriereCons.png" height=300 style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="docs/mockups/cameriereEdit.png" height=300 style="border: 2px solid DimGray; border-radius: 3px">
 </p>
 <div style="page-break-after: always;"></div>
 
@@ -301,7 +301,7 @@ Ogni pagina ha una top bar con:
 <br per lasciare spazio tra testo e immagine >
 <br per lasciare spazio tra testo e immagine >
 <p align="center">
-  <img src="mockups/cucina.png" height=380 style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="docs/mockups/cucina.png" height=380 style="border: 2px solid DimGray; border-radius: 3px">
 </p>
 
 <div style="page-break-after: always;"></div>
@@ -314,7 +314,7 @@ Ogni pagina ha una top bar con:
 <br per lasciare spazio tra testo e immagine >
 <br per lasciare spazio tra testo e immagine >
 <p align="center">
-  <img src="mockups/smazzo.png" height=380 style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="docs/mockups/smazzo.png" height=380 style="border: 2px solid DimGray; border-radius: 3px">
 </p>
 
 [⮝ torna all'indice](#indice)
