@@ -203,7 +203,7 @@ Ogni pagina ha una top bar con:
 
 <div style="page-break-after: always;"></div>
 
-#### Login
+#### Login and Register
 - Tasti per registrarsi o loggarsi
 
 <br per lasciare spazio tra testo e immagine >
@@ -760,6 +760,8 @@ LoginDialog
 - on login if user redirect to home
 - _LAST_ on login if user has at least a role redirect to role page else to home
 - if loginError show message under form
+
+#### domain/register
 
 RegisterDialog
 - state = registerError (false)
