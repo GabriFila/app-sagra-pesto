@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -21,9 +21,11 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function ButtonAppBar() {
+export default function TopBar() {
   const classes = useStyles();
+  const url = window.location.href;
 
+  console.log(url);
   return (
     <div className={classes.root}>
       <AppBar position="static">
@@ -39,7 +41,9 @@ export default function ButtonAppBar() {
           <Typography variant="h6" className={classes.title}>
             Sagra del Pesto
           </Typography>
-          <Button color="inherit">Login</Button>
+          {url.includes('/login') || url.includes('/register') ? null : (
+            <Button color="inherit">Logout</Button>
+          )}
         </Toolbar>
       </AppBar>
     </div>
