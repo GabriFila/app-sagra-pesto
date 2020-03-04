@@ -55,6 +55,7 @@ export default function LoginPage() {
         });
     }
   };
+  // if (auth.currentUser) return <Redirect to="/" />;
 
   return (
     <Container component="main" maxWidth="xs">
@@ -95,7 +96,7 @@ export default function LoginPage() {
               Le credenziali non sono valide
             </Typography>
           ) : loginOutcome === 'success' ? (
-            <Redirect to="/home" />
+            <Redirect to="/" />
           ) : null}
           <Button
             type="submit"
