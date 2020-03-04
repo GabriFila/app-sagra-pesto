@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -21,8 +21,10 @@ const useStyles = makeStyles((theme: Theme) =>
     }
   })
 );
-
-export default function TopBar() {
+interface ITopBarProps {
+  authed: boolean;
+}
+const TopBar: React.FunctionComponent<ITopBarProps> = ({ authed }) => {
   const classes = useStyles();
   const url = window.location.href;
 
@@ -45,13 +47,20 @@ export default function TopBar() {
           <Typography variant="h6" className={classes.title}>
             Sagra del Pesto
           </Typography>
-          {url.includes('/login') || url.includes('/register') ? null : (
+          {!authed ? null : (
             <Button color="inherit" onClick={logOutUser}>
               Logout
             </Button>
           )}
+          {/* {url.includes('/login') || url.includes('/register') ? null : (
+            <Button color="inherit" onClick={logOutUser}>
+              Logout
+            </Button>
+          )} */}
         </Toolbar>
       </AppBar>
     </div>
   );
-}
+};
+
+export default TopBar;

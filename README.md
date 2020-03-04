@@ -1051,7 +1051,7 @@ SmazzoCourse (course : ICourseWithId)
 
 #### triggers:
 
-- [ ] onCreate on instantOrder
+- [x] onCreate on instantOrder
   - need to get more info on idempotency
   1. update totalRevenue of current service
   2. update totalInstantOrders of current service
@@ -1061,7 +1061,7 @@ SmazzoCourse (course : ICourseWithId)
   1. create new record in userSagraRoles collection with 'roles' field = []
   2. create new reacord in users with empty doc
 
-- [ ] user deletion
+- [x] user deletion
   a single batch
   1. delete user record from userSagraRole
   2. delete user record from users

@@ -4,30 +4,32 @@ import { Route, Redirect } from 'react-router-dom';
 interface IPrivateRoleRouteProps {
   path: string;
   authed: boolean;
-  userRoles: string[];
-  requiredRoles: string[];
   exact: boolean;
+  component: React.FunctionComponent;
 }
 
-const PrivateRoleRoute: React.FunctionComponent<IPrivateRoleRouteProps> = props => {
-  const { authed, path, exact } = props;
-  console.log('path', path);
-  console.log('exact', exact);
+const PrivateRoleRoute: React.FunctionComponent<IPrivateRoleRouteProps> = ({
+  authed,
+  path,
+  exact,
+  component: Component
+}) => {
   console.log('authed', authed);
   return (
     <Route
       path={path}
       exact={exact}
-      render={() =>
-        authed ? <div>ciao{console.log('here')}</div> : <Redirect to="/login" />
-      }
+      render={() => {
+        if (authed) {
+          console.log('true');
+          return <Component />;
+        } else {
+          console.log('false');
+          return <Redirect to="/login" />;
+        }
+      }}
     />
   );
-  //   return (
-  //     <Route path={path} exact={exact}>
-  //       {authed ? <div>ciao{console.log('here')}</div> : <Redirect to="/login" />}
-  //     </Route>
-  //   );
 };
 
 export default PrivateRoleRoute;

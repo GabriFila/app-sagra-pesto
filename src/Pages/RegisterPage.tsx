@@ -54,7 +54,7 @@ export default function RegisterPage() {
     setPswError('');
     setConfirmPswError('');
     // FIXME password regex
-    if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))
+    if (!/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email))
       setEmailError('Email non valida');
     else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(psw))
       setPswError(

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 // import './App.css';
-import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
 import TopBar from './components/TopBar';
 import PrivateRoleRoute from './components/PrivateRoleRoute';
@@ -25,30 +25,24 @@ function App() {
     return () => unsubscribe();
   }, []);
 
-  console.log('auth', isLoggedIn);
-
   return (
     <>
-      <TopBar />
+      <TopBar authed={isLoggedIn} />
       <BrowserRouter>
-        {/* <Switch> */}
-        <PrivateRoleRoute
-          exact={true}
-          path="/"
-          authed={isLoggedIn}
-          userRoles={[]}
-          requiredRoles={[]}
-        />
-        {/* <Route exact path="/">
-          {isLoggedIn ? <div>ciao</div> : <Redirect to="/login" />}
-        </Route> */}
-        <Route exact path="/login">
-          <LoginPage />
-        </Route>
-        <Route exact path="/register">
-          <RegisterPage />
-        </Route>
-        {/* </Switch> */}
+        <Switch>
+          <PrivateRoleRoute
+            exact
+            path="/"
+            authed={isLoggedIn}
+            component={HomePage}
+          />
+          <Route exact path="/login">
+            <LoginPage />
+          </Route>
+          <Route exact path="/register">
+            <RegisterPage />
+          </Route>
+        </Switch>
       </BrowserRouter>
     </>
   );

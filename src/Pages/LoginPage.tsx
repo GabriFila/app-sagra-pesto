@@ -55,7 +55,8 @@ export default function LoginPage() {
         });
     }
   };
-  // if (auth.currentUser) return <Redirect to="/" />;
+  // TODO try to fix private route which doesn't work properly
+  if (auth.currentUser) return <Redirect to="/" />;
 
   return (
     <Container component="main" maxWidth="xs">
@@ -113,7 +114,7 @@ export default function LoginPage() {
             style={{ textDecoration: 'none', color: 'black' }}
           >
             <Button fullWidth variant="contained" color="secondary">
-              Register
+              Registrati
             </Button>
           </Link>
         </form>
