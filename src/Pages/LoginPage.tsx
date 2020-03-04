@@ -1,13 +1,12 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, Redirect } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import LinkUI from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import { auth } from '../fbConfig';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -32,6 +31,31 @@ const useStyles = makeStyles(theme => ({
 export default function LoginPage() {
   const classes = useStyles();
 
+  // form data
+  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [psw, setPsw] = useState('');
+
+  // login error
+  const [loginOutcome, setLoginOutcome] = useState('wait');
+
+  const loginUser = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setEmailError('');
+    setLoginOutcome('wait');
+    if (!/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email))
+      setEmailError('Email non valida');
+    else {
+      auth
+        .signInWithEmailAndPassword(email, psw)
+        .then(res => setLoginOutcome('success'))
+        .catch(err => {
+          console.error(err.message);
+          setLoginOutcome('error');
+        });
+    }
+  };
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -50,6 +74,9 @@ export default function LoginPage() {
             name="email"
             autoComplete="email"
             autoFocus
+            onChange={e => setEmail(e.target.value)}
+            error={emailError.length > 0}
+            helperText={emailError}
           />
           <TextField
             variant="outlined"
@@ -61,13 +88,22 @@ export default function LoginPage() {
             type="password"
             id="password"
             autoComplete="current-password"
-          />
+            onChange={e => setPsw(e.target.value)}
+          />{' '}
+          {loginOutcome === 'error' ? (
+            <Typography color="error">
+              Le credenziali non sono valide
+            </Typography>
+          ) : loginOutcome === 'success' ? (
+            <Redirect to="/home" />
+          ) : null}
           <Button
             type="submit"
             fullWidth
             variant="contained"
             color="primary"
             className={classes.submit}
+            onClick={loginUser}
           >
             Login
           </Button>

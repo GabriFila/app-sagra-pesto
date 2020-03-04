@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import { auth } from '../fbConfig';
 
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import LinkUI from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -44,10 +43,13 @@ export default function RegisterPage() {
   const [confirmPswError, setConfirmPswError] = useState('');
 
   // registration error
-  const [regStatus, setRegStatus] = useState('wait');
+  const [regOutcome, setRegOutcome] = useState('wait');
 
   const registerUser = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+
+    setRegOutcome('wait');
+
     setEmailError('');
     setPswError('');
     setConfirmPswError('');
@@ -68,13 +70,12 @@ export default function RegisterPage() {
           if (auth.currentUser != null)
             return auth.currentUser.updateProfile({ displayName: name });
         })
-        .then(res => setRegStatus('success'))
+        .then(res => setRegOutcome('success'))
         .catch(err => {
-          console.log(err.message);
-          setRegStatus('error');
+          console.error(err.message);
+          setRegOutcome('error');
         });
     }
-    // register user
   };
 
   return (
@@ -135,11 +136,11 @@ export default function RegisterPage() {
             error={confirmPswError.length > 0}
             helperText={confirmPswError}
           />
-          {regStatus === 'error' ? (
+          {regOutcome === 'error' ? (
             <Typography color="error">
               C'è stato un problema con la registrazione
             </Typography>
-          ) : regStatus === 'success' ? (
+          ) : regOutcome === 'success' ? (
             <Typography color="primary">
               La registrazione è andata a buon fine! Chiedi che ti venga
               assegnato un ruolo

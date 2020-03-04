@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+import { auth } from '../fbConfig';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -25,7 +26,10 @@ export default function TopBar() {
   const classes = useStyles();
   const url = window.location.href;
 
-  console.log(url);
+  const logOutUser = () => {
+    auth.signOut();
+  };
+
   return (
     <div className={classes.root}>
       <AppBar position="static">
@@ -42,7 +46,9 @@ export default function TopBar() {
             Sagra del Pesto
           </Typography>
           {url.includes('/login') || url.includes('/register') ? null : (
-            <Button color="inherit">Logout</Button>
+            <Button color="inherit" onClick={logOutUser}>
+              Logout
+            </Button>
           )}
         </Toolbar>
       </AppBar>
