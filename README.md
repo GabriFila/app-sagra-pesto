@@ -571,11 +571,11 @@ interface IService {
   lastOrderNum: number; // progressive counter for orders
   totalInstantOrders: number;
   totalOrders: number;
-  consumedCourses : IRemainingCourse[]
+  startingCourses : IStartingCourses[]
 }
 ```
 ```ts
-interface IRemainingCourse {
+interface IStartingCourses {
   name: string;
   dishes: IDish[];
 }
@@ -787,17 +787,17 @@ AdminPage
 - getCurrentService
 - setup listener for service where EndDate = null
 
-Storage
+Storage (startingCourses : IStartingCourses)
 - getCurrentStorage
 - setup listener for storage document
 - useState = storage
-- map courses of storage to StorageCourse and remove 
+- map courses of storage and starting courses to StorageCourse
 
-StorageCourse (storageCourse : IStorageCourse, consumedCourse : IConsumedCourse)
-- map dishes in storageCourse to StorageDish and pass single dish as prop
+StorageCourse (storageCourse : IStorageCourse, startingCourse : IStartingCourse)
+- map dishes in storageCourse to StorageDish and pass single dish as prop with also corresponding starting dish value
 - _LAST_ plus button to add dish
 
-StorageDish (storageDish : IStorageDish, consumedDish : IDish)
+StorageDish (storageDish : IStorageDish, startingDishQt : number)
 - render infos from props
 - useState = isEditing
 - on editButton click set isEditing to true
@@ -1057,7 +1057,7 @@ SmazzoCourse (course : ICourseWithId)
   2. update totalInstantOrders of current service
   3. update qts in storage
 
-- [ ] new user registration
+- [x] new user registration
   1. create new record in userSagraRoles collection with 'roles' field = []
   2. create new reacord in users with empty doc
 
@@ -1066,7 +1066,7 @@ SmazzoCourse (course : ICourseWithId)
   1. delete user record from userSagraRole
   2. delete user record from users
 
-- [ ] onUpdate on sagraUserRoles
+- [x] onUpdate on sagraUserRoles
   1. delete all userCostum claims
   2. for each role in user add userCostumClaims 'role' = true
 

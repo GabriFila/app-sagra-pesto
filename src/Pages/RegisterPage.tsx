@@ -46,6 +46,7 @@ export default function RegisterPage() {
   const [regOutcome, setRegOutcome] = useState('wait');
 
   const registerUser = (e: React.MouseEvent<HTMLButtonElement>) => {
+    // TODO need to add spinner for user feedback on registration
     e.preventDefault();
 
     setRegOutcome('wait');
@@ -61,7 +62,7 @@ export default function RegisterPage() {
         'La password deve contenere almeno una lettera maiuscola, una minuscola e un numero'
       );
     else if (psw !== confirmPsw)
-      setConfirmPswError('L password non corrispondono');
+      setConfirmPswError('Le password non corrispondono');
     else {
       auth
         .createUserWithEmailAndPassword(email, psw)
