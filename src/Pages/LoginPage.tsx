@@ -71,15 +71,14 @@ export default function LoginPage() {
           >
             Login
           </Button>
-          <Grid container>
-            <Grid item>
-              <Link to="/register">
-                <LinkUI variant="body2">
-                  {'Non hai un account? Registrati!'}
-                </LinkUI>
-              </Link>
-            </Grid>
-          </Grid>
+          <Link
+            to="/register"
+            style={{ textDecoration: 'none', color: 'black' }}
+          >
+            <Button fullWidth variant="contained" color="secondary">
+              Register
+            </Button>
+          </Link>
         </form>
       </div>
     </Container>

@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
+
+import { auth } from '../fbConfig';
 
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import LinkUI from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -32,6 +33,8 @@ const useStyles = makeStyles(theme => ({
 
 export default function RegisterPage() {
   const classes = useStyles();
+
+  // form data state (field and field error)
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
@@ -40,20 +43,37 @@ export default function RegisterPage() {
   const [confirmPsw, setConfirmPsw] = useState('');
   const [confirmPswError, setConfirmPswError] = useState('');
 
+  // registration error
+  const [regStatus, setRegStatus] = useState('wait');
+
   const registerUser = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setEmailError('');
     setPswError('');
     setConfirmPswError('');
-
+    // FIXME password regex
     if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))
       setEmailError('Email non valida');
-    if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(psw))
+    else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(psw))
       setPswError(
         'La password deve contenere almeno una lettera maiuscola, una minuscola e un numero'
       );
-    if (psw !== confirmPsw) setConfirmPswError('L password non corrispondono');
-
+    else if (psw !== confirmPsw)
+      setConfirmPswError('L password non corrispondono');
+    else {
+      auth
+        .createUserWithEmailAndPassword(email, psw)
+        .then(res => {
+          console.log(res);
+          if (auth.currentUser != null)
+            return auth.currentUser.updateProfile({ displayName: name });
+        })
+        .then(res => setRegStatus('success'))
+        .catch(err => {
+          console.log(err.message);
+          setRegStatus('error');
+        });
+    }
     // register user
   };
 
@@ -74,7 +94,6 @@ export default function RegisterPage() {
             label="Nome identificativo"
             helperText="Ad esempio il tuo soprannome"
             name="name"
-            autoFocus
             onChange={e => setName(e.target.value)}
           />
           <TextField
@@ -99,7 +118,6 @@ export default function RegisterPage() {
             label="Password"
             type="password"
             id="password"
-            autoComplete="current-password"
             onChange={e => setPsw(e.target.value)}
             error={pswError.length > 0}
             helperText={pswError}
@@ -117,6 +135,16 @@ export default function RegisterPage() {
             error={confirmPswError.length > 0}
             helperText={confirmPswError}
           />
+          {regStatus === 'error' ? (
+            <Typography color="error">
+              C'è stato un problema con la registrazione
+            </Typography>
+          ) : regStatus === 'success' ? (
+            <Typography color="primary">
+              La registrazione è andata a buon fine! Chiedi che ti venga
+              assegnato un ruolo
+            </Typography>
+          ) : null}
           <Button
             type="submit"
             fullWidth
@@ -127,13 +155,11 @@ export default function RegisterPage() {
           >
             Registrati
           </Button>
-          <Grid container>
-            <Grid item>
-              <Link to="/login">
-                <LinkUI variant="body2">{'Hai già un account? Accedi!'}</LinkUI>
-              </Link>
-            </Grid>
-          </Grid>
+          <Link to="/login" style={{ textDecoration: 'none', color: 'black' }}>
+            <Button fullWidth variant="contained" color="secondary">
+              Accedi
+            </Button>
+          </Link>
         </form>
       </div>
     </Container>
