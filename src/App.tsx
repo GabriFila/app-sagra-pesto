@@ -4,37 +4,29 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
 import TopBar from './components/TopBar';
 import PrivateRoleRoute from './components/PrivateRoleRoute';
-import { auth } from './fbConfig';
 import LoginPage from './Pages/LoginPage';
 import RegisterPage from './Pages/RegisterPage';
 import HomePage from './Pages/HomePage';
+import AdminPage from './Pages/AdminPage';
+import AuthProvider from './AuthContext';
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(user => {
-      if (user) {
-        setIsLoggedIn(true);
-        console.log('user is logged in');
-      } else {
-        setIsLoggedIn(false);
-        console.log('user is logged out');
-      }
-    });
-    return () => unsubscribe();
-  }, []);
-
   return (
-    <>
-      <TopBar authed={isLoggedIn} />
+    <AuthProvider>
+      <TopBar />
       <BrowserRouter>
         <Switch>
           <PrivateRoleRoute
+            requiredRoles={[]}
             exact
             path="/"
-            authed={isLoggedIn}
             component={HomePage}
+          />
+          <PrivateRoleRoute
+            requiredRoles={['admin']}
+            exact
+            path="/admin"
+            component={AdminPage}
           />
           <Route exact path="/login">
             <LoginPage />
@@ -44,7 +36,7 @@ function App() {
           </Route>
         </Switch>
       </BrowserRouter>
-    </>
+    </AuthProvider>
   );
 }
 

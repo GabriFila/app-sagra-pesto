@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import { auth } from '../fbConfig';
+import { AuthContext } from '../AuthContext';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -21,13 +22,10 @@ const useStyles = makeStyles((theme: Theme) =>
     }
   })
 );
-interface ITopBarProps {
-  authed: boolean;
-}
-const TopBar: React.FunctionComponent<ITopBarProps> = ({ authed }) => {
+const TopBar: React.FunctionComponent = () => {
   const classes = useStyles();
-  const url = window.location.href;
 
+  const { isLoggedIn, userRoles } = useContext(AuthContext);
   const logOutUser = () => {
     auth.signOut();
   };
@@ -47,7 +45,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = ({ authed }) => {
           <Typography variant="h6" className={classes.title}>
             Sagra del Pesto
           </Typography>
-          {!authed ? null : (
+          {!isLoggedIn ? null : (
             <Button color="inherit" onClick={logOutUser}>
               Logout
             </Button>

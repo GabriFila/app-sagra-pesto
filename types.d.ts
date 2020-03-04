@@ -38,3 +38,8 @@ export interface IDish {
   shortName: string;
   qt: number;
 }
+
+export interface IUserSagraRolesDoc {
+  name: string;
+  roles: string[];
+}

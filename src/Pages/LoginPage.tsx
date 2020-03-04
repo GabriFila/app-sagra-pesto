@@ -56,7 +56,7 @@ export default function LoginPage() {
     }
   };
   // TODO try to fix private route which doesn't work properly
-  if (auth.currentUser) return <Redirect to="/" />;
+  // if (auth.currentUser) return <Redirect to="/" />;
 
   return (
     <Container component="main" maxWidth="xs">
@@ -98,7 +98,8 @@ export default function LoginPage() {
             </Typography>
           ) : loginOutcome === 'success' ? (
             <Redirect to="/" />
-          ) : null}
+          ) : // <div>dentro</div>
+          null}
           <Button
             type="submit"
             fullWidth

@@ -1,6 +1,8 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 // import { IService, IOrder } from '../../types';
+import { IUserSagraRolesDoc } from '../../types';
+import rolesToClaims from './helpers/rolesToClaims';
 
 admin.initializeApp();
 const db = admin.firestore();
@@ -50,11 +52,6 @@ export const onUserSagraRolesUpdate = functions
   .region('europe-west2')
   .firestore.document('userSagraRoles/{docId}')
   .onUpdate((change, ctx) => {
-    interface IUserSagraRolesDoc {
-      name: string;
-      roles: string[];
-    }
-
     const uid = (ctx.params.docId as string).substring(3);
     const { roles, name } = change.after.data() as IUserSagraRolesDoc;
 
@@ -63,9 +60,7 @@ export const onUserSagraRolesUpdate = functions
       .setCustomUserClaims(
         uid,
         // from [primi,bar] to {primi:true, bar:true}
-        roles.reduce((acc, val) => {
-          return { ...acc, [val.toString()]: true };
-        }, {})
+        rolesToClaims(roles)
       )
       .then(() =>
         console.log(`Roles of ${name} updated to ${roles.toString()}`)

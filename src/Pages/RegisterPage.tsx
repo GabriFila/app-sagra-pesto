@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 
 import { auth } from '../fbConfig';
 
@@ -74,6 +74,7 @@ export default function RegisterPage() {
         .then(res => setRegOutcome('success'))
         .catch(err => {
           console.error(err.message);
+          // handle registration error for better UX
           setRegOutcome('error');
         });
     }
@@ -142,10 +143,7 @@ export default function RegisterPage() {
               C'è stato un problema con la registrazione
             </Typography>
           ) : regOutcome === 'success' ? (
-            <Typography color="primary">
-              La registrazione è andata a buon fine! Chiedi che ti venga
-              assegnato un ruolo
-            </Typography>
+            <Redirect to="/" />
           ) : null}
           <Button
             type="submit"
