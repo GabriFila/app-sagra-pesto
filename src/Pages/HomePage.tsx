@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(() =>
   createStyles({
-    base: {
+    root: {
       display: 'flex',
       flexDirection: 'column',
       flex: 1,
@@ -23,7 +23,7 @@ const HomePage = () => {
   const classes = useStyles();
 
   return (
-    <div className={classes.base}>
+    <div className={classes.root}>
       {userRoles.map(role => (
         <Link
           key={role}
