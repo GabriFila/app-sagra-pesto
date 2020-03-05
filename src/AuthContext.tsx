@@ -21,6 +21,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
     const unsubscribe = auth.onAuthStateChanged(user => {
       if (user) {
         user.getIdTokenResult().then(idTokenResult => {
+          console.log(idTokenResult);
           setAuthState({
             phase: 'in',
             userRoles: claimsToRoles(idTokenResult.claims)

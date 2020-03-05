@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { Link, Redirect, useHistory } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -37,7 +37,6 @@ export default function LoginPage() {
   const [emailError, setEmailError] = useState('');
   const [psw, setPsw] = useState('');
 
-  const history = useHistory();
   // login error
   const [loginOutcome, setLoginOutcome] = useState('wait');
 
