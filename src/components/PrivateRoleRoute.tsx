@@ -1,46 +1,40 @@
 import React, { useContext } from 'react';
-import { Route, Redirect } from 'react-router-dom';
+import {
+  Route,
+  Redirect,
+  RouteComponentProps,
+  RouteProps
+} from 'react-router-dom';
 import { AuthContext } from '../AuthContext';
 
-interface IPrivateRoleRouteProps {
-  path: string;
-  exact: boolean;
+interface IPrivateRouteProps extends RouteProps {
+  component: React.FunctionComponent<RouteComponentProps>;
   requiredRoles: string[];
-  component: React.FunctionComponent;
 }
 
-const PrivateRoleRoute: React.FunctionComponent<IPrivateRoleRouteProps> = ({
-  path,
-  exact,
+const PrivateRoute: React.FunctionComponent<IPrivateRouteProps> = ({
+  component: RouteComponent,
   requiredRoles,
-  component: Component
+  ...rest
 }) => {
-  const { isLoggedIn, userRoles } = useContext(AuthContext);
-
-  console.log('authed', isLoggedIn);
+  const { phase, userRoles } = useContext(AuthContext);
   return (
     <Route
-      path={path}
-      exact={exact}
-      render={() => {
-        // if (
-        //   isLoggedIn &&
-        //   userRoles.length > 0 &&
-        //   userRoles.some(role => requiredRoles.includes(role))
-        // ) {
-        //   // return <Redirect to={`/${userRoles[0]}`} />;
-        //   return <Component />;
-        // } else
-        if (isLoggedIn) {
-          console.log('private true');
-          return <Component />;
-        } else {
-          console.log('private false');
-          return <Redirect to="/login" />;
+      {...rest}
+      render={routeProps => {
+        switch (phase) {
+          case 'in':
+            if (userRoles.some(role => requiredRoles.includes(role)))
+              return <RouteComponent {...routeProps} />;
+            else return <Redirect to={'/'} />;
+          case 'out':
+            return <Redirect to={'/login'} />;
+          default:
+            return <div></div>;
         }
       }}
     />
   );
 };
 
-export default PrivateRoleRoute;
+export default PrivateRoute;

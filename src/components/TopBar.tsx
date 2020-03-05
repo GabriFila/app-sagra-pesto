@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme: Theme) =>
 const TopBar: React.FunctionComponent = () => {
   const classes = useStyles();
 
-  const { isLoggedIn, userRoles } = useContext(AuthContext);
+  const { phase, userRoles } = useContext(AuthContext);
   const logOutUser = () => {
     auth.signOut();
   };
@@ -45,16 +45,11 @@ const TopBar: React.FunctionComponent = () => {
           <Typography variant="h6" className={classes.title}>
             Sagra del Pesto
           </Typography>
-          {!isLoggedIn ? null : (
+          {phase === 'in' ? (
             <Button color="inherit" onClick={logOutUser}>
               Logout
             </Button>
-          )}
-          {/* {url.includes('/login') || url.includes('/register') ? null : (
-            <Button color="inherit" onClick={logOutUser}>
-              Logout
-            </Button>
-          )} */}
+          ) : null}
         </Toolbar>
       </AppBar>
     </div>

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import React, { useState, useContext } from 'react';
+import { Link, Redirect, useHistory } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { auth } from '../fbConfig';
+import { AuthContext } from '../AuthContext';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -36,6 +37,7 @@ export default function LoginPage() {
   const [emailError, setEmailError] = useState('');
   const [psw, setPsw] = useState('');
 
+  const history = useHistory();
   // login error
   const [loginOutcome, setLoginOutcome] = useState('wait');
 
@@ -48,15 +50,18 @@ export default function LoginPage() {
     else {
       auth
         .signInWithEmailAndPassword(email, psw)
-        .then(res => setLoginOutcome('success'))
+        .then(res => {
+          setLoginOutcome('scess');
+          // history.push('/admin');
+        })
         .catch(err => {
           console.error(err.message);
           setLoginOutcome('error');
         });
     }
   };
-  // TODO try to fix private route which doesn't work properly
-  // if (auth.currentUser) return <Redirect to="/" />;
+  const { phase } = useContext(AuthContext);
+  if (phase === 'in') return <Redirect to="/" />;
 
   return (
     <Container component="main" maxWidth="xs">
@@ -96,10 +101,7 @@ export default function LoginPage() {
             <Typography color="error">
               Le credenziali non sono valide
             </Typography>
-          ) : loginOutcome === 'success' ? (
-            <Redirect to="/" />
-          ) : // <div>dentro</div>
-          null}
+          ) : null}
           <Button
             type="submit"
             fullWidth

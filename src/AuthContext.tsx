@@ -3,17 +3,17 @@ import { auth } from './fbConfig';
 import claimsToRoles from './helpers/claimsToRoles';
 
 interface IAuthContext {
-  isLoggedIn: boolean;
+  phase: string;
   userRoles: string[];
 }
 export const AuthContext = createContext<IAuthContext>({
-  isLoggedIn: false,
+  phase: 'pending',
   userRoles: []
 });
 
 const AuthProvider: React.FunctionComponent = ({ children }) => {
   const [authState, setAuthState] = useState<IAuthContext>({
-    isLoggedIn: false,
+    phase: 'pending',
     userRoles: []
   });
   console.log('in context');
@@ -22,13 +22,13 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
       if (user) {
         user.getIdTokenResult().then(idTokenResult => {
           setAuthState({
-            isLoggedIn: true,
+            phase: 'in',
             userRoles: claimsToRoles(idTokenResult.claims)
           });
         });
         console.log(`User is logged in`);
       } else {
-        setAuthState({ isLoggedIn: false, userRoles: [] });
+        setAuthState({ phase: 'out', userRoles: [] });
         console.log('User is logged out');
       }
     });
