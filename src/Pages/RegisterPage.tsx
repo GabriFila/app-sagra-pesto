@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, MouseEvent } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 
 import { auth } from '../fbConfig';
@@ -54,12 +54,16 @@ export default function RegisterPage() {
     setEmailError('');
     setPswError('');
     setConfirmPswError('');
-    // FIXME password regex
     if (!/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email))
       setEmailError('Email non valida');
-    else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(psw))
+    else if (
+      psw.length < 8 ||
+      !/[A-Z]/.test(psw) ||
+      !/[a-z]/.test(psw) ||
+      !/[0-9]/.test(psw)
+    )
       setPswError(
-        'La password deve contenere almeno una lettera maiuscola, una minuscola e un numero'
+        'La password deve contenere almeno 8 caratteri, di cui una lettera maiuscola, una minuscola e un numero'
       );
     else if (psw !== confirmPsw)
       setConfirmPswError('Le password non corrispondono');
