@@ -12,10 +12,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 import Button from '@material-ui/core/Button';
 import { AuthContext } from '../AuthContext';
 import { auth } from '../fbConfig';
@@ -25,7 +22,8 @@ const drawerWidth = 140;
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      display: 'flex'
+      display: 'flex',
+      height: '100vh'
     },
     appBar: {
       transition: theme.transitions.create(['margin', 'width'], {
@@ -65,6 +63,7 @@ const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'flex-end'
     },
     content: {
+      display: 'flex',
       flexGrow: 1,
       padding: theme.spacing(3),
       transition: theme.transitions.create('margin', {
@@ -102,17 +101,13 @@ const PersistentDrawerLeft: React.FunctionComponent = ({ children }) => {
     setOpen(false);
   };
 
-  const { phase, userRoles } = useContext(AuthContext);
+  const { phase, userRoles, name } = useContext(AuthContext);
 
   const logOutUser = () => {
     auth.signOut();
   };
 
-  const history = useHistory();
-
-  const handleClick = (e: React.MouseEvent<Element, MouseEvent>) => {
-    console.log(e);
-  };
+  const { location } = useHistory();
 
   return (
     <div className={classes.root}>
@@ -134,7 +129,10 @@ const PersistentDrawerLeft: React.FunctionComponent = ({ children }) => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap className={classes.title}>
-            Sagra del Pesto
+            {name ? `${name}` : 'Sagra del Pesto'}
+            {location.pathname.substring(1).length > 0
+              ? ` - ${location.pathname.substring(1)}`
+              : ''}
           </Typography>
           {phase === 'in' ? (
             <Button color="inherit" onClick={logOutUser}>
@@ -159,9 +157,8 @@ const PersistentDrawerLeft: React.FunctionComponent = ({ children }) => {
         </div>
         <Divider />
         <List>
-          {console.log('roles', userRoles)}
-          {userRoles.map((role, index) => (
-            <Link to={`/${role}`} className={classes.link}>
+          {userRoles.map(role => (
+            <Link key={role} to={`/${role}`} className={classes.link}>
               <ListItem button key={role}>
                 <ListItemText primary={role} />
               </ListItem>
@@ -174,7 +171,7 @@ const PersistentDrawerLeft: React.FunctionComponent = ({ children }) => {
           [classes.contentShift]: open
         })}
       >
-        <div className={classes.drawerHeader} />
+        {/* <div className={classes.drawerHeader} /> */}
         {children}
       </main>
     </div>

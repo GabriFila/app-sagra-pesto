@@ -8,7 +8,7 @@ import RegisterPage from './Pages/RegisterPage';
 import HomePage from './Pages/HomePage';
 import AdminPage from './Pages/AdminPage';
 import AuthProvider from './AuthContext';
-import Menu from './components/Menu';
+import Menu from './components/TopBar';
 
 function App() {
   return (

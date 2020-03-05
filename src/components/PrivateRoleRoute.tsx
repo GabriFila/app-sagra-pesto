@@ -24,9 +24,14 @@ const PrivateRoute: React.FunctionComponent<IPrivateRouteProps> = ({
       render={routeProps => {
         switch (phase) {
           case 'in':
-            if (userRoles.some(role => requiredRoles.includes(role)))
+            if (
+              userRoles.some(role => requiredRoles.includes(role)) ||
+              routeProps.location.pathname === '/'
+            ) {
               return <RouteComponent {...routeProps} />;
-            else return <Redirect to={'/'} />;
+            } else {
+              return <Redirect to={'/'} />;
+            }
           case 'out':
             return <Redirect to={'/login'} />;
           default:
