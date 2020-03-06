@@ -66,6 +66,10 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       flexGrow: 1,
       padding: theme.spacing(3),
+      [theme.breakpoints.down('sm')]: {
+        padding: theme.spacing(3, 1),
+        flexDirection: 'row'
+      },
       transition: theme.transitions.create('margin', {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen

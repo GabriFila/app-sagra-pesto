@@ -1,5 +1,5 @@
 export interface IStorage {
-  courses: IStorageCourse[];
+  storageCourses: IStorageCourse[];
 }
 export interface IStorageCourse {
   name: string;
@@ -12,7 +12,7 @@ export interface IStorageDish {
   shortName: string;
   storageQt: number;
   price: number;
-  inMenu: boolean;
+  isInMenu: boolean;
 }
 export interface IService {
   start: Date | null;

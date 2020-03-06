@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
-import firebase from '../fbConfig';
-import getServicesRef from '../helpers/getServicesRef';
+import firebase from '../../fbConfig';
+import getServicesRef from '../../helpers/getServicesRef';
+import { StorageContext } from '../../context/StorageContext';
 
 interface IServiceStarterProps {
   isServiceActive: boolean;
@@ -13,6 +14,8 @@ const ServiceStarter: React.FunctionComponent<IServiceStarterProps> = ({
   isServiceActive,
   serviceRef
 }) => {
+  const { storageCourses } = useContext(StorageContext);
+
   const changeServiceState = () => {
     if (isServiceActive)
       // end service
@@ -33,7 +36,15 @@ const ServiceStarter: React.FunctionComponent<IServiceStarterProps> = ({
         totalInstantOrders: 0,
         totalOrders: 0,
         // TODO add storage, get it from props
-        startingCourses: [] // get set current storage
+        startingCourses: storageCourses.map(course => {
+          return {
+            name: course.name,
+            dishes: course.dishes.map(dish => {
+              return { name: dish.name, qt: dish.storageQt };
+            })
+          };
+        })
+        // get set current storage
       });
     }
   };

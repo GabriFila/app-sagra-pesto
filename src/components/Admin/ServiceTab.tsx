@@ -1,5 +1,5 @@
 import React from 'react';
-import { IService } from '../../types';
+import { IService } from '../../../types';
 import Container from '@material-ui/core/Container';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import ServiceStarter from './ServiceStarter';

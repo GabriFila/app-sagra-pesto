@@ -1,0 +1,40 @@
+// import React from 'react';
+// import { IStorage } from '../../types';
+
+// enum ActionType {
+//   changeInMenu = 'changeInMenu',
+//   changeQt = 'changeQt'
+// }
+
+// interface IAction {
+//   type: ActionType;
+//   payload: {
+//     dishName: string;
+//     prevInMenu?: boolean;
+//     qt?: number;
+//   };
+// }
+
+// const changeInMenu = (
+//   prevStorage: IStorage,
+//   dishName: string,
+//   prevInMenu: boolean
+// ): IStorage => {
+//   const newStorage = { ...prevStorage };
+//   newStorage.storageCourses
+//     .find(course => course.dishes.some(dish => dish.name === dishName))
+//     .dishes.find(dish => dish.name === dishName).isInMenu = !prevInMenu;
+
+//   return { ...prevStorage };
+// };
+
+// const reducer: React.Reducer<IStorage, IAction> = (state, action) => {
+//   switch (action.type) {
+//     case ActionType.changeInMenu:
+//       return changeInMenu();
+//     case ActionType.changeProps:
+//       return { count: state.count - action.payload.count };
+//     default:
+//       throw new Error();
+//   }
+// };
