@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { AuthContext } from '../AuthContext';
+import { AuthContext } from '../context/AuthContext';
 import Button from '@material-ui/core/Button';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';

@@ -774,7 +774,7 @@ RegisterDialog
 #### domain/admin
 
 - [ ] AdminPage
-  - [ ] Storage
+  - [ ] StorageTab
     - [ ] StorageCourse
       - [ ] StorageDish
       - [ ] AddDishButton
@@ -783,14 +783,14 @@ RegisterDialog
     - [ ] ServiceInfo
 
 AdminPage
-- 2 sections: Storage, ServiceTab
+- 2 sections: StorageTab, ServiceTab
 - getCurrentService
 - setup listener for service where EndDate = null
-
-Storage (startingCourses : IStartingCourses)
 - getCurrentStorage
 - setup listener for storage document
 - useState = storage
+
+StorageTab (startingCourses : IStartingCourses, courses : IStorageCourse[])
 - map courses of storage and starting courses to StorageCourse
 
 StorageCourse (storageCourse : IStorageCourse, startingCourse : IStartingCourse)
@@ -804,7 +804,7 @@ StorageDish (storageDish : IStorageDish, startingDishQt : number)
 - if isEditing==true becomes check icon to finish, text inputs enables
 - on checkButton click, update stroage in DB and set isEditing=false
 
-ServiceTab (service : IService)
+ServiceTab (service : IService, currentStorage : ICourses[], serviceRef)
 - useState = current service
 - if service exists pass isServiceActive=true as prop to serviceStarter else pass false
 - if service exists display ServiceInfo and pass service as prop

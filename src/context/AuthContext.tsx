@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
-import { auth } from './fbConfig';
-import claimsToRoles from './helpers/claimsToRoles';
+import { auth } from '../fbConfig';
+import claimsToRoles from '../helpers/claimsToRoles';
 
 interface IAuthContext {
   phase: string;
@@ -19,7 +19,6 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
     userRoles: [],
     name: ''
   });
-  console.log('in context');
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
       if (user) {

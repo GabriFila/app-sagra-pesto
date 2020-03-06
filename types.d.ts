@@ -1,6 +1,22 @@
+export interface IStorage {
+  courses: IStorageCourse[];
+}
+export interface IStorageCourse {
+  name: string;
+  kitchen: string;
+  dishes: IStorageDish[];
+  isInstant: boolean;
+}
+export interface IStorageDish {
+  name: string;
+  shortName: string;
+  storageQt: number;
+  price: number;
+  inMenu: boolean;
+}
 export interface IService {
-  start: Date;
-  end: Date;
+  start: Date | null;
+  end: Date | null;
   totalRevenue: number;
   totalInstantRevenue: number;
   totalPeople: number; // total number of people
@@ -25,12 +41,10 @@ export interface IOrder {
   notes: string;
 }
 
-export interface ICourse {
+export interface ICourse extends IStartingCourses {
   orderNum: number;
-  name: string;
   kitchen: string;
   status: string; // (wait,prep,ready,delivered)
-  dishes: IDish[];
   notes: string;
 }
 

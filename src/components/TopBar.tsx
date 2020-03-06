@@ -14,7 +14,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Button from '@material-ui/core/Button';
-import { AuthContext } from '../AuthContext';
+import { AuthContext } from '../context/AuthContext';
 import { auth } from '../fbConfig';
 import { Link, useHistory } from 'react-router-dom';
 const drawerWidth = 140;

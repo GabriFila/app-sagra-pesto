@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { auth } from '../fbConfig';
-import { AuthContext } from '../AuthContext';
+import { AuthContext } from '../context/AuthContext';
 
 const useStyles = makeStyles(theme => ({
   paper: {

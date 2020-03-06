@@ -7,7 +7,7 @@ import LoginPage from './Pages/LoginPage';
 import RegisterPage from './Pages/RegisterPage';
 import HomePage from './Pages/HomePage';
 import AdminPage from './Pages/AdminPage';
-import AuthProvider from './AuthContext';
+import AuthProvider from './context/AuthContext';
 import Menu from './components/TopBar';
 
 function App() {

@@ -1,8 +1,9 @@
 import React from 'react';
-import { ICourse } from '../../types';
+import { IStartingCourses, IStorageCourse } from '../../types';
 import Paper from '@material-ui/core/Paper';
 interface IStorageTabProps {
-  startingCourses: ICourse[];
+  startingCourses: IStartingCourses[];
+  storageCourses: IStorageCourse[];
 }
 const StorageTab: React.FunctionComponent<IStorageTabProps> = () => {
   return (
