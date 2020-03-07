@@ -7,13 +7,12 @@ import EditIcon from '@material-ui/icons/Edit';
 import Checkbox from '@material-ui/core/Checkbox';
 import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import getCurrentStorageRef from '../../helpers/getStorageRef';
 import { StorageContext } from '../../context/StorageContext';
 import CheckIcon from '@material-ui/icons/Check';
 
 interface IStorageDishProps {
   storageDish: IStorageDish;
-  startingDishQt: number;
+  startingDishQt: number | undefined;
 }
 
 const StorageDish: React.FunctionComponent<IStorageDishProps> = ({
@@ -22,9 +21,10 @@ const StorageDish: React.FunctionComponent<IStorageDishProps> = ({
 }) => {
   const { name, price, storageQt, shortName, isInMenu } = storageDish;
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
+  console.log(isMobile);
 
-  const { storageCourses } = useContext(StorageContext);
+  const { storageCourses, storageRef } = useContext(StorageContext);
 
   const [editing, setEditing] = useState(false);
   const [inputPrice, setInputPrice] = useState(price);
@@ -35,7 +35,7 @@ const StorageDish: React.FunctionComponent<IStorageDishProps> = ({
       .find(course => course.dishes.some(dish => dish.name === name))
       .dishes.find(dish => dish.name === name).isInMenu = !isInMenu;
 
-    getCurrentStorageRef().set({ storageCourses });
+    storageRef.set({ storageCourses });
   };
 
   const setQtAndPrice = () => {
@@ -48,7 +48,7 @@ const StorageDish: React.FunctionComponent<IStorageDishProps> = ({
       .dishes.find(dish => dish.name === name).storageQt = inputQt;
     console.log('courses', storageCourses);
 
-    getCurrentStorageRef().set({ storageCourses });
+    storageRef.set({ storageCourses });
   };
   return (
     <div
@@ -93,14 +93,16 @@ const StorageDish: React.FunctionComponent<IStorageDishProps> = ({
         </Typography>
       )}
       <Divider orientation="vertical" />
-      <Typography
-        align="center"
-        variant="body1"
-        color="primary"
-        style={{ flex: 2 }}
-      >
-        {345}
-      </Typography>
+      {startingDishQt ? (
+        <Typography
+          align="center"
+          variant="body1"
+          color="primary"
+          style={{ flex: 2 }}
+        >
+          {startingDishQt - storageQt}
+        </Typography>
+      ) : null}
       <Divider orientation="vertical" />
       {editing ? (
         <CheckIcon

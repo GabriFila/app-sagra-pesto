@@ -23,10 +23,10 @@ export interface IService {
   lastOrderNum: number; // progressive counter for orders
   totalInstantOrders: number;
   totalOrders: number;
-  startingCourses: IStartingCourses[];
+  startingCourses: IStartingCourse[];
 }
 
-export interface IStartingCourses {
+export interface IStartingCourse {
   name: string;
   dishes: IDish[];
 }
@@ -41,7 +41,7 @@ export interface IOrder {
   notes: string;
 }
 
-export interface ICourse extends IStartingCourses {
+export interface ICourse extends IStartingCourse {
   orderNum: number;
   kitchen: string;
   status: string; // (wait,prep,ready,delivered)

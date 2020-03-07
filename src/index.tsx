@@ -13,6 +13,19 @@ const theme = createMuiTheme({
   palette: {
     primary: green,
     secondary: orange
+  },
+  overrides: {
+    MuiCssBaseline: {
+      '@global': {
+        '*::-webkit-scrollbar': {
+          width: '4px'
+        },
+        '*::-webkit-scrollbar-thumb': {
+          borderRadius: 10,
+          backgroundColor: green[400]
+        }
+      }
+    }
   }
 });
 

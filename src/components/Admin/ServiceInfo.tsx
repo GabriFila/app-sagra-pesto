@@ -1,5 +1,4 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -8,12 +7,6 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { IService } from '../../../types';
 
-const useStyles = makeStyles({
-  table: {
-    minWidth: 100
-  }
-});
-
 interface IServiceInfoProps {
   service: IService | undefined;
 }
@@ -21,11 +14,12 @@ interface IServiceInfoProps {
 const ServiceInfo: React.FunctionComponent<IServiceInfoProps> = ({
   service
 }) => {
-  const classes = useStyles();
-
   return (
     <Paper elevation={6}>
-      <Table className={classes.table} aria-label="simple table">
+      <Table
+        aria-label="simple table"
+        style={{ maxWidth: 200, margin: 'auto' }}
+      >
         <TableHead>
           <TableRow>
             <TableCell>Dati</TableCell>

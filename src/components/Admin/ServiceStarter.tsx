@@ -42,7 +42,7 @@ const ServiceStarter: React.FunctionComponent<IServiceStarterProps> = ({
             return {
               name: course.name,
               dishes: course.dishes.map(dish => {
-                return { name: dish.name, qt: dish.storageQt };
+                return { shortName: dish.shortName, qt: dish.storageQt };
               })
             };
           })
@@ -52,26 +52,16 @@ const ServiceStarter: React.FunctionComponent<IServiceStarterProps> = ({
   };
 
   return (
-    <Paper
-      elevation={6}
+    <Button
+      variant="contained"
       style={{
-        display: 'flex',
-        justifyContent: 'center',
-        height: 70,
+        backgroundColor: isServiceActive ? 'red' : 'green',
         marginBottom: 20
       }}
+      onClick={changeServiceState}
     >
-      <Button
-        variant="contained"
-        style={{
-          backgroundColor: isServiceActive ? 'red' : 'green',
-          margin: 'auto'
-        }}
-        onClick={changeServiceState}
-      >
-        {isServiceActive ? 'Termina servizio' : 'Inizia servizio'}
-      </Button>
-    </Paper>
+      {isServiceActive ? 'Termina servizio' : 'Inizia servizio'}
+    </Button>
   );
 };
 

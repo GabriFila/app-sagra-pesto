@@ -1,17 +1,25 @@
 import React, { useEffect, useState, createContext } from 'react';
 import getStorageRef from '../helpers/getStorageRef';
-import { IStorage } from '../../types';
+import { IStorage, IStorageCourse } from '../../types';
 
-export const StorageContext = createContext<IStorage>({ storageCourses: [] });
+interface IStorageContext {
+  storageCourses: IStorageCourse[];
+  storageRef: any;
+}
+export const StorageContext = createContext<IStorageContext>({
+  storageCourses: [],
+  storageRef: null
+});
 
 const StorageContextProvider: React.FunctionComponent = ({ children }) => {
-  const [storage, setStorage] = useState<IStorage>({ storageCourses: [] });
+  const [storageCourses, setStorageCourses] = useState<IStorageCourse[]>([]);
+  const [storageRef, setStroageRef] = useState(getStorageRef);
 
   useEffect(() => {
     const unsubscribe = getStorageRef().onSnapshot(
       snap => {
-        console.log(snap.data());
-        setStorage(snap.data() as IStorage);
+        setStroageRef(snap.ref);
+        setStorageCourses((snap.data() as IStorage).storageCourses);
       },
       err => console.error(err)
     );
@@ -19,7 +27,7 @@ const StorageContextProvider: React.FunctionComponent = ({ children }) => {
   }, []);
 
   return (
-    <StorageContext.Provider value={storage}>
+    <StorageContext.Provider value={{ storageCourses, storageRef }}>
       {children}
     </StorageContext.Provider>
   );
