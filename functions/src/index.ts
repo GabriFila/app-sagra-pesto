@@ -14,12 +14,12 @@ export const onUserCreate = functions
   .region('europe-west2')
   .auth.user()
   .onCreate(user => {
-    const { uid, displayName } = user;
+    const { uid, email } = user;
     return db
       .collection('userSagraRoles')
       .doc(`sr_${uid}`)
-      .set({ roles: [], name: displayName })
-      .then(() => console.log(`User roles of ${displayName}  created`))
+      .set({ roles: [], email })
+      .then(() => console.log(`User roles of ${email}  created`))
       .then(() =>
         db
           .collection('users')
@@ -33,12 +33,12 @@ export const onUserDelete = functions
   .region('europe-west2')
   .auth.user()
   .onDelete(user => {
-    const { uid, displayName } = user;
+    const { uid, email } = user;
     return db
       .collection('userSagraRoles')
       .doc(`sr_${uid}`)
       .delete()
-      .then(() => console.log(`User roles of ${displayName} deleted`))
+      .then(() => console.log(`User roles of ${email} deleted`))
       .then(() =>
         db
           .collection('users')
