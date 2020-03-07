@@ -26,26 +26,28 @@ const ServiceStarter: React.FunctionComponent<IServiceStarterProps> = ({
         )
         .catch((err: Error) => console.error(err));
     else {
-      getServicesRef().add({
-        start: firebase.firestore.FieldValue.serverTimestamp(),
-        end: null,
-        totalRevenue: 0,
-        totalInstantRevenue: 0,
-        totalPeople: 0,
-        lastOrderNum: 0,
-        totalInstantOrders: 0,
-        totalOrders: 0,
-        // TODO add storage, get it from props
-        startingCourses: storageCourses.map(course => {
-          return {
-            name: course.name,
-            dishes: course.dishes.map(dish => {
-              return { name: dish.name, qt: dish.storageQt };
-            })
-          };
+      console.log(storageCourses);
+      getServicesRef()
+        .add({
+          start: firebase.firestore.FieldValue.serverTimestamp(),
+          end: null,
+          totalRevenue: 0,
+          totalInstantRevenue: 0,
+          totalPeople: 0,
+          lastOrderNum: 0,
+          totalInstantOrders: 0,
+          totalOrders: 0,
+          // TODO add storage, get it from props
+          startingCourses: storageCourses.map(course => {
+            return {
+              name: course.name,
+              dishes: course.dishes.map(dish => {
+                return { name: dish.name, qt: dish.storageQt };
+              })
+            };
+          })
         })
-        // get set current storage
-      });
+        .catch(err => console.error(err));
     }
   };
 

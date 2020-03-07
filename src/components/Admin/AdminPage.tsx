@@ -35,7 +35,6 @@ const AdminPage = () => {
   useEffect(() => {
     const unsubscribeService = getCurrentServiceRef().onSnapshot(
       snaps => {
-        console.log(snaps.docs.length);
         if (snaps.docs.length === 0) setCurrentService(undefined);
         else if (snaps.docs.length > 1) {
           // TODO add error to tell user
