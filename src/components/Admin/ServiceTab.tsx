@@ -16,8 +16,6 @@ const useStyles = makeStyles((theme: Theme) =>
       alignSelf: 'center',
       padding: theme.spacing(0, 2),
       [theme.breakpoints.down('sm')]: {
-        height: 'auto',
-        flexDirection: 'column',
         padding: 0,
         marginTop: 30
       }

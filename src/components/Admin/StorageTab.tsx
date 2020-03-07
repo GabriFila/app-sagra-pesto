@@ -4,7 +4,6 @@ import StorageCourse from './StorageCourse';
 import { StorageContext } from '../../context/StorageContext';
 import { ServiceContext } from '../../context/ServiceContext';
 import { IStartingCourse } from '../../../types';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
 
 const StorageTab: React.FunctionComponent = () => {
   const { storageCourses } = useContext(StorageContext);
@@ -15,7 +14,7 @@ const StorageTab: React.FunctionComponent = () => {
   return (
     <Paper
       elevation={6}
-      style={{ flex: 4, padding: 8, height: '100%', overflowY: 'scroll' }}
+      style={{ flex: 4, padding: 8, height: 'auto', overflowY: 'scroll' }}
     >
       {storageCourses.map((course, i) => (
         <StorageCourse

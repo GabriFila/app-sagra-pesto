@@ -3,13 +3,13 @@ import { AuthContext } from '../context/AuthContext';
 import Button from '@material-ui/core/Button';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
+import { Typography } from '@material-ui/core';
 
 const useStyles = makeStyles(() =>
   createStyles({
     root: {
       display: 'flex',
       flexDirection: 'column',
-      flex: 1,
       height: '100%',
       margin: 'auto',
       alignSelf: 'center'
@@ -24,6 +24,11 @@ const HomePage = () => {
 
   return (
     <div className={classes.root}>
+      {userRoles.length === 0 ? (
+        <Typography variant="h4" style={{ margin: 'auto' }}>
+          Non hai ruoli, chiedi che te ne venga assegnato uno!
+        </Typography>
+      ) : null}
       {userRoles.map(role => (
         <Link
           key={role}

@@ -5,14 +5,12 @@ import StorageTab from './StorageTab';
 import ServiceTab from './ServiceTab';
 import StorageContextProvider from '../../context/StorageContext';
 import ServiceContextProvider from '../../context/ServiceContext';
-import Divider from '@material-ui/core/Divider';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       display: 'flex',
       flex: 1,
-      alignSelf: 'center',
       justifyContent: 'space-between',
       padding: theme.spacing(2),
       [theme.breakpoints.down('sm')]: {

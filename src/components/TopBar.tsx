@@ -17,13 +17,13 @@ import Button from '@material-ui/core/Button';
 import { AuthContext } from '../context/AuthContext';
 import { auth } from '../fbConfig';
 import { Link, useHistory } from 'react-router-dom';
-const drawerWidth = 140;
+const drawerWidth = 100;
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       display: 'flex',
-      height: '100vh'
+      minHeight: '100vh'
     },
     appBar: {
       transition: theme.transitions.create(['margin', 'width'], {
@@ -123,15 +123,17 @@ const PersistentDrawerLeft: React.FunctionComponent = ({ children }) => {
         })}
       >
         <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            className={clsx(classes.menuButton, open && classes.hide)}
-          >
-            <MenuIcon />
-          </IconButton>
+          {userRoles.length === 0 ? null : (
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              className={clsx(classes.menuButton)}
+            >
+              <MenuIcon />
+            </IconButton>
+          )}
           <Typography variant="h6" noWrap className={classes.title}>
             {name ? `${name}` : 'Sagra del Pesto'}
             {location.pathname.substring(1).length > 0
