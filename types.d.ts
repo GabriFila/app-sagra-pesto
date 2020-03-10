@@ -32,19 +32,21 @@ export interface IOrder {
 }
 
 export interface IStartingCourse {
-  shortName: string;
+  name: string;
   dishes: IDish[];
 }
 
-export interface ICourse extends IStartingCourse {
-  orderNum: number;
+export interface IPrepCourse extends IStartingCourse {
   kitchen: string;
-  status: string; // (wait,prep,ready,delivered)
   notes: string;
 }
 
+export interface ICourse extends IPrepCourse {
+  orderNum: number;
+  status: string; // (wait,prep,ready,delivered)
+}
+
 export interface IStorageCourse extends IStartingCourse {
-  name: string;
   kitchen: string;
   dishes: IStorageDish[];
   isInstant: boolean;

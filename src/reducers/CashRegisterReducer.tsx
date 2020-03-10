@@ -1,26 +1,28 @@
 import * as React from 'react';
-import { ICourse } from '../../types';
+import { IPrepCourse, IDish } from '../../types';
 
-enum ActionType {
+export enum ActionType {
   AddDish = 'AddDish',
   RemoveDish = 'RemoveDish'
 }
 
 export interface ICashRegisterReducerState {
   orderNum: number | undefined;
-  courses: ICourse[];
+  courses: IPrepCourse[];
+  dishes: IDish[];
 }
 
-interface IAction {
+export interface ICashRegisterAction {
   type: ActionType;
   payload: {
     dishShortName: string;
   };
 }
 
-const initialState: ICashRegisterReducerState = {
+export const initialCashRegsiterState: ICashRegisterReducerState = {
   orderNum: undefined,
-  courses: []
+  courses: [],
+  dishes: []
 };
 
 const addDish = (
@@ -28,22 +30,40 @@ const addDish = (
   dishShortName: string
 ): ICashRegisterReducerState => {
   const newState = { ...prevState };
-  newState.courses
-    .find(course =>
-      course.dishes.some(dish => dish.shortName === dishShortName)
-    )
-    .dishes.find(dish => dish.shortName === dishShortName).qt++;
+  const isDishAlreadyInOrder = newState.dishes.some(
+    dish => dish.shortName === dishShortName
+  );
+
+  if (isDishAlreadyInOrder)
+    newState.dishes.find(dish => dish.shortName === dishShortName).qt++;
+  else newState.dishes.push({ shortName: dishShortName, qt: 1 });
+  return newState;
+};
+
+const removeDish = (
+  prevState: ICashRegisterReducerState,
+  dishShortName: string
+): ICashRegisterReducerState => {
+  const newState = { ...prevState };
+  const isDishAlreadyInOrder = newState.dishes.some(
+    dish => dish.shortName === dishShortName
+  );
+
+  if (isDishAlreadyInOrder)
+    newState.dishes.find(dish => dish.shortName === dishShortName).qt--;
 
   return newState;
 };
 
-const CashRegisterReducer: React.Reducer<ICashRegisterReducerState, IAction> = (
-  state,
-  action
-) => {
+const CashRegisterReducer: React.Reducer<
+  ICashRegisterReducerState,
+  ICashRegisterAction
+> = (state, action) => {
   switch (action.type) {
     case ActionType.AddDish:
       return addDish(state, action.payload.dishShortName);
+    case ActionType.RemoveDish:
+      return removeDish(state, action.payload.dishShortName);
     default:
       throw new Error();
   }

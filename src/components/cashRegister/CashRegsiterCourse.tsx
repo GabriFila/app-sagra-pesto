@@ -29,7 +29,7 @@ const CashRegisterCourse: React.FunctionComponent<ICashRegisterProps> = ({
       {course.dishes
         .filter(dish => dish.isInMenu)
         .map(dish => (
-          <CashRegisterDish dish={dish} />
+          <CashRegisterDish key={dish.shortName} dish={dish} />
         ))}
     </Paper>
   );

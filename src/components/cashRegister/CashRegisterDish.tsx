@@ -5,6 +5,9 @@ import Typography from '@material-ui/core/Typography';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
+import { CashRegisterContext } from '../../context/CashRegisterContext';
+import { ActionType } from '../../reducers/CashRegisterReducer';
+import IconButton from '@material-ui/core/IconButton';
 
 interface ICashRegisterDishProps {
   dish: IStorageDish;
@@ -12,16 +15,18 @@ interface ICashRegisterDishProps {
 
 const useStyle = makeStyles(theme =>
   createStyles({
-    paper: {
-      flex: 1,
-      padding: theme.spacing(1)
-    },
-    menu: {
+    base: {
+      marginLeft: 20,
       display: 'flex',
-      flexWrap: 'wrap'
+      height: 40,
+      alignItems: 'center',
+      [theme.breakpoints.down('xs')]: {
+        marginLeft: 5
+      }
     }
   })
 );
+
 const CashRegisterDish: React.FunctionComponent<ICashRegisterDishProps> = ({
   dish
 }) => {
@@ -31,37 +36,46 @@ const CashRegisterDish: React.FunctionComponent<ICashRegisterDishProps> = ({
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
+  const { state, dispatch } = useContext(CashRegisterContext);
+  let dishQtInOrder =
+    state.dishes.find(dish => dish.shortName === shortName)?.qt || 0;
 
   return (
-    <div
-      style={{
-        marginLeft: isMobile ? 5 : 20,
-        display: 'flex',
-        height: 40,
-        alignItems: 'center'
-      }}
-    >
+    <div className={classes.base}>
       <Typography variant="body1" style={{ flex: 6 }}>
         {isMobile ? shortName : name}
       </Typography>
       <Typography align="center" variant="body1" style={{ flex: 1 }}>
         {storageQt}
       </Typography>
-      <RemoveIcon
-        alignmentBaseline="text-after-edge"
+      <IconButton
+        disabled={dishQtInOrder === 0}
+        onClick={() =>
+          dispatch({
+            type: ActionType.RemoveDish,
+            payload: { dishShortName: shortName }
+          })
+        }
         color="secondary"
-        style={{ flex: 1 }}
-      />
+      >
+        <RemoveIcon style={{ flex: 1 }} />
+      </IconButton>
       <Typography align="center" variant="body1" style={{ flex: 1 }}>
         € {price}
       </Typography>
-      <AddIcon
-        alignmentBaseline="text-after-edge"
+      <IconButton
+        onClick={() =>
+          dispatch({
+            type: ActionType.AddDish,
+            payload: { dishShortName: shortName }
+          })
+        }
         color="primary"
-        style={{ flex: 1 }}
-      />{' '}
+      >
+        <AddIcon style={{ flex: 1 }} />
+      </IconButton>
       <Typography align="center" variant="body1" style={{ flex: 1 }}>
-        1
+        {dishQtInOrder || 0}
       </Typography>
     </div>
   );
