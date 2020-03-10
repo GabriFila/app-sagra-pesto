@@ -21,7 +21,7 @@ const StorageContextProvider: React.FunctionComponent = ({ children }) => {
         setStroageRef(snap.ref);
         setStorageCourses((snap.data() as IStorage).storageCourses);
       },
-      err => console.error(err)
+      err => console.error('storage context', err)
     );
     return () => unsubscribe();
   }, []);
@@ -33,4 +33,12 @@ const StorageContextProvider: React.FunctionComponent = ({ children }) => {
   );
 };
 
-export default StorageContextProvider;
+const withStorageContext = (BaseComponent: React.FunctionComponent) => (
+  props: any
+) => (
+  <StorageContextProvider>
+    <BaseComponent {...props} />
+  </StorageContextProvider>
+);
+
+export default withStorageContext;

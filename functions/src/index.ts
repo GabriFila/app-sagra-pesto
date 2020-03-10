@@ -100,3 +100,5 @@ export const onUserSagraRolesUpdate = functions
 //         .catch(err => console.error(err));
 //     });
 //   });
+
+// TODO create a function to prevent 2 contemporary services

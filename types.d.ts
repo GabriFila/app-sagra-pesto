@@ -1,12 +1,7 @@
 export interface IStorage {
   storageCourses: IStorageCourse[];
 }
-export interface IStorageCourse {
-  name: string;
-  kitchen: string;
-  dishes: IStorageDish[];
-  isInstant: boolean;
-}
+
 export interface IStorageDish {
   name: string;
   shortName: string;
@@ -26,11 +21,6 @@ export interface IService {
   startingCourses: IStartingCourse[];
 }
 
-export interface IStartingCourse {
-  name: string;
-  dishes: IDish[];
-}
-
 export interface IOrder {
   orderNum: number;
   status: string; // (pending, active, completed, deleted)
@@ -41,11 +31,23 @@ export interface IOrder {
   notes: string;
 }
 
+export interface IStartingCourse {
+  shortName: string;
+  dishes: IDish[];
+}
+
 export interface ICourse extends IStartingCourse {
   orderNum: number;
   kitchen: string;
   status: string; // (wait,prep,ready,delivered)
   notes: string;
+}
+
+export interface IStorageCourse extends IStartingCourse {
+  name: string;
+  kitchen: string;
+  dishes: IStorageDish[];
+  isInstant: boolean;
 }
 
 export interface IDish {

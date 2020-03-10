@@ -21,7 +21,7 @@ const StorageTab: React.FunctionComponent = () => {
           key={course.name}
           storageCourse={course}
           startingCourse={startingCourses.find(
-            startingCourse => startingCourse.name === course.name
+            startingCourse => startingCourse.shortName === course.name
           )}
         />
       ))}

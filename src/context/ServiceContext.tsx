@@ -30,7 +30,7 @@ const ServiceContextProvider: React.FunctionComponent = ({ children }) => {
             console.log(snap.ref);
           });
       },
-      err => console.error(err)
+      err => console.error('Service context: ', err)
     );
     return () => unsubscribeService();
   }, []);
@@ -42,8 +42,15 @@ const ServiceContextProvider: React.FunctionComponent = ({ children }) => {
   );
 };
 
-export default ServiceContextProvider;
+const withServiceContext = (BaseComponent: React.FunctionComponent) => (
+  props: any
+) => (
+  <ServiceContextProvider>
+    <BaseComponent {...props} />
+  </ServiceContextProvider>
+);
 
+export default withServiceContext;
 // const initService: IService = {
 //   start: null,
 //   end: null,

@@ -3,8 +3,8 @@ import Container from '@material-ui/core/Container';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import StorageTab from './StorageTab';
 import ServiceTab from './ServiceTab';
-import StorageContextProvider from '../../context/StorageContext';
-import ServiceContextProvider from '../../context/ServiceContext';
+import withStorageContext from '../../context/StorageContext';
+import withServiceContext from '../../context/ServiceContext';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -26,15 +26,11 @@ const AdminPage = () => {
   const classes = useStyles();
 
   return (
-    <StorageContextProvider>
-      <ServiceContextProvider>
-        <Container className={classes.root}>
-          <StorageTab />
-          <ServiceTab />
-        </Container>
-      </ServiceContextProvider>
-    </StorageContextProvider>
+    <Container className={classes.root}>
+      <StorageTab />
+      <ServiceTab />
+    </Container>
   );
 };
 
-export default AdminPage;
+export default withStorageContext(withServiceContext(AdminPage));
