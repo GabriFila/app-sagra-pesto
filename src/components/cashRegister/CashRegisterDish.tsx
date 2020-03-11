@@ -18,7 +18,7 @@ const useStyle = makeStyles(theme =>
     base: {
       marginLeft: 20,
       display: 'flex',
-      height: 40,
+      height: 30,
       alignItems: 'center',
       [theme.breakpoints.down('xs')]: {
         marginLeft: 5
@@ -42,11 +42,14 @@ const CashRegisterDish: React.FunctionComponent<ICashRegisterDishProps> = ({
 
   return (
     <div className={classes.base}>
-      <Typography variant="body1" style={{ flex: 6 }}>
+      <Typography variant="body1" style={{ flex: 5 }}>
         {isMobile ? shortName : name}
       </Typography>
-      <Typography align="center" variant="body1" style={{ flex: 1 }}>
+      <Typography align="center" variant="body1" style={{ flex: 2 }}>
         {storageQt}
+      </Typography>
+      <Typography align="center" variant="body1" style={{ flex: 2 }}>
+        € {price}
       </Typography>
       <IconButton
         disabled={dishQtInOrder === 0}
@@ -61,7 +64,7 @@ const CashRegisterDish: React.FunctionComponent<ICashRegisterDishProps> = ({
         <RemoveIcon style={{ flex: 1 }} />
       </IconButton>
       <Typography align="center" variant="body1" style={{ flex: 1 }}>
-        € {price}
+        {dishQtInOrder || 0}
       </Typography>
       <IconButton
         onClick={() =>
@@ -74,9 +77,6 @@ const CashRegisterDish: React.FunctionComponent<ICashRegisterDishProps> = ({
       >
         <AddIcon style={{ flex: 1 }} />
       </IconButton>
-      <Typography align="center" variant="body1" style={{ flex: 1 }}>
-        {dishQtInOrder || 0}
-      </Typography>
     </div>
   );
 };

@@ -7,13 +7,11 @@ interface ICashRegisterMenuProps {}
 
 const useStyle = makeStyles(theme =>
   createStyles({
-    paper: {
-      flex: 1,
-      padding: theme.spacing(1)
-    },
     menu: {
-      display: 'grid',
-      gridTemplateColumns: 'repeat(2,1fr)'
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      flex: 3
     }
   })
 );

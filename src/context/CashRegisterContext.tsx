@@ -1,10 +1,9 @@
-import React, { createContext, useReducer, useContext } from 'react';
+import React, { createContext, useReducer } from 'react';
 import CashRegisterReducer, {
   ICashRegisterReducerState,
   ICashRegisterAction,
   initialCashRegsiterState
 } from '../reducers/CashRegisterReducer';
-import { StorageContext } from './StorageContext';
 
 interface ICashRegisterContext {
   state: ICashRegisterReducerState;

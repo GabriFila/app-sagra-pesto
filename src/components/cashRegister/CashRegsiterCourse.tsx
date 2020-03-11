@@ -4,6 +4,7 @@ import { IStorageCourse } from '../../../types';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import CashRegisterDish from './CashRegisterDish';
+import TextField from '@material-ui/core/TextField';
 
 interface ICashRegisterProps {
   course: IStorageCourse;
@@ -12,8 +13,17 @@ interface ICashRegisterProps {
 const useStyle = makeStyles(theme =>
   createStyles({
     paper: {
-      flex: 1,
-      padding: theme.spacing(1)
+      // flex: 1,
+      padding: theme.spacing(1),
+      width: 600,
+      margin: 5,
+      [theme.breakpoints.down('sm')]: {
+        width: '100%'
+      }
+    },
+    notes: {
+      margin: 20,
+      width: '90%'
     }
   })
 );
@@ -22,7 +32,7 @@ const CashRegisterCourse: React.FunctionComponent<ICashRegisterProps> = ({
 }) => {
   const classes = useStyle();
   return (
-    <Paper elevation={6} className={classes.paper} style={{ margin: 5 }}>
+    <Paper elevation={6} className={classes.paper}>
       <Typography color="primary" variant="h6">
         {course.name}
       </Typography>
@@ -31,6 +41,13 @@ const CashRegisterCourse: React.FunctionComponent<ICashRegisterProps> = ({
         .map(dish => (
           <CashRegisterDish key={dish.shortName} dish={dish} />
         ))}
+      <TextField
+        multiline
+        rows="2"
+        placeholder={`Note ${course.name}`}
+        variant="standard"
+        className={classes.notes}
+      />
     </Paper>
   );
 };

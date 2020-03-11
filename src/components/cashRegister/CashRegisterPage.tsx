@@ -4,14 +4,14 @@ import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import withStorageContext from '../../context/StorageContext';
 import CashRegisterMenu from './CashRegisterMenu';
 import withCashRegisterContext from '../../context/CashRegisterContext';
+import CashRegisterConsole from './CashRegisterConsole';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       display: 'flex',
       flex: 1,
-      justifyContent: 'space-between',
-      flexDirection: 'column',
+      justifyContent: 'space-around',
       padding: theme.spacing(2),
       [theme.breakpoints.down('sm')]: {
         height: 'auto',
@@ -27,6 +27,7 @@ const CashRegisterPage = () => {
   return (
     <Container className={classes.root}>
       <CashRegisterMenu />
+      <CashRegisterConsole />
     </Container>
   );
 };
