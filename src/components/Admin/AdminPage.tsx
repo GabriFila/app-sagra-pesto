@@ -11,6 +11,7 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       display: 'flex',
       flex: 1,
+      height: 'calc(100vh - 80px)',
       justifyContent: 'space-between',
       padding: theme.spacing(2),
       [theme.breakpoints.down('sm')]: {

@@ -70,12 +70,11 @@ export default function RegisterPage() {
     else {
       auth
         .createUserWithEmailAndPassword(email, psw)
-        .then(res => {
-          console.log(res);
+        .then(() => {
           if (auth.currentUser != null)
             return auth.currentUser.updateProfile({ displayName: name });
         })
-        .then(res => setRegOutcome('success'))
+        .then(() => setRegOutcome('success'))
         .catch(err => {
           console.error(err.message);
           // handle registration error for better UX

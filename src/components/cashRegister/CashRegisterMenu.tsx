@@ -20,7 +20,6 @@ const useStyle = makeStyles(theme =>
 const CashRegisterMenu: React.FunctionComponent<ICashRegisterMenuProps> = () => {
   const classes = useStyle();
   const { storageCourses } = useContext(StorageContext);
-  console.log('menu', storageCourses);
   return (
     <div className={classes.menu}>
       {storageCourses.map(course => (

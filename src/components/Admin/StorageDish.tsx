@@ -22,7 +22,6 @@ const StorageDish: React.FunctionComponent<IStorageDishProps> = ({
   const { name, price, storageQt, shortName, isInMenu } = storageDish;
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
-  console.log(isMobile);
 
   const { storageCourses, storageRef } = useContext(StorageContext);
 
@@ -39,14 +38,12 @@ const StorageDish: React.FunctionComponent<IStorageDishProps> = ({
   };
 
   const setQtAndPrice = () => {
-    console.log('qt', inputQt);
     storageCourses
       .find(course => course.dishes.some(dish => dish.name === name))
       .dishes.find(dish => dish.name === name).price = inputPrice;
     storageCourses
       .find(course => course.dishes.some(dish => dish.name === name))
       .dishes.find(dish => dish.name === name).storageQt = inputQt;
-    console.log('courses', storageCourses);
 
     storageRef.set({ storageCourses });
   };

@@ -4,18 +4,28 @@ import StorageCourse from './StorageCourse';
 import { StorageContext } from '../../context/StorageContext';
 import { ServiceContext } from '../../context/ServiceContext';
 import { IStartingCourse } from '../../../types';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles(theme => ({
+  paper: {
+    flex: 4,
+    padding: 8,
+    overflowY: 'scroll',
+    [theme.breakpoints.down('sm')]: {
+      overflowY: 'visible'
+    }
+  }
+}));
 
 const StorageTab: React.FunctionComponent = () => {
+  const classes = useStyles();
   const { storageCourses } = useContext(StorageContext);
   const { service } = useContext(ServiceContext);
   let startingCourses: IStartingCourse[] = [];
   if (service) startingCourses = service.startingCourses;
 
   return (
-    <Paper
-      elevation={6}
-      style={{ flex: 4, padding: 8, height: 'auto', overflowY: 'scroll' }}
-    >
+    <Paper elevation={6} className={classes.paper}>
       {storageCourses.map((course, i) => (
         <StorageCourse
           key={course.name}

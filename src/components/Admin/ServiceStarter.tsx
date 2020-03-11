@@ -25,7 +25,6 @@ const ServiceStarter: React.FunctionComponent<IServiceStarterProps> = ({
         )
         .catch((err: Error) => console.error(err));
     else {
-      console.log(storageCourses);
       getServicesRef()
         .add({
           start: firebase.firestore.FieldValue.serverTimestamp(),
