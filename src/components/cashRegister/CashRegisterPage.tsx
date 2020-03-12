@@ -14,8 +14,10 @@ const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'space-around',
       padding: theme.spacing(2),
       [theme.breakpoints.down('sm')]: {
-        height: 'auto',
-        padding: theme.spacing(1)
+        // height: 'auto',
+        flexDirection: 'column-reverse',
+        padding: theme.spacing(1),
+        alignItems: 'center'
       }
     }
   })

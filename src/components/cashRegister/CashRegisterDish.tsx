@@ -35,7 +35,7 @@ const CashRegisterDish: React.FunctionComponent<ICashRegisterDishProps> = ({
   const { name, price, storageQt, shortName } = dish;
 
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
+  const isTablet = useMediaQuery(theme.breakpoints.down('sm'));
   const { state, dispatch } = useContext(CashRegisterContext);
   let dishQtInOrder =
     state.dishes.find(dish => dish.shortName === shortName)?.qt || 0;
@@ -43,7 +43,7 @@ const CashRegisterDish: React.FunctionComponent<ICashRegisterDishProps> = ({
   return (
     <div className={classes.base}>
       <Typography variant="body1" style={{ flex: 5 }}>
-        {isMobile ? shortName : name}
+        {isTablet ? shortName : name}
       </Typography>
       <Typography align="center" variant="body1" style={{ flex: 2 }}>
         {storageQt}

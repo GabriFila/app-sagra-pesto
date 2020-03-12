@@ -11,7 +11,8 @@ const useStyle = makeStyles(theme =>
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      flex: 3
+      flex: 1,
+      width: '100%'
     }
   })
 );

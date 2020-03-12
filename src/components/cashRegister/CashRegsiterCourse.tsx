@@ -15,11 +15,10 @@ const useStyle = makeStyles(theme =>
     paper: {
       // flex: 1,
       padding: theme.spacing(1),
-      width: 600,
+      width: '100%',
+      maxWidth: 600,
       margin: 5,
-      [theme.breakpoints.down('sm')]: {
-        width: '100%'
-      }
+      [theme.breakpoints.down('sm')]: {}
     },
     notes: {
       margin: 20,
