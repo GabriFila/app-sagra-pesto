@@ -5,10 +5,11 @@ import withStorageContext from '../../context/StorageContext';
 import CashRegisterMenu from './CashRegisterMenu';
 import withCashRegisterContext from '../../context/CashRegisterContext';
 import CashRegisterConsole from './CashRegisterConsole';
+import CashRegisterNav from './CashRegisterNav';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {
+    cashPage: {
       display: 'flex',
       flex: 1,
       justifyContent: 'space-around',
@@ -27,7 +28,8 @@ const CashRegisterPage = () => {
   const classes = useStyles();
 
   return (
-    <Container className={classes.root}>
+    <Container className={classes.cashPage}>
+      <CashRegisterNav />
       <CashRegisterMenu />
       <CashRegisterConsole />
     </Container>
@@ -35,4 +37,3 @@ const CashRegisterPage = () => {
 };
 
 export default withStorageContext(withCashRegisterContext(CashRegisterPage));
-// export default StorageContextProvider()(CashRegisterPage);

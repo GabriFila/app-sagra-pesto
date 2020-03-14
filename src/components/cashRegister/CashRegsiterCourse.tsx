@@ -12,13 +12,15 @@ interface ICashRegisterProps {
 
 const useStyle = makeStyles(theme =>
   createStyles({
-    paper: {
-      // flex: 1,
-      padding: theme.spacing(2),
+    course: {
+      padding: theme.spacing(3),
       width: '100%',
       maxWidth: 500,
-      margin: 5,
+      margin: 10,
       [theme.breakpoints.down('sm')]: {}
+    },
+    courseName: {
+      paddingBottom: 10
     },
     notes: {
       margin: 20,
@@ -31,8 +33,17 @@ const CashRegisterCourse: React.FunctionComponent<ICashRegisterProps> = ({
 }) => {
   const classes = useStyle();
   return (
-    <Paper elevation={6} className={classes.paper}>
-      <Typography color="primary" variant="h5">
+    <Paper elevation={6} className={classes.course}>
+      <div
+        id={course.name}
+        style={{
+          position: 'relative',
+          top: '-80px',
+          visibility: 'hidden',
+          display: 'block'
+        }}
+      ></div>
+      <Typography color="primary" variant="h5" className={classes.courseName}>
         {course.name}
       </Typography>
       {course.dishes

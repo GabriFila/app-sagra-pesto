@@ -16,12 +16,12 @@ interface ICashRegisterDishProps {
 const useStyle = makeStyles(theme =>
   createStyles({
     base: {
-      marginLeft: 20,
+      // marginLeft: 20,
       display: 'flex',
-      height: 30,
+      height: 38,
       alignItems: 'center',
       [theme.breakpoints.down('xs')]: {
-        marginLeft: 5
+        // marginLeft: 5
       }
     }
   })

@@ -17,6 +17,9 @@ const theme = createMuiTheme({
   overrides: {
     MuiCssBaseline: {
       '@global': {
+        html: {
+          'scroll-behavior': 'smooth'
+        },
         '*::-webkit-scrollbar': {
           width: '4px'
         },
