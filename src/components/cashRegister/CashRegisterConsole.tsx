@@ -8,8 +8,8 @@ import ReplayIcon from '@material-ui/icons/Replay';
 import { StorageContext } from '../../context/StorageContext';
 import { CashRegisterContext } from '../../context/CashRegisterContext';
 
-import jsPDF from 'jspdf';
 import { ActionType } from '../../reducers/CashRegisterReducer';
+import printOrder from '../../helpers/printOrder';
 
 interface ICashRegisterMenuProps {}
 const consoleHeight = 300;
@@ -55,19 +55,6 @@ const CashRegisterConsole: React.FunctionComponent<ICashRegisterMenuProps> = () 
     total += price * dishInOrder.qt;
   });
 
-  const printOrder = () => {
-    const doc = new jsPDF();
-    doc.text(10, 10, 'Sagra del pesto');
-    doc.text(10, 20, 'This is a test');
-    doc.line(0, 23, 210, 23);
-    doc.line(10, 0, 10, 297);
-    doc.table(10, 50, ['ciao', 'come'], [], {});
-    doc.autoPrint();
-    // TODO create table
-    // doc.save('autoprint.pdf');
-    doc.output('dataurlnewwindow');
-  };
-
   const resetOrder = () => {
     dispatch({ type: ActionType.ResetOrder });
   };
@@ -89,7 +76,7 @@ const CashRegisterConsole: React.FunctionComponent<ICashRegisterMenuProps> = () 
       <IconButton
         className={classes.doneBtn}
         color="primary"
-        onClick={printOrder}
+        onClick={() => printOrder(storageCourses)}
       >
         <PrintIcon />
       </IconButton>
