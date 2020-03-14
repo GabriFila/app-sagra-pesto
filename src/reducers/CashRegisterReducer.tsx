@@ -66,7 +66,7 @@ const CashRegisterReducer: React.Reducer<
     case ActionType.RemoveDish:
       return removeDish(state, action.payload.dishShortName);
     case ActionType.ResetOrder:
-      return initialCashRegsiterState;
+      return { orderNum: undefined, courses: [], dishes: [] };
     default:
       throw new Error();
   }
