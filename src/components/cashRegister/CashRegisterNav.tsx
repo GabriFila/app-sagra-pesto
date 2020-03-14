@@ -46,7 +46,7 @@ const CashRegisterNav = () => {
   return isTablet ? null : (
     <div className={classes.navs}>
       {storageCourses.map(course => (
-        <a href={`#${course.name}`} className={classes.link}>
+        <a key={course.name} href={`#${course.name}`} className={classes.link}>
           <Typography color="primary" variant="h5">
             {course.name}
           </Typography>
