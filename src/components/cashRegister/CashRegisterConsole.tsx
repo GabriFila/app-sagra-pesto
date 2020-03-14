@@ -65,7 +65,7 @@ const CashRegisterConsole: React.FunctionComponent<ICashRegisterMenuProps> = () 
         € {total}
       </Typography>
       <IconButton className={classes.doneBtn} color="primary">
-        <DoneIcon />
+        <DoneIcon fontSize="large" />
       </IconButton>
       <Typography
         variant="h5"
@@ -78,14 +78,14 @@ const CashRegisterConsole: React.FunctionComponent<ICashRegisterMenuProps> = () 
         color="primary"
         onClick={() => printOrder(storageCourses)}
       >
-        <PrintIcon />
+        <PrintIcon fontSize="large" />
       </IconButton>
       <IconButton
         className={classes.doneBtn}
         color="secondary"
         onClick={resetOrder}
       >
-        <ReplayIcon />
+        <ReplayIcon fontSize="large" />
       </IconButton>
     </Paper>
   );
