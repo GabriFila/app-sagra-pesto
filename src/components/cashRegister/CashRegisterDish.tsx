@@ -16,13 +16,10 @@ interface ICashRegisterDishProps {
 const useStyle = makeStyles(theme =>
   createStyles({
     base: {
-      // marginLeft: 20,
       display: 'flex',
       height: 38,
       alignItems: 'center',
-      [theme.breakpoints.down('xs')]: {
-        // marginLeft: 5
-      }
+      justifyContent: 'space-between'
     }
   })
 );
@@ -45,7 +42,11 @@ const CashRegisterDish: React.FunctionComponent<ICashRegisterDishProps> = ({
       <Typography variant="body1" style={{ flex: 7 }}>
         {isTablet ? shortName : name}
       </Typography>
-      <Typography align="center" variant="body1" style={{ flex: 3 }}>
+      <Typography
+        align="center"
+        variant="body1"
+        style={{ flex: 3, backgroundColor: storageQt < 30 ? '#db9486' : null }}
+      >
         {storageQt}
       </Typography>
       <Typography align="left" variant="body1" style={{ flex: 3 }}>
