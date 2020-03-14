@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { Typography, IconButton } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
@@ -9,6 +9,7 @@ import { StorageContext } from '../../context/StorageContext';
 import { CashRegisterContext } from '../../context/CashRegisterContext';
 
 import jsPDF from 'jspdf';
+import { ActionType } from '../../reducers/CashRegisterReducer';
 
 interface ICashRegisterMenuProps {}
 const consoleHeight = 300;
@@ -40,7 +41,7 @@ const CashRegisterConsole: React.FunctionComponent<ICashRegisterMenuProps> = () 
   const classes = useStyle();
 
   const { storageCourses } = useContext(StorageContext);
-  const { state } = useContext(CashRegisterContext);
+  const { state, dispatch } = useContext(CashRegisterContext);
 
   const { dishes } = state;
   let total = 0;
@@ -67,6 +68,10 @@ const CashRegisterConsole: React.FunctionComponent<ICashRegisterMenuProps> = () 
     doc.output('dataurlnewwindow');
   };
 
+  const resetOrder = () => {
+    dispatch({ type: ActionType.ResetOrder });
+  };
+
   return (
     <Paper elevation={6} className={classes.console}>
       <Typography variant="h6" color="secondary">
@@ -88,7 +93,11 @@ const CashRegisterConsole: React.FunctionComponent<ICashRegisterMenuProps> = () 
       >
         <PrintIcon />
       </IconButton>
-      <IconButton className={classes.doneBtn} color="secondary">
+      <IconButton
+        className={classes.doneBtn}
+        color="secondary"
+        onClick={resetOrder}
+      >
         <ReplayIcon />
       </IconButton>
     </Paper>

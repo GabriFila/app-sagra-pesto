@@ -3,7 +3,8 @@ import { IPrepCourse, IDish } from '../../types';
 
 export enum ActionType {
   AddDish = 'AddDish',
-  RemoveDish = 'RemoveDish'
+  RemoveDish = 'RemoveDish',
+  ResetOrder = 'ResetOrder'
 }
 
 export interface ICashRegisterReducerState {
@@ -14,7 +15,7 @@ export interface ICashRegisterReducerState {
 
 export interface ICashRegisterAction {
   type: ActionType;
-  payload: {
+  payload?: {
     dishShortName: string;
   };
 }
@@ -64,23 +65,11 @@ const CashRegisterReducer: React.Reducer<
       return addDish(state, action.payload.dishShortName);
     case ActionType.RemoveDish:
       return removeDish(state, action.payload.dishShortName);
+    case ActionType.ResetOrder:
+      return initialCashRegsiterState;
     default:
       throw new Error();
   }
 };
 
 export default CashRegisterReducer;
-// const ComplexState = () => {
-//   const [state, dispatch] = React.useReducer<React.Reducer<IState, IAction>>(CashRegisterReducer, initialState);
-
-//   return (
-//     <div>
-//       <div>Count: {state.count}</div>
-//       <button onClick={
-//         () => dispatch({type: ActionType.AddDish, payload: { count: 1 } })
-//       }>+</button>
-//       <button onClick={
-//         () => dispatch({type: ActionType.RemoveDish, payload: { count: 1 }})
-//       }>-</button>
-//     </div>
-//   );
