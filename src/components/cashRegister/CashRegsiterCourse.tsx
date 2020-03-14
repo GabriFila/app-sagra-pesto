@@ -14,9 +14,9 @@ const useStyle = makeStyles(theme =>
   createStyles({
     paper: {
       // flex: 1,
-      padding: theme.spacing(1),
+      padding: theme.spacing(2),
       width: '100%',
-      maxWidth: 600,
+      maxWidth: 500,
       margin: 5,
       [theme.breakpoints.down('sm')]: {}
     },
@@ -32,7 +32,7 @@ const CashRegisterCourse: React.FunctionComponent<ICashRegisterProps> = ({
   const classes = useStyle();
   return (
     <Paper elevation={6} className={classes.paper}>
-      <Typography color="primary" variant="h6">
+      <Typography color="primary" variant="h5">
         {course.name}
       </Typography>
       {course.dishes

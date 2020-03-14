@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme: Theme) =>
       flex: 1,
       justifyContent: 'space-around',
       padding: theme.spacing(2),
-      [theme.breakpoints.down('sm')]: {
+      [theme.breakpoints.down('xs')]: {
         // height: 'auto',
         flexDirection: 'column-reverse',
         padding: theme.spacing(1),
