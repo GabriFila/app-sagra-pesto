@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import App from './App';
 // import * as serviceWorker from './serviceWorker';
 
@@ -26,7 +25,9 @@ const theme = createMuiTheme({
         '*::-webkit-scrollbar-thumb': {
           borderRadius: 10,
           backgroundColor: green[400]
-        }
+        },
+        '-webkit-font-smoothing': 'antialiased',
+        '-moz-osx-font-smoothing': 'grayscale'
       }
     }
   }
