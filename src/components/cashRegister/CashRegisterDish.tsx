@@ -42,15 +42,15 @@ const CashRegisterDish: React.FunctionComponent<ICashRegisterDishProps> = ({
       <Typography variant="body1" style={{ flex: 7 }}>
         {isTablet ? shortName : name}
       </Typography>
+      <Typography align="left" variant="body1" style={{ flex: 3 }}>
+        € {price}
+      </Typography>
       <Typography
         align="center"
         variant="body1"
         style={{ flex: 3, backgroundColor: storageQt < 30 ? '#db9486' : null }}
       >
         {storageQt}
-      </Typography>
-      <Typography align="left" variant="body1" style={{ flex: 3 }}>
-        € {price}
       </Typography>
       <IconButton
         disabled={dishQtInOrder === 0}
