@@ -9,6 +9,7 @@ import { useTheme, makeStyles, createStyles } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { StorageContext } from '../../context/StorageContext';
 import CheckIcon from '@material-ui/icons/Check';
+import CancelIcon from '@material-ui/icons/Cancel';
 
 interface IStorageDishProps {
   storageDish: IStorageDish;
@@ -107,15 +108,25 @@ const StorageDish: React.FunctionComponent<IStorageDishProps> = ({
       ) : null}
       <Divider orientation="vertical" />
       {editing ? (
-        <CheckIcon
-          alignmentBaseline="text-after-edge"
-          color="secondary"
-          style={{ flex: 2 }}
-          onClick={() => {
-            setEditing(!editing);
-            setQtAndPrice();
-          }}
-        />
+        <>
+          <CancelIcon
+            alignmentBaseline="text-after-edge"
+            color="secondary"
+            style={{ flex: 1 }}
+            onClick={() => {
+              setEditing(false);
+            }}
+          />
+          <CheckIcon
+            alignmentBaseline="text-after-edge"
+            color="secondary"
+            style={{ flex: 1 }}
+            onClick={() => {
+              setEditing(!editing);
+              setQtAndPrice();
+            }}
+          />
+        </>
       ) : (
         <EditIcon
           alignmentBaseline="text-after-edge"
