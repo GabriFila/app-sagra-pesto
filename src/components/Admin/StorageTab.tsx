@@ -7,11 +7,12 @@ import { IStartingCourse } from '../../../types';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
-  paper: {
+  storageTab: {
     flex: 4,
-    padding: 8,
+    padding: theme.spacing(1, 3),
     overflowY: 'scroll',
     [theme.breakpoints.down('sm')]: {
+      padding: theme.spacing(1, 1),
       overflowY: 'visible'
     }
   }
@@ -25,7 +26,7 @@ const StorageTab: React.FunctionComponent = () => {
   if (service) startingCourses = service.startingCourses;
 
   return (
-    <Paper elevation={6} className={classes.paper}>
+    <Paper elevation={6} className={classes.storageTab}>
       {storageCourses.map((course, i) => (
         <StorageCourse
           key={course.name}

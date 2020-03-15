@@ -65,6 +65,7 @@ const useStyles = makeStyles((theme: Theme) =>
     content: {
       display: 'flex',
       flexGrow: 1,
+      width: '100%',
       marginTop: 64,
       padding: theme.spacing(1),
       [theme.breakpoints.down('sm')]: {

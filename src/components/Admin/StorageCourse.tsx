@@ -1,8 +1,14 @@
 import React from 'react';
 import { IStorageCourse, IStartingCourse } from '../../../types';
 import StorageDish from './StorageDish';
-import { Typography } from '@material-ui/core';
+import { Typography, makeStyles, createStyles } from '@material-ui/core';
 import Divider from '@material-ui/core/Divider';
+
+const useStyle = makeStyles(theme =>
+  createStyles({
+    storageCourse: { margin: theme.spacing(5, 0) }
+  })
+);
 
 interface IStorageCourseProps {
   storageCourse: IStorageCourse;
@@ -13,9 +19,10 @@ const StorageCourse: React.FunctionComponent<IStorageCourseProps> = ({
   storageCourse,
   startingCourse
 }) => {
+  const classes = useStyle();
   return (
-    <div style={{ marginTop: 5, marginBottom: 5 }}>
-      <Typography color="primary" variant="h6">
+    <div className={classes.storageCourse}>
+      <Typography color="primary" variant="h5">
         {storageCourse.name}
       </Typography>
       {storageCourse.dishes.map((dish, i) => (

@@ -27,7 +27,14 @@ const theme = createMuiTheme({
           backgroundColor: green[400]
         },
         '-webkit-font-smoothing': 'antialiased',
-        '-moz-osx-font-smoothing': 'grayscale'
+        '-moz-osx-font-smoothing': 'grayscale',
+        'input::-webkit-inner-spin-button': {
+          '-webkit-appearance': 'none',
+          margin: 0
+        },
+        'input[type=number]': {
+          '-moz-appearance': 'textfield'
+        }
       }
     }
   }

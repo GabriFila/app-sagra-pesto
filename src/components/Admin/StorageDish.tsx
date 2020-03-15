@@ -5,7 +5,7 @@ import TextField from '@material-ui/core/TextField';
 import Divider from '@material-ui/core/Divider';
 import EditIcon from '@material-ui/icons/Edit';
 import Checkbox from '@material-ui/core/Checkbox';
-import { useTheme } from '@material-ui/core/styles';
+import { useTheme, makeStyles, createStyles } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { StorageContext } from '../../context/StorageContext';
 import CheckIcon from '@material-ui/icons/Check';
@@ -14,11 +14,21 @@ interface IStorageDishProps {
   storageDish: IStorageDish;
   startingDishQt: number | undefined;
 }
+const useStyle = makeStyles(theme =>
+  createStyles({
+    dish: {
+      display: 'flex',
+      height: 40,
+      alignItems: 'center'
+    }
+  })
+);
 
 const StorageDish: React.FunctionComponent<IStorageDishProps> = ({
   storageDish,
   startingDishQt
 }) => {
+  const classes = useStyle();
   const { name, price, storageQt, shortName, isInMenu } = storageDish;
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
@@ -48,14 +58,7 @@ const StorageDish: React.FunctionComponent<IStorageDishProps> = ({
     storageRef.set({ storageCourses });
   };
   return (
-    <div
-      style={{
-        marginLeft: isMobile ? 5 : 20,
-        display: 'flex',
-        height: 40,
-        alignItems: 'center'
-      }}
-    >
+    <div className={classes.dish}>
       <Typography variant="body1" style={{ flex: 4 }}>
         {isMobile ? shortName : name}
       </Typography>
@@ -65,6 +68,7 @@ const StorageDish: React.FunctionComponent<IStorageDishProps> = ({
           size="small"
           style={{ flex: 2 }}
           inputProps={{ min: 0, style: { textAlign: 'center' } }}
+          type="number"
           value={inputQt}
           variant="outlined"
           onChange={e => setInputQt(Number(e.target.value))}
@@ -78,6 +82,7 @@ const StorageDish: React.FunctionComponent<IStorageDishProps> = ({
       {editing ? (
         <TextField
           size="small"
+          type="number"
           style={{ flex: 2 }}
           inputProps={{ min: 0, style: { textAlign: 'center' } }}
           value={inputPrice}

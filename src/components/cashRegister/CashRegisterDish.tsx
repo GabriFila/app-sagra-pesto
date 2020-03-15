@@ -1,12 +1,12 @@
 import React, { useContext } from 'react';
 import { IStorageDish } from '../../../types';
-import { makeStyles, createStyles, useTheme } from '@material-ui/core/styles';
+import { CashRegisterContext } from '../../context/CashRegisterContext';
+import { ActionType } from '../../reducers/CashRegisterReducer';
 import Typography from '@material-ui/core/Typography';
+import { makeStyles, createStyles, useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
-import { CashRegisterContext } from '../../context/CashRegisterContext';
-import { ActionType } from '../../reducers/CashRegisterReducer';
 import IconButton from '@material-ui/core/IconButton';
 
 interface ICashRegisterDishProps {
