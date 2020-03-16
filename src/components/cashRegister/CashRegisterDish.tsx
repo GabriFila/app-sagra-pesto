@@ -68,6 +68,7 @@ const CashRegisterDish: React.FunctionComponent<ICashRegisterDishProps> = ({
         {dishQtInOrder || 0}
       </Typography>
       <IconButton
+        disabled={dishQtInOrder >= storageQt}
         onClick={() =>
           dispatch({
             type: ActionType.AddDish,
