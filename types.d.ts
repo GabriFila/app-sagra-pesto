@@ -1,14 +1,12 @@
-export interface IStorage {
-  storageCourses: IStorageCourse[];
+export interface IUserSagraRolesDoc {
+  name: string;
+  roles: string[];
 }
 
-export interface IStorageDish {
-  name: string;
-  shortName: string;
-  storageQt: number;
-  price: number;
-  isInMenu: boolean;
+export interface IStorage {
+  storageCourses: IDish[];
 }
+
 export interface IService {
   start: Date | null;
   end: Date | null;
@@ -18,7 +16,21 @@ export interface IService {
   lastOrderNum: number; // progressive counter for orders
   totalInstantOrders: number;
   totalOrders: number;
-  startingCourses: IStartingCourse[];
+  startingCourses: IDish[];
+}
+
+export interface IDish {
+  shortName: string;
+  qt: number;
+}
+
+export interface IStorageDish extends IDish {
+  name: string;
+  shortName: string;
+  storageQt: number;
+  price: number;
+  isInMenu: boolean;
+  isInstant: boolean;
 }
 
 export interface IOrder {
@@ -31,33 +43,11 @@ export interface IOrder {
   notes: string;
 }
 
-export interface IStartingCourse {
+export interface ICourse {
   name: string;
-  dishes: IDish[];
-}
-
-export interface IPrepCourse extends IStartingCourse {
   kitchen: string;
-  notes: string;
-}
-
-export interface ICourse extends IPrepCourse {
   orderNum: number;
   status: string; // (wait,prep,ready,delivered)
-}
-
-export interface IStorageCourse extends IStartingCourse {
-  kitchen: string;
-  dishes: IStorageDish[];
-  isInstant: boolean;
-}
-
-export interface IDish {
-  shortName: string;
-  qt: number;
-}
-
-export interface IUserSagraRolesDoc {
-  name: string;
-  roles: string[];
+  notes: string;
+  dishes: IDish[];
 }
