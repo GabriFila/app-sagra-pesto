@@ -18,7 +18,6 @@ export const CashRegisterContext = createContext<ICashRegisterContext>({
 const CashRegisterContextProvider: React.FunctionComponent = ({ children }) => {
   const initialState: ICashRegisterReducerState = {
     orderNum: undefined,
-    courses: [],
     dishes: []
   };
   const [state, dispatch] = useReducer(CashRegisterReducer, initialState);

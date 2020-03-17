@@ -13,7 +13,7 @@ const ServiceStarter: React.FunctionComponent<IServiceStarterProps> = ({
   isServiceActive,
   serviceRef
 }) => {
-  const { storageCourses } = useContext(StorageContext);
+  const { storageDishes: storageDishes } = useContext(StorageContext);
 
   const changeServiceState = () => {
     if (isServiceActive)
@@ -36,12 +36,10 @@ const ServiceStarter: React.FunctionComponent<IServiceStarterProps> = ({
           totalInstantOrders: 0,
           totalOrders: 0,
           // TODO add storage, get it from props
-          startingCourses: storageCourses.map(course => {
+          startingCourses: storageDishes.map(dish => {
             return {
-              name: course.name,
-              dishes: course.dishes.map(dish => {
-                return { shortName: dish.shortName, qt: dish.storageQt };
-              })
+              name: dish.name,
+              qt: dish.storageQt
             };
           })
         })

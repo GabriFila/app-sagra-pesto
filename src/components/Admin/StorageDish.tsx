@@ -34,29 +34,23 @@ const StorageDish: React.FunctionComponent<IStorageDishProps> = ({
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
 
-  const { storageCourses, storageRef } = useContext(StorageContext);
+  const { storageDishes, storageRef } = useContext(StorageContext);
 
   const [editing, setEditing] = useState(false);
   const [inputPrice, setInputPrice] = useState(price);
   const [inputQt, setInputQt] = useState(storageQt);
 
   const changeInMenu = () => {
-    storageCourses
-      .find(course => course.dishes.some(dish => dish.name === name))
-      .dishes.find(dish => dish.name === name).isInMenu = !isInMenu;
+    storageDishes.find(dish => dish.name === name).isInMenu = !isInMenu;
 
-    storageRef.set({ storageCourses });
+    storageRef.set({ storageDishes });
   };
 
   const setQtAndPrice = () => {
-    storageCourses
-      .find(course => course.dishes.some(dish => dish.name === name))
-      .dishes.find(dish => dish.name === name).price = inputPrice;
-    storageCourses
-      .find(course => course.dishes.some(dish => dish.name === name))
-      .dishes.find(dish => dish.name === name).storageQt = inputQt;
+    storageDishes.find(dish => dish.name === name).price = inputPrice;
+    storageDishes.find(dish => dish.name === name).storageQt = inputQt;
 
-    storageRef.set({ storageCourses });
+    storageRef.set({ storageCourses: storageDishes });
   };
   return (
     <div className={classes.dish}>

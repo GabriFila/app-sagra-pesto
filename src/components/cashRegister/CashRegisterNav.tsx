@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const CashRegisterNav = () => {
   const classes = useStyles();
-  const { storageCourses } = useContext(StorageContext);
+  const { storageDishes: storageCourses } = useContext(StorageContext);
 
   const theme = useTheme();
   const isTablet = useMediaQuery(theme.breakpoints.down('sm'));

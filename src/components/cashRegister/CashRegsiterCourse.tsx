@@ -1,13 +1,14 @@
 import React from 'react';
 import Paper from '@material-ui/core/Paper';
-import { IStorageCourse } from '../../../types';
+import { IStorageDish } from '../../../types';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import CashRegisterDish from './CashRegisterDish';
 import TextField from '@material-ui/core/TextField';
 
-interface ICashRegisterProps {
-  course: IStorageCourse;
+interface ICashRegisterCourseProps {
+  courseName: string;
+  storageDishes: IStorageDish[];
 }
 
 const useStyle = makeStyles(theme =>
@@ -28,14 +29,15 @@ const useStyle = makeStyles(theme =>
     }
   })
 );
-const CashRegisterCourse: React.FunctionComponent<ICashRegisterProps> = ({
-  course
+const CashRegisterCourse: React.FunctionComponent<ICashRegisterCourseProps> = ({
+  courseName,
+  storageDishes: dishes
 }) => {
   const classes = useStyle();
   return (
     <Paper elevation={6} className={classes.course}>
       <div
-        id={course.name}
+        id={courseName}
         style={{
           position: 'relative',
           top: '-80px',
@@ -44,9 +46,9 @@ const CashRegisterCourse: React.FunctionComponent<ICashRegisterProps> = ({
         }}
       ></div>
       <Typography color="primary" variant="h5" className={classes.courseName}>
-        {course.name}
+        {courseName}
       </Typography>
-      {course.dishes
+      {dishes
         .filter(dish => dish.isInMenu)
         .map(dish => (
           <CashRegisterDish key={dish.shortName} dish={dish} />
@@ -54,7 +56,7 @@ const CashRegisterCourse: React.FunctionComponent<ICashRegisterProps> = ({
       <TextField
         multiline
         rows="2"
-        placeholder={`Note ${course.name}`}
+        placeholder={`Note ${courseName}`}
         variant="standard"
         className={classes.notes}
       />

@@ -1,5 +1,5 @@
 import React from 'react';
-import { IStorageCourse, IStartingCourse } from '../../../types';
+import { IStorageDish, IDish } from '../../../types';
 import StorageDish from './StorageDish';
 import { Typography, makeStyles, createStyles } from '@material-ui/core';
 import Divider from '@material-ui/core/Divider';
@@ -11,33 +11,35 @@ const useStyle = makeStyles(theme =>
 );
 
 interface IStorageCourseProps {
-  storageCourse: IStorageCourse;
-  startingCourse: IStartingCourse | undefined;
+  storageDishes: IStorageDish[];
+  courseName: string;
+  startingDishes: IDish[] | undefined;
 }
 
 const StorageCourse: React.FunctionComponent<IStorageCourseProps> = ({
-  storageCourse,
-  startingCourse
+  storageDishes,
+  startingDishes,
+  courseName
 }) => {
   const classes = useStyle();
   return (
     <div className={classes.storageCourse}>
       <Typography color="primary" variant="h5">
-        {storageCourse.name}
+        {courseName}
       </Typography>
-      {storageCourse.dishes.map((dish, i) => (
+      {storageDishes.map((dish, i) => (
         <div key={i}>
           <StorageDish
             storageDish={dish}
             startingDishQt={
-              startingCourse
-                ? startingCourse.dishes.find(
+              startingDishes
+                ? startingDishes.find(
                     startDish => startDish.shortName === dish.shortName
                   ).qt
                 : null
             }
           />
-          {i === storageCourse.dishes.length - 1 ? null : <Divider />}
+          {i === storageDishes.length - 1 ? null : <Divider />}
         </div>
       ))}
     </div>

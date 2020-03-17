@@ -3,7 +3,7 @@ import Paper from '@material-ui/core/Paper';
 import StorageCourse from './StorageCourse';
 import { StorageContext } from '../../context/StorageContext';
 import { ServiceContext } from '../../context/ServiceContext';
-import { IStartingCourse } from '../../../types';
+import { IDish } from '../../../types';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
@@ -20,20 +20,25 @@ const useStyles = makeStyles(theme => ({
 
 const StorageTab: React.FunctionComponent = () => {
   const classes = useStyles();
-  const { storageCourses } = useContext(StorageContext);
+  const { storageDishes, courseNames } = useContext(StorageContext);
   const { service } = useContext(ServiceContext);
-  let startingCourses: IStartingCourse[] = [];
-  if (service) startingCourses = service.startingCourses;
+  let startingDishes: IDish[] = [];
+  if (service) startingDishes = service.startingDishes;
 
   return (
     <Paper elevation={6} className={classes.storageTab}>
-      {storageCourses.map((course, i) => (
+      {courseNames.map((courseName, i) => (
         <StorageCourse
-          key={course.name}
-          storageCourse={course}
-          startingCourse={startingCourses.find(
-            startingCourse => startingCourse.name === course.name
+          key={courseName}
+          courseName={courseName}
+          storageDishes={storageDishes.filter(
+            dish => dish.courseName === courseName
           )}
+          startingDishes={startingDishes.filter(
+            dish => dish.courseName === courseName
+          )}
+
+          // TODO move starting dish storageDish took from service Context
         />
       ))}
     </Paper>

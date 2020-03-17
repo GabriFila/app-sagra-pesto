@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IPrepCourse, IDish } from '../../types';
+import { IDish } from '../../types';
 
 export enum ActionType {
   AddDish = 'AddDish',
@@ -9,7 +9,6 @@ export enum ActionType {
 
 export interface ICashRegisterReducerState {
   orderNum: number | undefined;
-  courses: IPrepCourse[];
   dishes: IDish[];
 }
 
@@ -22,7 +21,6 @@ export interface ICashRegisterAction {
 
 export const initialCashRegsiterState: ICashRegisterReducerState = {
   orderNum: undefined,
-  courses: [],
   dishes: []
 };
 

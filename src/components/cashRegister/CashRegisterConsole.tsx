@@ -40,18 +40,16 @@ const useStyle = makeStyles(theme =>
 const CashRegisterConsole: React.FunctionComponent<ICashRegisterMenuProps> = () => {
   const classes = useStyle();
 
-  const { storageCourses } = useContext(StorageContext);
+  const { storageDishes } = useContext(StorageContext);
   const { state, dispatch } = useContext(CashRegisterContext);
 
   const { dishes } = state;
   let total = 0;
 
   dishes.forEach(dishInOrder => {
-    const { price } = storageCourses
-      .find(course =>
-        course.dishes.some(dish => dish.shortName === dishInOrder.shortName)
-      )
-      .dishes.find(dish => dish.shortName === dishInOrder.shortName);
+    const { price } = storageDishes.find(
+      dish => dish.shortName === dishInOrder.shortName
+    );
     total += price * dishInOrder.qt;
   });
 
@@ -76,7 +74,7 @@ const CashRegisterConsole: React.FunctionComponent<ICashRegisterMenuProps> = () 
       <IconButton
         className={classes.doneBtn}
         color="primary"
-        onClick={() => printOrder(storageCourses)}
+        onClick={() => printOrder(storageDishes)}
       >
         <PrintIcon fontSize="large" />
       </IconButton>

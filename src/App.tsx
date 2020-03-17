@@ -22,7 +22,7 @@ function App() {
               path="/"
               component={HomePage}
             />
-            <PrivateRoleRoute
+            {/* <PrivateRoleRoute
               requiredRoles={['admin']}
               exact
               path="/admin"
@@ -33,7 +33,7 @@ function App() {
               exact
               path="/cassa"
               component={CashRegisterPage}
-            />
+            /> */}
             <Route exact path="/login" component={LoginPage} />
             <Route exact path="/register" component={RegisterPage} />
           </Switch>

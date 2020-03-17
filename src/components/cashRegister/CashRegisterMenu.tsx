@@ -18,11 +18,17 @@ const useStyle = makeStyles(theme =>
 );
 const CashRegisterMenu: React.FunctionComponent<ICashRegisterMenuProps> = () => {
   const classes = useStyle();
-  const { storageCourses } = useContext(StorageContext);
+  const { storageDishes, courseNames } = useContext(StorageContext);
   return (
     <div className={classes.menu}>
-      {storageCourses.map(course => (
-        <CashRegisterCourse key={course.name} course={course} />
+      {courseNames.map(courseName => (
+        <CashRegisterCourse
+          key={courseName}
+          courseName={courseName}
+          storageDishes={storageDishes.filter(
+            dish => dish.courseName === courseName
+          )}
+        />
       ))}
     </div>
   );
