@@ -22,14 +22,13 @@ const StorageTab: React.FunctionComponent = () => {
 
   return (
     <Paper elevation={6} className={classes.storageTab}>
-      {courseNames.map((courseName, i) => (
+      {courseNames.map(courseName => (
         <StorageCourse
           key={courseName}
           courseName={courseName}
           storageDishes={storageDishes.filter(
             dish => dish.courseName === courseName
           )}
-          // TODO move starting dish storageDish took from service Context
         />
       ))}
     </Paper>

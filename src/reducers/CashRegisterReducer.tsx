@@ -4,7 +4,8 @@ import { ICourseDish } from '../../types';
 export enum ActionType {
   AddDish = 'AddDish',
   RemoveDish = 'RemoveDish',
-  ResetOrder = 'ResetOrder'
+  ResetOrder = 'ResetOrder',
+  SendOrder = 'SendOrder'
 }
 
 export interface ICashRegisterReducerState {

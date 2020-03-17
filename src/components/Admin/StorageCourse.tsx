@@ -26,7 +26,7 @@ const StorageCourse: React.FunctionComponent<IStorageCourseProps> = ({
         {courseName}
       </Typography>
       {storageDishes.map((dish, i) => (
-        <div key={i}>
+        <div key={dish.name}>
           <StorageDish storageDish={dish} />
           {i === storageDishes.length - 1 ? null : <Divider />}
         </div>
