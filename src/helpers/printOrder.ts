@@ -1,7 +1,7 @@
 import jsPDF from 'jspdf';
-import { IStorageCourse } from '../../types';
+import { IStorageDish } from '../../types';
 
-const printOrder = (storageCourses: IStorageCourse[]) => {
+const printOrder = (courseNames: string[], storageDishes: IStorageDish[]) => {
   // prep useful data
   const today = new Date();
   const year = today.getFullYear();
@@ -27,19 +27,21 @@ const printOrder = (storageCourses: IStorageCourse[]) => {
   doc.text(140, lastLine, `${date} - ${time}`);
   lastLine += 10;
   doc.setTextColor('#000000');
-  storageCourses.forEach(({ dishes, name }, i) => {
+  courseNames.forEach((courseName, i) => {
     doc.setFontType('bold');
     doc.setFontSize(15);
-    doc.text(listXStart + 10, lastLine, `${name}`);
+    doc.text(listXStart + 10, lastLine, `${courseName}`);
     lastLine += 7;
     doc.setFontType('normal');
     doc.setFontSize(14);
-    dishes.forEach(({ storageQt, price, name }, j) => {
-      doc.text(listXStart + 15, lastLine, `${name}`);
-      doc.text(listXStart + 85, lastLine, `€ ${price.toFixed(2)}`);
-      doc.text(listXStart + 120, lastLine, `${2}`);
-      lastLine += 6;
-    });
+    storageDishes
+      .filter(dish => dish.courseName === courseName)
+      .forEach(({ storageQt, price, name }, j) => {
+        doc.text(listXStart + 15, lastLine, `${name}`);
+        doc.text(listXStart + 85, lastLine, `€ ${price.toFixed(2)}`);
+        doc.text(listXStart + 120, lastLine, `${2}`);
+        lastLine += 6;
+      });
     lastLine += 4;
   });
   doc.autoPrint();

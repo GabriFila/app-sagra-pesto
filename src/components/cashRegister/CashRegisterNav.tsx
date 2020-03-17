@@ -38,17 +38,17 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const CashRegisterNav = () => {
   const classes = useStyles();
-  const { storageDishes: storageCourses } = useContext(StorageContext);
+  const { courseNames } = useContext(StorageContext);
 
   const theme = useTheme();
   const isTablet = useMediaQuery(theme.breakpoints.down('sm'));
 
   return isTablet ? null : (
     <div className={classes.navs}>
-      {storageCourses.map(course => (
-        <a key={course.name} href={`#${course.name}`} className={classes.link}>
+      {courseNames.map(courseName => (
+        <a key={courseName} href={`#${courseName}`} className={classes.link}>
           <Typography color="primary" variant="h5">
-            {course.name}
+            {courseName}
           </Typography>
         </a>
       ))}

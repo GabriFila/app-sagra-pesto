@@ -16,21 +16,18 @@ export interface IService {
   lastOrderNum: number; // progressive counter for orders
   totalInstantOrders: number;
   totalOrders: number;
-  startingDishes: IDish[];
+  startingDishes: ICourseDish[];
 }
-
-export interface IDish {
+interface IDish {
   shortName: string;
+}
+export interface ICourseDish extends IDish {
   qt: number;
 }
 
-export interface IDishWithCourse extends IDish {
+export interface IStorageDish extends IDish {
   courseName: string;
-}
-
-export interface IStorageDish extends IDishWithCourse {
   name: string;
-  shortName: string;
   storageQt: number;
   price: number;
   isInMenu: boolean;
@@ -48,10 +45,10 @@ export interface IOrder {
 }
 
 export interface ICourse {
-  name: string;
+  courseName: string;
   kitchen: string;
   orderNum: number;
   status: string; // (wait,prep,ready,delivered)
   notes: string;
-  dishes: IDish[];
+  dishes: ICourseDish[];
 }

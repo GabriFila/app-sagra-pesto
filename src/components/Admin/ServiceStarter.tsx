@@ -13,7 +13,7 @@ const ServiceStarter: React.FunctionComponent<IServiceStarterProps> = ({
   isServiceActive,
   serviceRef
 }) => {
-  const { storageDishes: storageDishes } = useContext(StorageContext);
+  const { storageDishes } = useContext(StorageContext);
 
   const changeServiceState = () => {
     if (isServiceActive)

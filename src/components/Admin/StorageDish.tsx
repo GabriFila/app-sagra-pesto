@@ -10,24 +10,23 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { StorageContext } from '../../context/StorageContext';
 import CheckIcon from '@material-ui/icons/Check';
 import CancelIcon from '@material-ui/icons/Cancel';
+import { ServiceContext } from '../../context/ServiceContext';
 
 interface IStorageDishProps {
   storageDish: IStorageDish;
-  startingDishQt: number | undefined;
 }
 const useStyle = makeStyles(theme =>
   createStyles({
     dish: {
       display: 'flex',
-      height: 40,
+      height: 50,
       alignItems: 'center'
     }
   })
 );
 
 const StorageDish: React.FunctionComponent<IStorageDishProps> = ({
-  storageDish,
-  startingDishQt
+  storageDish
 }) => {
   const classes = useStyle();
   const { name, price, storageQt, shortName, isInMenu } = storageDish;
@@ -35,6 +34,13 @@ const StorageDish: React.FunctionComponent<IStorageDishProps> = ({
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
 
   const { storageDishes, storageRef } = useContext(StorageContext);
+  const { service } = useContext(ServiceContext);
+
+  const { startingDishes } = service || {};
+
+  let startingDishQt = startingDishes?.find(
+    dish => dish.shortName === shortName
+  ).qt;
 
   const [editing, setEditing] = useState(false);
   const [inputPrice, setInputPrice] = useState(price);
@@ -42,7 +48,6 @@ const StorageDish: React.FunctionComponent<IStorageDishProps> = ({
 
   const changeInMenu = () => {
     storageDishes.find(dish => dish.name === name).isInMenu = !isInMenu;
-
     storageRef.set({ storageDishes });
   };
 

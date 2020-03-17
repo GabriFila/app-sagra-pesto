@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IDish } from '../../types';
+import { ICourseDish } from '../../types';
 
 export enum ActionType {
   AddDish = 'AddDish',
@@ -9,7 +9,7 @@ export enum ActionType {
 
 export interface ICashRegisterReducerState {
   orderNum: number | undefined;
-  dishes: IDish[];
+  dishes: ICourseDish[];
 }
 
 export interface ICashRegisterAction {

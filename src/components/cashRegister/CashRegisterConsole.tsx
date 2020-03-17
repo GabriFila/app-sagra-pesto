@@ -40,7 +40,7 @@ const useStyle = makeStyles(theme =>
 const CashRegisterConsole: React.FunctionComponent<ICashRegisterMenuProps> = () => {
   const classes = useStyle();
 
-  const { storageDishes } = useContext(StorageContext);
+  const { storageDishes, courseNames } = useContext(StorageContext);
   const { state, dispatch } = useContext(CashRegisterContext);
 
   const { dishes } = state;
@@ -74,7 +74,7 @@ const CashRegisterConsole: React.FunctionComponent<ICashRegisterMenuProps> = () 
       <IconButton
         className={classes.doneBtn}
         color="primary"
-        onClick={() => printOrder(storageDishes)}
+        onClick={() => printOrder(courseNames, storageDishes)}
       >
         <PrintIcon fontSize="large" />
       </IconButton>
