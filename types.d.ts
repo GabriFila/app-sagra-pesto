@@ -4,7 +4,7 @@ export interface IUserSagraRolesDoc {
 }
 
 export interface IStorage {
-  storageCourses: IDish[];
+  storageDishes: IStorageDish[];
 }
 
 export interface IService {
@@ -16,7 +16,7 @@ export interface IService {
   lastOrderNum: number; // progressive counter for orders
   totalInstantOrders: number;
   totalOrders: number;
-  startingCourses: IDish[];
+  startingDishes: IDish[];
 }
 
 export interface IDish {
@@ -24,7 +24,11 @@ export interface IDish {
   qt: number;
 }
 
-export interface IStorageDish extends IDish {
+export interface IDishWithCourse extends IDish {
+  courseName: string;
+}
+
+export interface IStorageDish extends IDishWithCourse {
   name: string;
   shortName: string;
   storageQt: number;
