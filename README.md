@@ -2,7 +2,7 @@
 
 Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pesto di Genova. La prima parte descrive il funzionamento dell'app, la seconda descrive la guida per l'implementazione. L'app è pensata come parte di un'infrastuttura più generale per gestire l'IT della sezione di Genova.
 
-Le parti precedute da *LAST* sono funzioni non essenziali che potrebbero non essere presenti nell'app entro giugno.
+Le parti precedute da _LAST_ sono funzioni non essenziali che potrebbero non essere presenti nell'app entro giugno.
 
 ## Indice
 
@@ -48,11 +48,11 @@ L'applicazione ha l'obbiettivo di migliorare la gestione degli ordini della sagr
 
 Alcune nozioni fondamentali sull'app:
 
-- *servizio*: sessione di pasto (pranzo, cena)
-- *ordine* istantaneo: ordine fatto dal bar che viene consegnato al cliente direttamente
-- *ordine* (classico): ordine normale fatto dalla cassa che deve passare attraverso cameriere -> cucina -> smazzo
-- *portata*: elemento dell'ordine preparato da una singola cucina
-- *piatto*: elemento di una portata
+- _servizio_: sessione di pasto (pranzo, cena)
+- _ordine_ istantaneo: ordine fatto dal bar che viene consegnato al cliente direttamente
+- _ordine_ (classico): ordine normale fatto dalla cassa che deve passare attraverso cameriere -> cucina -> smazzo
+- _portata_: elemento dell'ordine preparato da una singola cucina
+- _piatto_: elemento di una portata
 - ogni piatto deve possedere un nome 'corto' di massimo 7 lettere per facilitare la visualizzazione su certe pagine
 
 L'app prevede che ogni membro attivo durante un servizio possieda un account (a parte forse alcuni camerieri). L'utilizzo è consentito esclusivamente agli utenti loggati, con certe limitazioni in base al ruolo. Un utente può avere più ruoli.
@@ -365,56 +365,56 @@ Le informazioni di seguto sono indicative. Le letture (r) e scritture (w) si rif
 
 2a+ca+2 r & n+3 w
 
-|  qt   | tipo  | desc                                                                         |
-| :---: | :---: | ---------------------------------------------------------------------------- |
-|   1   |   r   | in service/current per sapere lastOrderID                                    |
-|   1   |   w   | in service/current per aggiornare lastOrderID e altri parametri del servizio |
-|   1   |   w   | in service/current/orders per creare un nuovo ordine                         |
-|   n   |   w   | in service/current/courses per creare le nuove portate                       |
-|   1   |   w   | in service/current/storage per aggiornare le quantità in storage             |
-|  ca   |   r   | per aggiornare le quantità della cassa                                       |
-|   a   |   r   | per aggiornare le quantità in magazzino dell'admin                           |
-|   a   |   r   | per aggiornare le info sul servizio dell'admin                               |
-|   1   |   r   | per aggiornare l'ordine pendente dello smazzo                                |
+| qt  | tipo | desc                                                                         |
+| :-: | :--: | ---------------------------------------------------------------------------- |
+|  1  |  r   | in service/current per sapere lastOrderID                                    |
+|  1  |  w   | in service/current per aggiornare lastOrderID e altri parametri del servizio |
+|  1  |  w   | in service/current/orders per creare un nuovo ordine                         |
+|  n  |  w   | in service/current/courses per creare le nuove portate                       |
+|  1  |  w   | in service/current/storage per aggiornare le quantità in storage             |
+| ca  |  r   | per aggiornare le quantità della cassa                                       |
+|  a  |  r   | per aggiornare le quantità in magazzino dell'admin                           |
+|  a  |  r   | per aggiornare le info sul servizio dell'admin                               |
+|  1  |  r   | per aggiornare l'ordine pendente dello smazzo                                |
 
 #### Legame cameriere: n+2 r & 1 w
 
-|  qt   | tipo  | desc                                                           |
-| :---: | :---: | -------------------------------------------------------------- |
-|   1   |   w   | in service/current/orders per segnare il cameriere nell'ordine |
-|   1   |   r   | per mostrare il proprio ordine al cameriere                    |
-|   1   |   r   | per rimozione dell'ordine pendente dallo smazzo                |
-|   n   |   r   | per la visualizzazione delle portate dell'ordine al cameriere  |
+| qt  | tipo | desc                                                           |
+| :-: | :--: | -------------------------------------------------------------- |
+|  1  |  w   | in service/current/orders per segnare il cameriere nell'ordine |
+|  1  |  r   | per mostrare il proprio ordine al cameriere                    |
+|  1  |  r   | per rimozione dell'ordine pendente dallo smazzo                |
+|  n  |  r   | per la visualizzazione delle portate dell'ordine al cameriere  |
 
 <div style="page-break-after: always;"></div>
 
 #### ciclo cameriere -> cucina -> smazzo : n(3+2cu+3s) r & 3n w
 
-|    qt     | tipo  | desc                      |
-| :-------: | :---: | ------------------------- |
+|    qt     | tipo | desc                      |
+| :-------: | :--: | ------------------------- |
 | cameriere |
-|     1     |   w   | cambio stato wait->prep   |
-|     1     |   r   | cambio stato wait->prep   |
-|     1     |   r   | cambio stato prep->pronto |
-|     1     |   w   | cambio stato pronto->cons |
-|     1     |   r   | cambio stato pronto->cons |
+|     1     |  w   | cambio stato wait->prep   |
+|     1     |  r   | cambio stato wait->prep   |
+|     1     |  r   | cambio stato prep->pronto |
+|     1     |  w   | cambio stato pronto->cons |
+|     1     |  r   | cambio stato pronto->cons |
 |  cucina   |
-|    cu     |   r   | cambio stato wait->prep   |
-|     1     |   w   | cambio stato prep->pronto |
-|    cu     |   r   | cambio stato prep->pronto |
+|    cu     |  r   | cambio stato wait->prep   |
+|     1     |  w   | cambio stato prep->pronto |
+|    cu     |  r   | cambio stato prep->pronto |
 |  smazzo   |
-|     s     |   r   | cambio stato wait->prep   |
-|     s     |   r   | cambio stato prep->pronto |
-|     s     |   r   | cambio stato pronto->cons |
+|     s     |  r   | cambio stato wait->prep   |
+|     s     |  r   | cambio stato prep->pronto |
+|     s     |  r   | cambio stato pronto->cons |
 
 #### Totale
 
-| qt           |          r          |   w   |
-| :----------- | :-----------------: | :---: |
-| creazione    |       2a+ca+2       |  n+3  |
-| collegamento |         n+2         |   1   |
-| ciclo        |     n(3+2cu+3s)     |  3n   |
-| totale       | n(4+2cu+3s)+2a+ca+4 | 4n+4  |
+| qt           |          r          |  w   |
+| :----------- | :-----------------: | :--: |
+| creazione    |       2a+ca+2       | n+3  |
+| collegamento |         n+2         |  1   |
+| ciclo        |     n(3+2cu+3s)     |  3n  |
+| totale       | n(4+2cu+3s)+2a+ca+4 | 4n+4 |
 
 #### Ipotesi reale
 
@@ -467,13 +467,13 @@ App relies on 2 main technologies:
 One document for each 'sagra' of type ISagra with 2 subcollections:
 
 - #### storage
-  
+
   Only one document which contains an IStorage Object
 
 - #### services
-  
+
   Each document is a single service of a 'sagra' with 3 subcollections:
-  
+
   - _instantOrders_: each document is of type IInstantOrder
   - _orders_: each document is of type IOrder
   - _courses_: each document is a course of type ICourse
@@ -556,6 +556,13 @@ match / {
 #### Firestore
 
 ```ts
+interface IUserSagraRolesDoc {
+  name: string;
+  roles: string[];
+}
+```
+
+```ts
 interface ISagra {
   year: number;
   totalRevenue: number;
@@ -567,55 +574,52 @@ interface ISagra {
 ```
 
 ```ts
-interface IStorage {
-  courses: IStorageCourse[];
+interface IDish {
+  shortName: string;
 }
 ```
 
 ```ts
-interface IStorageCourse {
+interface ICourseDish extends IDish {
+  qt: number;
+}
+```
+
+```ts
+interface IStorageDish extends IDish {
+  courseName: string;
   name: string;
-  kitchen: string;
-  dishes: IStorageDish[];
+  storageQt: number;
+  price: number;
+  isInMenu: boolean;
   isInstant: boolean;
 }
 ```
 
 ```ts
-interface IStorageDish {
-  name: string;
-  shortName: string;
-  storageQt: number;
-  price: number;
-  inMenu: boolean;
+export interface IStorage {
+  storageDishes: IStorageDish[];
 }
 ```
 
 ```ts
 interface IService {
-  start: Date;
-  end: Date;
+  start: Date | null;
+  end: Date | null;
   totalRevenue: number;
   totalInstantRevenue: number;
   totalPeople: number; // total number of people
   lastOrderNum: number; // progressive counter for orders
   totalInstantOrders: number;
   totalOrders: number;
-  startingCourses : IStartingCourses[]
-}
-```
-
-```ts
-interface IStartingCourses {
-  name: string;
-  dishes: IDish[];
+  startingDishes: ICourseDish[];
 }
 ```
 
 ```ts
 interface IInstantOrder {
   revenue: number;
-  dishes: IDish[];
+  dishes: ICourseDish[];
 }
 ```
 
@@ -633,19 +637,12 @@ interface IOrder {
 
 ```ts
 interface ICourse {
-  orderNum: number;
-  name: string;
+  courseName: string;
   kitchen: string;
+  orderNum: number;
   status: string; // (wait,prep,ready,delivered)
-  dishes: IDish[];
-  notes : string;
-}
-```
-
-```ts
-interface IDish {
-  shortName: string;
-  qt: number;
+  notes: string;
+  dishes: ICourseDish[];
 }
 ```
 
@@ -1109,6 +1106,7 @@ SmazzoCourse (course : ICourseWithId)
   (order : IOrder) => {} : number
 
   in a single transaction
+
   - change timeout ~ 90s
 
   1. read lastOrderNum of current service
@@ -1121,32 +1119,37 @@ SmazzoCourse (course : ICourseWithId)
   8. update service consumed props
 
 - [ ] addCoursesToOrder
-  (orderNum : number, courses : ICourses[]) => {} : boolean
+      (orderNum : number, courses : ICourses[]) => {} : boolean
+
   2. add new courses in courses collections with orderNum equal to arg
   3. update storage
 
 - [ ] deleteOrder
-  (orderNum : number) => {} : boolean
+      (orderNum : number) => {} : boolean
   2. decrease total revenue of service
-  2. decrease storage qts
-  3. decrease totalPeople
-  4. decrease totalOrders
-  5. update service consumed props
+  3. decrease storage qts
+  4. decrease totalPeople
+  5. decrease totalOrders
+  6. update service consumed props
 
 #### triggers
 
 - [x] onCreate on instantOrder
+
   - need to get more info on idempotency
+
   1. update totalRevenue of current service
   2. update totalInstantOrders of current service
   3. update qts in storage
 
 - [x] new user registration
+
   1. create new record in userSagraRoles collection with 'roles' field = []
   2. create new reacord in users with empty doc
 
 - [x] user deletion
-  a single batch
+      a single batch
+
   1. delete user record from userSagraRole
   2. delete user record from users
 
