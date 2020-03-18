@@ -94,7 +94,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const PersistentDrawerLeft: React.FunctionComponent = ({ children }) => {
+const TopBar: React.FunctionComponent = ({ children }) => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
@@ -185,4 +185,4 @@ const PersistentDrawerLeft: React.FunctionComponent = ({ children }) => {
   );
 };
 
-export default PersistentDrawerLeft;
+export default TopBar;
