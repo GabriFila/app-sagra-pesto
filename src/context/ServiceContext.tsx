@@ -27,7 +27,6 @@ const ServiceContextProvider: React.FunctionComponent = ({ children }) => {
           snaps.forEach(snap => {
             setCurrentService(snap.data() as IService);
             setCurrentServiceRef(snap.ref);
-            console.log(snap.ref);
           });
       },
       err => console.error('Service context: ', err)

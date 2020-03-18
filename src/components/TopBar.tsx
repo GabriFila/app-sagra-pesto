@@ -55,13 +55,6 @@ const useStyles = makeStyles((theme: Theme) =>
     drawerPaper: {
       width: drawerWidth
     },
-    drawerHeader: {
-      display: 'flex',
-      alignItems: 'center',
-      padding: theme.spacing(0, 1),
-      ...theme.mixins.toolbar,
-      justifyContent: 'flex-end'
-    },
     content: {
       display: 'flex',
       flexGrow: 1,
@@ -178,7 +171,6 @@ const TopBar: React.FunctionComponent = ({ children }) => {
           [classes.contentShift]: open
         })}
       >
-        {/* <div className={classes.drawerHeader} /> */}
         {children}
       </main>
     </div>
