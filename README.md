@@ -646,8 +646,6 @@ interface ICourse {
 }
 ```
 
-#### React
-
 ```ts
 interface IOrderWithId extends IOrder {
   // id is added to reach document in firestore faster
@@ -667,13 +665,6 @@ interface IOrderLinkInfo {
   orderNum: number;
   tableNum: number;
   waiterName: string;
-}
-```
-
-```ts
-interface IReducerAction {
-  type: string;
-  payload: unknown;
 }
 ```
 
@@ -697,13 +688,34 @@ domain = (e.g. sagra.genova.cngei.it)
 
 ### React Components
 
-Assumption (need to be checked during development): for all Components where a user event triggers a change in firestore there is no need to add a reducer but only a listener that acts on the state. Actions will pass through firestore on-device cache first and then propagate to other UIs via DB and then trigger the snapshot. In those components where a reducer is needed (cassa, cassBar) there should not be the need also for context, should be maximum 2-level prop-drilling, which doesn't make the use of Context so imminent.
+#### Contextes
+
+- [ ] AuthContext
+- [ ] StorageContext
+- [ ] ServiceContext
+- [ ] CashRegisterReducerContext
+
+AuthContext
+
+StorageContext
+
+ServiceContext
+
+CashRegisterReducerContext
+
+#### Reducers
+
+- [ ] CashRegisterReducer
+
+CashRegisterReducer
+
+#### Components
 
 Base structure:
 
 - [ ] App
   - [ ] SagraContextProvider
-  - [ ] AppBar
+  - [ ] TopBar
     - [ ] MenuDrawer
     - [ ] PendingOrders
     - [ ] DeleteOrderButton
@@ -717,31 +729,33 @@ App
 
 - material UI theme builder
 - CSS Baseline
-- AppBar
+- TopBar
 - router and switch with all PrivateRoleRoute for pages except for login
 - useState = {isLoggedIn : boolean, roles: string[], name: string}
 - useState = {serviceDbRef: string, storageDbRef: string}
 - in useEffect setup onetime listener for firebase.auth() to change state
 
-AppBar (isUserLoggedIn : boolean, userRoles: string[])
+TopBar
 
+- access isLoggedIn and userRoles from AuthContext
 - if userLoggedIn show name, role, logout button
 - if userRoles includes 'smazzo' and url is '/smazzo' show also search button and pending orders
 - if userRoles includes 'cassa' and url is '/cassa' show also delete button
-- on logoutButton click log out user and redirect to login page
+- on logoutButton click log out user
 
 PendingOrders
 
-- getCurrentService
+- access serviceRef from ServiceContext
 - setup firebase snapshot on orders collection where state='pending'
 - useState = orders where state='pending'
-- if there are more than 1 order show attention icon
+- if there are more than 1 order show alert icon
 - display id of each order
 - _LAST_ could signal if an order is waiting for too long
 
 MenuDrawer (userRoles : string[])
 
-- contains links to reachable pages by user based on userRoles
+- access userRoles from AuthContext
+- display links to reachable pages by user based on userRoles
 
 DeleteOrderButton
 
@@ -774,8 +788,8 @@ SearchOrderModalCourse (course : ICourseWithID)
 PrivateRoleRoute (component : FComponent, authed : boolean, required roles : string[])
 
 - if user not logged in redirect to login
-- if user logged in but urel not in role redirect to home
-- else return route to page page
+- if user logged in but userRole not in role redirect to home
+- else render page
 
 <div style="page-break-after: always;"></div>
 
@@ -792,33 +806,26 @@ HomePage
 #### domain/login
 
 - [ ] LoginPage
-  - [ ] LoginDialog
-  - [ ] RegisterDialog
 
 LoginPage
 
 - if user is logged in redirect to home
-- else
-  - notLoggedIn messagge
-  - loginButton to trigger LoginDialog
-  - registerButton to trigger RegisterDialog
-
-LoginDialog
-
 - state = loginError (false)
 - fields: email and password
-- on login if user redirect to home
-- _LAST_ on login if user has at least a role redirect to role page else to home
 - if loginError show message under form
+- _LAST_ on login if user has at least a role redirect to role page else to home
 
 #### domain/register
 
-RegisterDialog
+- [ ] RegisterPage
 
+RegisterPage
+
+- if user is logged in redirect to home
 - state = registerError (false)
-- fields: email, password, confirm password, name
+- fields: name, email, password, confirm password
 - on register if user redirect to home
-- _LAST_ on register if user has at least a role redirect to role page else to home- if registerError show message under form
+- if registerError show message under form
 
 <div style="page-break-after: always;"></div>
 
@@ -836,28 +843,36 @@ RegisterDialog
 AdminPage
 
 - 2 sections: StorageTab, ServiceTab
+
+////
+
 - getCurrentService
 - setup listener for service where EndDate = null
 - getCurrentStorage
 - setup listener for storage document
 - useState = storage
+  ////
 
 StorageTab (startingCourses : IStartingCourses, courses : IStorageCourse[])
 
-- map courses of storage and starting courses to StorageCourse
+- access storageDishes and courseNames from StorageContext
+- map courseNames to StorageCourse and pass proper dishes as props
 
-StorageCourse (storageCourse : IStorageCourse, startingCourse : IStartingCourse)
+StorageCourse (courseName : string, storageDishes : IStorageDishes)
 
-- map dishes in storageCourse to StorageDish and pass single dish as prop with also corresponding starting dish value
+- map storageDishes to StorageDish and pass single dish as prop
 - _LAST_ plus button to add dish
 
-StorageDish (storageDish : IStorageDish, startingDishQt : number)
+StorageDish (storageDish : IStorageDish)
 
-- render infos from props
+- access storageDishes from StorageContext to find target dish and update it
+- access startingDishes from ServiceContext
+- render infos
 - useState = isEditing
-- on editButton click set isEditing to true
-- if isEditing==true becomes check icon to finish, text inputs enables
-- on checkButton click, update stroage in DB and set isEditing=false
+- on editIcon click set isEditing to true
+- if isEditing==true edit icon turn into check and cancel icons and text inputs enable
+- on cancelIcon click, update stroage in DB and set isEditing=false
+- on checkIcon click, update stroage in DB and set isEditing=false
 
 ServiceTab (service : IService, currentStorage : ICourses[], serviceRef)
 
