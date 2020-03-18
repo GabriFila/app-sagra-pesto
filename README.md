@@ -4,7 +4,7 @@ Di seguito la documentazione dell'app per gestire gli ordini della Sagra del Pes
 
 Le parti precedute da *LAST* sono funzioni non essenziali che potrebbero non essere presenti nell'app entro giugno.
 
-# Indice
+## Indice
 
 - [Parte I - funzionamento](#parte-i---funzionamento)
   - [Obbiettivi](#obbiettivi)
@@ -26,9 +26,9 @@ Le parti precedute da *LAST* sono funzioni non essenziali che potrebbero non ess
 
 <div style="page-break-after: always;"></div>
 
-# Parte I - funzionamento
+## Parte I - funzionamento
 
-## Obbiettivi
+### Obbiettivi
 
 L'applicazione ha l'obbiettivo di migliorare la gestione degli ordini della sagra, fornendo:
 
@@ -44,7 +44,7 @@ L'applicazione ha l'obbiettivo di migliorare la gestione degli ordini della sagr
 
 <div style="page-break-after: always;"></div>
 
-## Evoluzione di un ordine
+### Evoluzione di un ordine
 
 Alcune nozioni fondamentali sull'app:
 
@@ -77,7 +77,7 @@ L'evoluzione temporale di un ordine è la seguente:
 
 <div style="page-break-after: always;"></div>
 
-## Ruoli Utente
+### Ruoli Utente
 
 - [Super Admin](#super-admin)
 - [Admin](#admin)
@@ -90,12 +90,14 @@ L'evoluzione temporale di un ordine è la seguente:
 
 [⮝ torna all'indice](#indice)
 
-## Attività dei ruoli
+### Attività dei ruoli
 
 #### Super admin
+
 - modificare i ruoli degli utenti
 
 #### Admin
+
 - modificare le quantità in 'magazzino'
 - _LAST_ aggiungere piatti al magazzino
 - modificare il menu
@@ -103,6 +105,7 @@ L'evoluzione temporale di un ordine è la seguente:
 - vedere info su incassi e ordini correnti
 
 #### Cassiere
+
 - creare un ordine
 - aggiungere una nota a ogni portata dell'ordine
 - stampare un ordine
@@ -110,6 +113,7 @@ L'evoluzione temporale di un ordine è la seguente:
 - _LAST_ modificare un ordine già creato
 
 #### Cameriere
+
 - associare ordine e tavolo
 - aggiungere una nota personale all'ordine per aiutare l'identificatione dei clienti
 - mandare una portata di un ordine in cucina per la preparazione
@@ -118,19 +122,23 @@ L'evoluzione temporale di un ordine è la seguente:
 - _LAST_ ricevere notifica quando un ordine è pronto
 
 #### Bar
+
 - visualizzare il bere e i dolci degli ordini che sono in preparazione
 - segnare il bere e i dolci come pronti
 - creare ordini istantanei
 
 #### Primi
+
 - visualizzare i primi degli ordini che sono in preparazione
 - segnare i primi come pronti
 
 #### Secondi
+
 - visualizzare i secondi degli ordini che sono in preparazione
 - segnare i secondi come pronti
 
 #### Smazzo
+
 - vedere gli ordini non collegati a un cameriere
 - vedere le portate degli ordini in corso e il loro stato (in preparazione, pronto)
 - concludere una portata di un ordine
@@ -138,43 +146,51 @@ L'evoluzione temporale di un ordine è la seguente:
 
 [⮝ torna all'indice](#indice)
 
-## Permessi dei ruoli
+### Permessi dei ruoli
 
 #### Modifica ruoli utente
+
 - Super admin
 
 #### Modifica menu
+
 - Admin
 
 #### Modifica magazzino
+
 - Admin
 
 #### Inizio/fine servizio
+
 - Admin
 
 #### Creazione ordine
+
 - Ordini classici solo cassa
 - Ordini istantanei solo bar
 
 #### Modifica stato ordine
+
 - Cassa
 - Smazzo
 - Cameriere modifica tutto solo i propri ordini
 
 #### Cancellazione ordine
+
 - Cassa
 
 #### Modifica portate ordine
+
 - Smazzo
 - Cameriere modifica tutto solo i propri ordini
 - Cucine modificano solo le proprie portate
-
 
 [⮝ torna all'indice](#indice)
 
 <div style="page-break-after: always;"></div>
 
-## Mokcup pagine
+### Mokcup pagine
+
 Le immagini mostrate sono delle bozze, non è detto che rispettino fedelmente il prodotto finale.
 
 Ogni pagina ha una top bar con:
@@ -193,6 +209,7 @@ Ogni pagina ha una top bar con:
 <div style="page-break-after: always;"></div>
 
 #### Home
+
 - Link che portano alle altre pagine accessibili dall'utente
 
 <br/>
@@ -204,6 +221,7 @@ Ogni pagina ha una top bar con:
 <div style="page-break-after: always;"></div>
 
 #### Login and Register
+
 - Tasti per registrarsi o loggarsi
 
 <br per lasciare spazio tra testo e immagine >
@@ -214,7 +232,8 @@ Ogni pagina ha una top bar con:
 
 <div style="page-break-after: always;"></div>
 
-#### Admin
+#### Admin dashboard
+
 - Una sezione per:
   - modificare il menu
   - modificare le quantità in magazzino
@@ -231,6 +250,7 @@ Ogni pagina ha una top bar con:
 <div style="page-break-after: always;"></div>
 
 #### Cassa istantanea
+
 - Una sezione per ogni portata con i piatti istantanei nel menu. Ogni piatto è una riga con:
   - la quantità rimanente in magazzino
   - il prezzo
@@ -250,6 +270,7 @@ Ogni pagina ha una top bar con:
 <div style="page-break-after: always;"></div>
 
 #### Cassa
+
 - Una sezione per ogni portata con i piatti nel menu. Ogni piatto è una riga con:
   - la quantità rimanente in magazzino
   - il prezzo
@@ -270,16 +291,17 @@ Ogni pagina ha una top bar con:
 
 <div style="page-break-after: always;"></div>
 
-#### Cameriere
+#### Cameriere dashboard
+
 - Un tasto '+' per collegare ordine e tavolo
 - Una sezione per ogni ordine con:
   - il numero dell'ordine
   - il numero del tavolo
   - un tasto per aggiungere portate all'ordine
   - un tasto per espandere comprimere l'ordine per non occupare inutile spazio
-  - le portate dell'ordine, contenente: 
+  - le portate dell'ordine, contenente:
     - un tasto per completare la portata
-    - un tasto per mandare la portata in preparazione 
+    - un tasto per mandare la portata in preparazione
     - una riga per piatto con nome e quantità
 
 <br per lasciare spazio tra testo e immagine >
@@ -294,6 +316,7 @@ Ogni pagina ha una top bar con:
 <div style="page-break-after: always;"></div>
 
 #### Cucine/bar
+
 - Una sezione ampia con tutti gli ordini in preparazione della propria cucina, ognuno con un tasto per segnarli completati
 - Una mini sezione con il totale dei piatti da preparare attualmente
 
@@ -306,7 +329,8 @@ Ogni pagina ha una top bar con:
 
 <div style="page-break-after: always;"></div>
 
-#### Smazzo
+#### Smazzo page
+
 - 3 colonne (bar, primi, secondi), contentti le portate degli ordini in corso e il loro stato (preparazione, pronto). Ogni portata contiene:
   - lista dei piatti
   - tasto per concludere la portata
@@ -322,8 +346,9 @@ Ogni pagina ha una top bar con:
 
 <div style="page-break-after: always;"></div>
 
-## Stima dei costi
-Le informazioni di seguto sono indicative. Le letture (r) e scritture (w) si riferiscono ai documenti nel Firestore DB e dipendono dall'implementazione descritta nella seconda parte di questo documento. 
+### Stima dei costi
+
+Le informazioni di seguto sono indicative. Le letture (r) e scritture (w) si riferiscono ai documenti nel Firestore DB e dipendono dall'implementazione descritta nella seconda parte di questo documento.
 
 #### Condizioni e ipotesi
 
@@ -336,8 +361,7 @@ Le informazioni di seguto sono indicative. Le letture (r) e scritture (w) si rif
 - il cameriere conclude l'ordine, non lo smazzo
 - le prime 50K r e 20k letture del giorno sono gratis
 
-
-#### Creazione ordine:
+#### Nuovo ordine
 
 2a+ca+2 r & n+3 w
 
@@ -392,7 +416,8 @@ Le informazioni di seguto sono indicative. Le letture (r) e scritture (w) si rif
 | ciclo        |     n(3+2cu+3s)     |  3n   |
 | totale       | n(4+2cu+3s)+2a+ca+4 | 4n+4  |
 
-#### Ipotesi reale:
+#### Ipotesi reale
+
 n=4 a=1 s=1 ca=2 cu=2 => 52r/ord & 18w/ord
 
 Considerato questa assunzione corretta, al giorno si possono fare gratis poco più di 900 ordini
@@ -403,7 +428,7 @@ n=4 a=1 s=1 ca=2 cu=2 => 52r/ord & 18w/ord
 
 4000 ordini = 208000 r & 72000 w ~ €0.13 & €0.13
 
-#### Ipotesi assurda:
+#### Ipotesi assurda
 
 ipotesi: 400 r/ord - 400 w/ord
 
@@ -415,7 +440,7 @@ Senza contare la parte gratuita
 
 [⮝ torna all'indice](#indice)
 
-## Note
+### Note
 
 Avere dati sull'evoluzione delle quantità in magazzino
 
@@ -423,7 +448,7 @@ Avere dati sull'evoluzione delle quantità in magazzino
 
 <div style="page-break-after: always;"></div>
 
-# Parte II - implementazione
+## Parte II - implementazione
 
 App relies on 2 main technologies:
 
@@ -435,22 +460,23 @@ App relies on 2 main technologies:
 
 [⮝ back to table of contents](#indice)
 
-## Firestore DB structure
+### Firestore DB structure
 
 #### sagre
 
 One document for each 'sagra' of type ISagra with 2 subcollections:
 
 - #### storage
+  
   Only one document which contains an IStorage Object
+
 - #### services
+  
   Each document is a single service of a 'sagra' with 3 subcollections:
-  - #### instantOrders
-    - each document is of type IInstantOrder
-  - #### orders
-    - each document is of type IOrder
-  - #### courses
-    - each document is a course of type ICourse
+  
+  - _instantOrders_: each document is of type IInstantOrder
+  - _orders_: each document is of type IOrder
+  - _courses_: each document is a course of type ICourse
 
 #### users
 
@@ -464,7 +490,7 @@ Each document corresponds to a user and contains a 'roles' property which is a s
 
 <div style="page-break-after: always;"></div>
 
-## Security rules
+### Security rules
 
 ```ts
 match / {
@@ -489,7 +515,7 @@ match / {
   }
   match /sagre {
     match /storage/{storageId} {
-      allow get: if isLoggedIn() && hasRole(admin) || hasRole(cassa) || hasRole(cameriere);     
+      allow get: if isLoggedIn() && hasRole(admin) || hasRole(cassa) || hasRole(cameriere);
       allow list: if false;
       allow create: if false; // only cloud functions
       allow update: if isLoggedIn() && hasRole(admin);
@@ -509,7 +535,7 @@ match / {
         allow update: if isLoggedIn() && hasRole(cassa) || hasRole(cameriere); // problem: waiter can update other waiter's courses
       }
       match /instantOrders/{instantOrderID} {
-        allow read: if false; 
+        allow read: if false;
         allow create: if isLoggedIn() && hasRole(cassaBar);
         allow update: if false;
         allow delete: if false;
@@ -525,7 +551,7 @@ match / {
 
 <div style="page-break-after: always;"></div>
 
-## Typescript Interfaces
+### Typescript Interfaces
 
 #### Firestore
 
@@ -539,11 +565,13 @@ interface ISagra {
   totalInstantOrders: number;
 }
 ```
+
 ```ts
 interface IStorage {
   courses: IStorageCourse[];
 }
 ```
+
 ```ts
 interface IStorageCourse {
   name: string;
@@ -552,6 +580,7 @@ interface IStorageCourse {
   isInstant: boolean;
 }
 ```
+
 ```ts
 interface IStorageDish {
   name: string;
@@ -561,6 +590,7 @@ interface IStorageDish {
   inMenu: boolean;
 }
 ```
+
 ```ts
 interface IService {
   start: Date;
@@ -574,18 +604,21 @@ interface IService {
   startingCourses : IStartingCourses[]
 }
 ```
+
 ```ts
 interface IStartingCourses {
   name: string;
   dishes: IDish[];
 }
 ```
+
 ```ts
 interface IInstantOrder {
   revenue: number;
   dishes: IDish[];
 }
 ```
+
 ```ts
 interface IOrder {
   orderNum: number;
@@ -597,6 +630,7 @@ interface IOrder {
   notes: string;
 }
 ```
+
 ```ts
 interface ICourse {
   orderNum: number;
@@ -607,6 +641,7 @@ interface ICourse {
   notes : string;
 }
 ```
+
 ```ts
 interface IDish {
   shortName: string;
@@ -622,12 +657,14 @@ interface IOrderWithId extends IOrder {
   docId: string;
 }
 ```
+
 ```ts
 interface ICourseWithId extends ICourse {
   // id is added to reach document in firestore faster
   docId: string;
 }
 ```
+
 ```ts
 interface IOrderLinkInfo {
   orderNum: number;
@@ -635,17 +672,19 @@ interface IOrderLinkInfo {
   waiterName: string;
 }
 ```
+
 ```ts
 interface IReducerAction {
   type: string;
   payload: unknown;
 }
 ```
+
 [⮝ back to table of contents](#indice)
 
 <div style="page-break-after: always;"></div>
 
-## URLs
+### URLs
 
 domain = (e.g. sagra.genova.cngei.it)
 
@@ -659,11 +698,12 @@ domain = (e.g. sagra.genova.cngei.it)
 - [cassaBar](#domain/cassaBar) istantanea = domain/cassaBar
 - [cameriere](#domain/cameriere) = domain/cameriere
 
-## React Components
+### React Components
 
 Assumption (need to be checked during development): for all Components where a user event triggers a change in firestore there is no need to add a reducer but only a listener that acts on the state. Actions will pass through firestore on-device cache first and then propagate to other UIs via DB and then trigger the snapshot. In those components where a reducer is needed (cassa, cassBar) there should not be the need also for context, should be maximum 2-level prop-drilling, which doesn't make the use of Context so imminent.
 
 Base structure:
+
 - [ ] App
   - [ ] SagraContextProvider
   - [ ] AppBar
@@ -672,11 +712,12 @@ Base structure:
     - [ ] DeleteOrderButton
       - [ ] DeleteOrderModal
     - [ ] SearchOrderButton
-      - [ ] SearchOrderModal 
-        - [ ] SearchOrderModalCourse 
+      - [ ] SearchOrderModal
+        - [ ] SearchOrderModalCourse
   - [ ] PrivateRoleRoute
 
 App
+
 - material UI theme builder
 - CSS Baseline
 - AppBar
@@ -686,12 +727,14 @@ App
 - in useEffect setup onetime listener for firebase.auth() to change state
 
 AppBar (isUserLoggedIn : boolean, userRoles: string[])
+
 - if userLoggedIn show name, role, logout button
 - if userRoles includes 'smazzo' and url is '/smazzo' show also search button and pending orders
 - if userRoles includes 'cassa' and url is '/cassa' show also delete button
 - on logoutButton click log out user and redirect to login page
 
 PendingOrders
+
 - getCurrentService
 - setup firebase snapshot on orders collection where state='pending'
 - useState = orders where state='pending'
@@ -700,25 +743,31 @@ PendingOrders
 - _LAST_ could signal if an order is waiting for too long
 
 MenuDrawer (userRoles : string[])
+
 - contains links to reachable pages by user based on userRoles
 
 DeleteOrderButton
+
 - on click trigger DeleteOrderModal
 
 DeleteOrderModal
+
 - text input for number of order to delete
 - on click deleteButton call deleteOrder cloud function
 
 SearchOrderButton
+
 - display a text input and a button
 - on click trigger SearchOrderModal
 
 SearchOrderModal (orderNum : number)
+
 - useState = {order : IOrderWithId, courses : ICoursesWithId[]}
 - listen to order by orderNum and coures with orderNum = arg
 - map courses to SearchOrderModalCourse
 
 SearchOrderModalCourse (course : ICourseWithID)
+
 - display course name
 - create obj iconState {state : icon}
 - display icon different from state
@@ -726,6 +775,7 @@ SearchOrderModalCourse (course : ICourseWithID)
 - map dishes to DishRow
 
 PrivateRoleRoute (component : FComponent, authed : boolean, required roles : string[])
+
 - if user not logged in redirect to login
 - if user logged in but urel not in role redirect to home
 - else return route to page page
@@ -737,6 +787,7 @@ PrivateRoleRoute (component : FComponent, authed : boolean, required roles : str
 - [ ] HomePage
 
 HomePage
+
 - loop through user costum claims and display buttons
 - display a link button for each route reachable by user based on userRoles
 - if userRoles is empty show message to go to superAdmin and get role
@@ -748,6 +799,7 @@ HomePage
   - [ ] RegisterDialog
 
 LoginPage
+
 - if user is logged in redirect to home
 - else
   - notLoggedIn messagge
@@ -755,6 +807,7 @@ LoginPage
   - registerButton to trigger RegisterDialog
 
 LoginDialog
+
 - state = loginError (false)
 - fields: email and password
 - on login if user redirect to home
@@ -764,6 +817,7 @@ LoginDialog
 #### domain/register
 
 RegisterDialog
+
 - state = registerError (false)
 - fields: email, password, confirm password, name
 - on register if user redirect to home
@@ -783,6 +837,7 @@ RegisterDialog
     - [ ] ServiceInfo
 
 AdminPage
+
 - 2 sections: StorageTab, ServiceTab
 - getCurrentService
 - setup listener for service where EndDate = null
@@ -791,13 +846,16 @@ AdminPage
 - useState = storage
 
 StorageTab (startingCourses : IStartingCourses, courses : IStorageCourse[])
+
 - map courses of storage and starting courses to StorageCourse
 
 StorageCourse (storageCourse : IStorageCourse, startingCourse : IStartingCourse)
+
 - map dishes in storageCourse to StorageDish and pass single dish as prop with also corresponding starting dish value
 - _LAST_ plus button to add dish
 
 StorageDish (storageDish : IStorageDish, startingDishQt : number)
+
 - render infos from props
 - useState = isEditing
 - on editButton click set isEditing to true
@@ -805,15 +863,18 @@ StorageDish (storageDish : IStorageDish, startingDishQt : number)
 - on checkButton click, update stroage in DB and set isEditing=false
 
 ServiceTab (service : IService, currentStorage : ICourses[], serviceRef)
+
 - useState = current service
 - if service exists pass isServiceActive=true as prop to serviceStarter else pass false
 - if service exists display ServiceInfo and pass service as prop
 
 ServiceStarter (isServiceActive : boolean)
+
 - if isServiceActive is true show red button to end it, i.e. set endDate where endDate is not defined
 - if isServiceActive is not active show green button to start it, i.e. create new service with endDate undefined
 
 ServiceInfo (service : IService)
+
 - display current service info from props
 
 <div style="page-break-after: always;"></div>
@@ -826,6 +887,7 @@ ServiceInfo (service : IService)
   - [ ] CashRegisterConfirmOrder
 
 CashRegisterPage
+
 - getCurrentStorage
 - setup listener for storage
 - filter courses from storage where inMenu==true and set them to state(storage)
@@ -842,13 +904,16 @@ CashRegisterPage
 - one card with CashRegisterConfirmOrder pass newOrder revenue
 
 CashRegisterCourse (courseInMenu : IStorageCourse, courseInOrder ?: IStorageCourse, dispatch)
+
 - map dishes to CashRegisterDish, if in courseInOrder there is a dish with the same name pass the qt as prop as prop
 
 CashRegisterDish (courseInMenu : IDish, newOrderQt : number, dispatch)
+
 - a row with dish name, qt in storage, '-'. '+' and newOrderQt
 - on click of '-' and '+' trigger dispatch action with name of dish
 
 CashRegisterConfirmOrder (revenue: number, orderNum ?: number )
+
 - display revenue from props
 - display sendButton, on click of sendButton dispatch SEND_ORDER action
 - display send button on click of printButton dispatch PRINT_ORDER action
@@ -856,6 +921,7 @@ CashRegisterConfirmOrder (revenue: number, orderNum ?: number )
 - display resetOrderButton
 
 cash register reducer actions:
+
 - ADD_DISH: (payload = dishName)
   - copy state and find course where dishes includes a dish==payload, increment qt and recalculate revenue
 - REMOVE_DISH:
@@ -877,6 +943,7 @@ cash register reducer actions:
   - [ ] InstantCashRegisterConfirmOrder
 
 InstantCashRegisterPage
+
 - getCurrentStorage
 - getCurrentService
 - setup firestore listener for storage
@@ -890,6 +957,7 @@ InstantCashRegisterPage
 - map state to CashRegisterCourse and pass single course as props
 
 InstantCashRegisterConfirmOrder
+
 - display total from props
 - on click of sendButton dispatch SEND_ORDER action
 
@@ -909,11 +977,13 @@ InstantCashRegisterConfirmOrder
   - [ ] LinkOrderModal
 
 WaiterPage
+
 - getCurrentService
 - in one-time useEffect listen for orders with waiterId == userID.uuid and status='active' (get from firebase.auth().currentUser)
 - map orders to WaiterOrders and pass order as prop + firestoreId order by orderNum Desc
 
 WaiterOrder (order : IOrderWithId)
+
 - in one-time useEffect listen for courses with orderId equal to prop one and pass Course obj as prop + docId
 - useState = isExpanded (false)
 - display table# and orderId
@@ -924,6 +994,7 @@ WaiterOrder (order : IOrderWithId)
 - if isExpanded = true map courses to WaiterCourse[]
 
 WaiterCourse (course : ICourseWithId)
+
 - when Course state == waiting, display pot button
 - when Course state == prep, display cancelPot button and turn bkg yellowish
 - when Course state == ready, display conclude button
@@ -931,9 +1002,11 @@ WaiterCourse (course : ICourseWithId)
 - when click a button change state in db appropriately
 
 DishRow (dish : IDish)
+
 - display dish shortName and qt
 
 AddDishModal (orderNum : number)
+
 - display orderNum to edit
 - getCurrentStorage
 - setup in one-time useEffect a listener for storage doc
@@ -946,17 +1019,21 @@ AddDishModal (orderNum : number)
     - SEND_ORDER
 
 WaiterEditOrderConfirm
+
 - display total price of new courses
 - display confirmButton
 - on click on confirmButton dispatch SEND_ORDER
 
 useReducer actions
+
 - SEND_ORDER: call cloud function addCoursesToOrder
 
 LinkOrderButton
+
 - floating '+' button to trigger LinkOrderModal
 
 LinkOrderModal
+
 - 2 number inputs, orderNum and tableNum
 - 1 'confirm' button, onClick change tableNum in DB order
 
@@ -971,20 +1048,24 @@ LinkOrderModal
   - DishRow
 
 KitchenPage
+
 - getCurrentService
 - in one-time useEffect setup listener for courses were status='prep' and kitchen is equal to url slug
 - KitchenShelf pass docs as prop
 - KitchenTotal pass docs as prop
 
 KitchenShelf (courses : ICourseWithId[])
+
 - map props to KitchenCourse
 
 KitchenCourse (course : ICourseWithId)
+
 - display order num
 - map props to DishRow
 - display note
 
 KitchenTotal (courses : ICourseWithId[])
+
 - reduce arrayProp to an array of IDIsh and map it to DishRow
 
 <div style="page-break-after: always;"></div>
@@ -996,10 +1077,12 @@ KitchenTotal (courses : ICourseWithId[])
     - [ ] SmazzoCourse
 
 SmazzoPage
+
 - getCurrentService
 - create array with 3 kitchens and map it to a columns in which to render CourseSection and pass kitchen as prop
 
 CourseSection (kitchen : string)
+
 - setup listener for courses where kitchen is equal to prop and statua in ['prep','ready']
 - useState = array of courses
 - useState = array of OrderLinkInfo[]
@@ -1008,6 +1091,7 @@ CourseSection (kitchen : string)
 - map courses to SmazzoCourse and pass Course and OrderLinkInfo
 
 SmazzoCourse (course : ICourseWithId)
+
 - render infos
 - check button, on click set in db course.status='delivered'
 - if status is prep then background is yellowish else greenish
@@ -1016,9 +1100,9 @@ SmazzoCourse (course : ICourseWithId)
 
 <div style="page-break-after: always;"></div>
 
-## Cloud functions
+### Cloud functions
 
-#### callables:
+#### callables
 
 - [ ] createOrder
 
@@ -1049,7 +1133,7 @@ SmazzoCourse (course : ICourseWithId)
   4. decrease totalOrders
   5. update service consumed props
 
-#### triggers:
+#### triggers
 
 - [x] onCreate on instantOrder
   - need to get more info on idempotency
@@ -1075,17 +1159,9 @@ SmazzoCourse (course : ICourseWithId)
 ## Helper functions
 
 - [ ] getCurrentStorageRef
+
 - [ ] getCurrentServiceRef
-```ts
-// to get current service
 
-  db.collection('sagre')
-    .doc(`${currentYear}`)
-    .collection('services').where('endDate', '>=','')
-    .limit()
-    .catch(err => console.log(err.message.red));
-
-```
 ## Logging
 
 L'app deve loggare le evoluzioni degli ordini per avere dati statistici
