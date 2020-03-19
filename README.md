@@ -815,27 +815,18 @@ RegisterPage
 
 #### domain/admin
 
-- [ ] AdminPage
-  - [ ] StorageTab
-    - [ ] StorageCourse
-      - [ ] StorageDish
-      - [ ] AddDishButton
-  - [ ] ServiceTab
-    - [ ] ServiceStarter
-    - [ ] ServiceInfo
+- [x] AdminPage
+  - [x] StorageTab
+    - [x] StorageCourse
+      - [x] StorageDish
+      - [x] AddDishButton
+  - [x] ServiceTab
+    - [x] ServiceStarter
+    - [x] ServiceInfo
 
 AdminPage
 
 - 2 sections: StorageTab, ServiceTab
-
-////
-
-- getCurrentService
-- setup listener for service where EndDate = null
-- getCurrentStorage
-- setup listener for storage document
-- useState = storage
-  ////
 
 StorageTab (startingCourses : IStartingCourses, courses : IStorageCourse[])
 
@@ -878,9 +869,10 @@ ServiceInfo (service : IService)
 #### domain/cassa
 
 - [ ] CashRegisterPage
-  - [ ] CashRegisterCourse
-    - [ ] CashRegisterDish
-  - [ ] CashRegisterConfirmOrder
+  - [ ] CashRegisterMenu
+    - [ ] CashRegisterCourse
+      - [ ] CashRegisterDish
+  - [ ] CashRegisterConsole
 
 CashRegisterPage
 
@@ -897,7 +889,7 @@ CashRegisterPage
     - PRINT_ORDER
     - RESET_ORDER
 - map state(storage) to list of CashRegisterCourse, if in newOrder there is a course with same name pass it as prop
-- one card with CashRegisterConfirmOrder pass newOrder revenue
+- CashRegisterConsole pass newOrder revenue
 
 CashRegisterCourse (courseInMenu : IStorageCourse, courseInOrder ?: IStorageCourse, dispatch)
 
@@ -908,7 +900,7 @@ CashRegisterDish (courseInMenu : IDish, newOrderQt : number, dispatch)
 - a row with dish name, qt in storage, '-'. '+' and newOrderQt
 - on click of '-' and '+' trigger dispatch action with name of dish
 
-CashRegisterConfirmOrder (revenue: number, orderNum ?: number )
+CashRegisterConsole (revenue: number, orderNum ?: number )
 
 - display revenue from props
 - display sendButton, on click of sendButton dispatch SEND_ORDER action
@@ -936,7 +928,7 @@ cash register reducer actions:
 - [ ] InstantCashRegisterPage
   - [ ] CashRegisterCourse
     - [ ] CashRegisterDish
-  - [ ] InstantCashRegisterConfirmOrder
+  - [ ] InstantCashRegisterConsole
 
 InstantCashRegisterPage
 
@@ -952,7 +944,7 @@ InstantCashRegisterPage
     - SEND_ORDER
 - map state to CashRegisterCourse and pass single course as props
 
-InstantCashRegisterConfirmOrder
+InstantCashRegisterConsole
 
 - display total from props
 - on click of sendButton dispatch SEND_ORDER action
@@ -1102,67 +1094,64 @@ SmazzoCourse (course : ICourseWithId)
 
 - [ ] createOrder
 
-  (order : IOrder) => {} : number
+  (dishesInOrder : ICourseDish[], orderRevenue : number, orderCovers : number) => {} : number
 
-  in a single transaction
+  1. in a single transaction
+     1. read lastOrderNum of current service
+     2. increase total revenue of service
+     3. increase totalPeople
+     4. increase totalOrders
+     5. store and update lastOrderNum
+  2. create a new order
 
-  - change timeout ~ 90s
+- [ ] addCoursesToOrder (orderNum : number, courses : ICourses[]) => {} : boolean
 
-  1. read lastOrderNum of current service
-  2. create a new order with lastOrderNum++
-  3. update lastOrderNum
-  4. increase total revenue of service
-  5. increase storage qts
-  6. increase totalPeople
-  7. increase totalOrders
-  8. update service consumed props
+  1. add new courses in courses collections with orderNum equal to arg
 
-- [ ] addCoursesToOrder
-      (orderNum : number, courses : ICourses[]) => {} : boolean
-
-  2. add new courses in courses collections with orderNum equal to arg
-  3. update storage
-
-- [ ] deleteOrder
-      (orderNum : number) => {} : boolean
-  2. decrease total revenue of service
-  3. decrease storage qts
-  4. decrease totalPeople
-  5. decrease totalOrders
-  6. update service consumed props
+- [ ] deleteOrder (orderNum : number) => {} : boolean
+  1. decrease total revenue of service
+  2. decrease storage qts
+  3. decrease totalPeople
+  4. decrease totalOrders
+  5. update service consumed props
 
 #### triggers
 
-- [x] onCreate on instantOrder
+- [ ] onCreate on orders
 
-  - need to get more info on idempotency
+  1. in a single transaction update qts in storage
+
+- [ ] onUpdate on orders
+
+  1. in a single transaction update check difference in dishes qts in storage
+
+- [ ] onCreate on instantOrders
 
   1. update totalRevenue of current service
   2. update totalInstantOrders of current service
-  3. update qts in storage
+  3. in a single transaction update qts in storage
 
 - [x] new user registration
 
-  1. create new record in userSagraRoles collection with 'roles' field = []
+  1. create new record in userSagraRoles collection with 'roles' field = [] and email
   2. create new reacord in users with empty doc
 
 - [x] user deletion
-      a single batch
 
   1. delete user record from userSagraRole
   2. delete user record from users
 
 - [x] onUpdate on sagraUserRoles
-  1. delete all userCostum claims
-  2. for each role in user add userCostumClaims 'role' = true
+
+  1. for each role in user add userCostumClaims role = true
 
 [⮝ back to table of contents](#indice)
 
 ## Helper functions
 
-- [ ] getCurrentStorageRef
+- [x] getCurrentStorageRef
 
-- [ ] getCurrentServiceRef
+- [x] getCurrentServiceRef
 
 ## Logging
 
