@@ -493,57 +493,41 @@ Each document corresponds to a user and contains a 'roles' property which is a s
 ### Security rules
 
 ```ts
-match / {
-  function isLoggedIn() {
-    return request.auth.id != null;
-  }
-
-  function hasRole(reqRole) {
-    request.auth.token.reqRole == true;
-  }
-
-  function notUpdating(field) {
-    return !(field in request.resource.data) || resource.data[field] == request.resource.data[field]
-  }
-  match /userRoles {
-    allow read: if false; // only cloud functions
-    allow write: if false; // only cloud functions
-  }
-  match /users  {
-    allow read: if false; // only cloud functions
-    allow write: if false; // only cloud functions
-  }
-  match /sagre {
-    match /storage/{storageId} {
-      allow get: if isLoggedIn() && hasRole(admin) || hasRole(cassa) || hasRole(cameriere);
-      allow list: if false;
-      allow create: if false; // only cloud functions
-      allow update: if isLoggedIn() && hasRole(admin);
-      allow delete: if false; // only cloud functions
-    }
-    match /services/{serviceID} {
-      allow create: if isLoggedIn() && hasRole(admin);
-      allow update: if isLoggedIn() && hasRole(admin); // add not updating property
-      match /orders/{orderID} {
-        allow read: if isLoggedIn() && hasRole(smazzo) || hasRole(cameriere) && waiterID == user.uid;
-        allow create: if false; // only cloud functions
-        allow update: if isLoggedIn() && hasRole(cassa) || hasRole(cameriere) && waiterID == user.uid;
-      }
-      match /courses/{courseID} {
-        allow read: if isLoggedIn() && hasRole(smazzo) || hasRole(cameriere); // problem: waiter can read other waiter's courses
-        allow create: if false; // only cloud functions
-        allow update: if isLoggedIn() && hasRole(cassa) || hasRole(cameriere); // problem: waiter can update other waiter's courses
-      }
-      match /instantOrders/{instantOrderID} {
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
         allow read: if false;
-        allow create: if isLoggedIn() && hasRole(cassaBar);
-        allow update: if false;
-        allow delete: if false;
+        allow write: if false;
+
+      match /sagre/{sagraId} {
+        allow read: if false;
+        allow write: if false;
+
+        match /services/{serviceId} {
+          allow read: if isLoggedIn() && hasRole('admin');
+          allow create: if isLoggedIn() && hasRole('admin') && //end date is null;
+          // also creation if there are no services with endDate == nulll
+          allow update: if isLoggedIn() && hasRole('admin');
+          allow delete: if false;
+        }
+        match /storage/{storageid} {
+          allow get: if isLoggedIn() && hasRole('admin') && hasRole('cassa');
+          allow create: if false;
+          allow update: if isLoggedIn() && hasRole('admin');
+          allow delete: if false;
+        }
+
       }
-    }
   }
-  allow read: if false;
-  allow write: if false;
+}
+
+
+function hasRole(reqRole) {
+  return request.auth.token[reqRole] == true;
+}
+
+function isLoggedIn() {
+  return request.auth.uid != null;
 }
 ```
 
@@ -880,7 +864,7 @@ ServiceTab (service : IService, currentStorage : ICourses[], serviceRef)
 - if service exists pass isServiceActive=true as prop to serviceStarter else pass false
 - if service exists display ServiceInfo and pass service as prop
 
-ServiceStarter (isServiceActive : boolean)
+ServiceStarter (isServiceActive : boolean, serviceRef)
 
 - if isServiceActive is true show red button to end it, i.e. set endDate where endDate is not defined
 - if isServiceActive is not active show green button to start it, i.e. create new service with endDate undefined
