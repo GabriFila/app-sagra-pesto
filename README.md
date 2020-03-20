@@ -693,6 +693,25 @@ CashRegisterReducerContext
 
 CashRegisterReducer
 
+State:
+
+- dishesInOrder
+- orderNum : number | undefined
+
+Actions:
+
+- AddDish: (payload : dishName)
+  - copy state and find course where dishes includes a dish==payload, increment qt and recalculate revenue
+- RemoveDish: (payload : dishName)
+  - copy state and find course where dishes includes a dish==payload, decrement qt and recalculate revenue
+- SendOrder:
+  - if onlyInstant == true:
+    - create new instatOrder and reset dishes state
+  - else
+    - call createOrder firebase cloud function and pass dishes then set orderNum as the one received:
+- ResetOrder:
+  - set newOrder to [] and orderNum to undefined
+
 #### Components
 
 Base structure:
@@ -876,78 +895,49 @@ ServiceInfo (service : IService)
 
 CashRegisterPage
 
-- getCurrentStorage
-- setup listener for storage
-- filter courses from storage where inMenu==true and set them to state(storage)
-- useState = storage : IStorageCourse[]
-- useReducer =
-  - newOrder : {orderNum: number, total: number, courses: IStorageCourse[]}
-  - dispatchActions: IReducerAction
-    - (ADD_DISH, dishName)
-    - (REMOVE_DISH, dishName)
-    - SEND_ORDER
-    - PRINT_ORDER
-    - RESET_ORDER
-- map state(storage) to list of CashRegisterCourse, if in newOrder there is a course with same name pass it as prop
-- CashRegisterConsole pass newOrder revenue
+- 2 sections:
+  - CashRegisterMenu (onlyInstant false)
+  - CashRegisterConsole
 
-CashRegisterCourse (courseInMenu : IStorageCourse, courseInOrder ?: IStorageCourse, dispatch)
+CashRegisterMenu (onlyInstant : boolean)
+
+- access courseNames and dishesInOrder from StorageCourses
+- map courseNames to CashRegisterCourse and pass dishes filtered base on coursename
+
+CashRegisterCourse (courseDishes : IStorageDish, onlyInstant : boolean)
 
 - map dishes to CashRegisterDish, if in courseInOrder there is a dish with the same name pass the qt as prop as prop
 
-CashRegisterDish (courseInMenu : IDish, newOrderQt : number, dispatch)
+CashRegisterDish (courseInMenu : IDish, onlyInstant : boolean)
 
-- a row with dish name, qt in storage, '-'. '+' and newOrderQt
+- access dishesInOrder and dispatch from CashRegisterContext and display orderQt
+- a row with dish name, qt in storage, '-'. '+' and orderQt
 - on click of '-' and '+' trigger dispatch action with name of dish
 
-CashRegisterConsole (revenue: number, orderNum ?: number )
+CashRegisterConsole (revenue: number, orderNum : number | undefined, onlyInstant : boolean)
 
-- display revenue from props
-- display sendButton, on click of sendButton dispatch SEND_ORDER action
-- display send button on click of printButton dispatch PRINT_ORDER action
-- display orderNum
-- display resetOrderButton
-
-cash register reducer actions:
-
-- ADD_DISH: (payload = dishName)
-  - copy state and find course where dishes includes a dish==payload, increment qt and recalculate revenue
-- REMOVE_DISH:
-  - copy state and find course where dishes includes a dish==payload, decrement qt and recalculate revenue
-- SEND_ORDER:
-  - call createOrder firebase cloud function with undefined as orderNum argument, then set orderNum as the one received
-- PRINT_ORDER:
-  - trigger print function
-- RESET_ORDER:
-- set newOrder to [] and orderNum to undefined
+- access storageDishes and dishes in order to calculate orderRevenue and display it
+- display sendIcon, on click dispatch SendOrder action and pass onlyInstant
+- if onlyInstant == false :
+  - display orderNumber
+  - display printIcon, on click trigger pdf generation and print (jsPDF)
+  - display orderNum
+  - display resetOrderIcon,on click dispatch ResetOrder action
 
 <div style="page-break-after: always;"></div>
 
 #### domain/cassaBar
 
 - [ ] InstantCashRegisterPage
-  - [ ] CashRegisterCourse
-    - [ ] CashRegisterDish
-  - [ ] InstantCashRegisterConsole
+  - [ ] CashRegisterMenu
+    - [ ] CashRegisterCourse
+      - [ ] CashRegisterDish
+  - [ ] CashRegisterConsole
 
 InstantCashRegisterPage
 
-- getCurrentStorage
-- getCurrentService
-- setup firestore listener for storage
-- useState = all courses in storage where isInstant=true
-- add useReducer:
-  - useState: {newOrder : StorageCourse[]}
-  - dispatchActions:
-    - ADD_DISH
-    - REMOVE_DISH
-    - SEND_ORDER
-- map state to CashRegisterCourse and pass single course as props
-
-InstantCashRegisterConsole
-
-- display total from props
-- on click of sendButton dispatch SEND_ORDER action
+- CashRegisterMenu with onlyInstant = true
+- CashRegisterConsole with onlyInstant = true
 
 <div style="page-break-after: always;"></div>
 
@@ -966,7 +956,7 @@ InstantCashRegisterConsole
 
 WaiterPage
 
-- getCurrentService
+- access currentServiceRef from ServiceContext
 - in one-time useEffect listen for orders with waiterId == userID.uuid and status='active' (get from firebase.auth().currentUser)
 - map orders to WaiterOrders and pass order as prop + firestoreId order by orderNum Desc
 
