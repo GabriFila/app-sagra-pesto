@@ -9,8 +9,8 @@ const useStyle = makeStyles(theme =>
   createStyles({
     menu: {
       display: 'flex',
-      flexWrap: 'wrap',
-      justifyContent: 'center',
+      flexDirection: 'column',
+      alignItems: 'center',
       flex: 1,
       width: '100%'
     }
