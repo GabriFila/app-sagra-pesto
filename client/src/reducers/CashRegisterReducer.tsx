@@ -1,11 +1,11 @@
-import * as React from "react";
-import { ICourseDish } from "../../../types";
+import * as React from 'react';
+import { ICourseDish } from '../../../types';
 
 export enum ActionType {
-  AddDish = "AddDish",
-  RemoveDish = "RemoveDish",
-  ResetOrder = "ResetOrder",
-  SendOrder = "SendOrder",
+  AddDish = 'AddDish',
+  RemoveDish = 'RemoveDish',
+  ResetOrder = 'ResetOrder',
+  SendOrder = 'SendOrder'
 }
 
 export interface ICashRegisterReducerState {
@@ -22,7 +22,7 @@ export interface ICashRegisterAction {
 
 export const initialCashRegsiterState: ICashRegisterReducerState = {
   orderNum: undefined,
-  dishes: [],
+  dishes: []
 };
 
 const addDish = (
@@ -31,11 +31,11 @@ const addDish = (
 ): ICashRegisterReducerState => {
   const newState = { ...prevState };
   const isDishAlreadyInOrder = newState.dishes.some(
-    (dish) => dish.shortName === dishShortName
+    dish => dish.shortName === dishShortName
   );
 
   if (isDishAlreadyInOrder)
-    newState.dishes.find((dish) => dish.shortName === dishShortName).qt++;
+    newState.dishes.find(dish => dish.shortName === dishShortName).qt++;
   else newState.dishes.push({ shortName: dishShortName, qt: 1 });
   return newState;
 };
@@ -46,11 +46,11 @@ const removeDish = (
 ): ICashRegisterReducerState => {
   const newState = { ...prevState };
   const isDishAlreadyInOrder = newState.dishes.some(
-    (dish) => dish.shortName === dishShortName
+    dish => dish.shortName === dishShortName
   );
 
   if (isDishAlreadyInOrder)
-    newState.dishes.find((dish) => dish.shortName === dishShortName).qt--;
+    newState.dishes.find(dish => dish.shortName === dishShortName).qt--;
 
   return newState;
 };
