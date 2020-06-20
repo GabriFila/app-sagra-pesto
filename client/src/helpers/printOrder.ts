@@ -1,5 +1,5 @@
-import jsPDF from 'jspdf';
-import { IStorageDish } from '../../types';
+import jsPDF from "jspdf";
+import { IStorageDish } from "../../../types";
 
 const printOrder = (courseNames: string[], storageDishes: IStorageDish[]) => {
   // prep useful data
@@ -12,30 +12,30 @@ const printOrder = (courseNames: string[], storageDishes: IStorageDish[]) => {
 
   const doc = new jsPDF();
 
-  doc.setFontType('bold');
-  doc.setTextColor('#4caf50');
+  doc.setFontType("bold");
+  doc.setTextColor("#4caf50");
   doc.setFontSize(30);
   let lastLine = 22; // initial line
-  doc.text(10, lastLine, 'CNGEI - Sagra del pesto 2020');
+  doc.text(10, lastLine, "CNGEI - Sagra del pesto 2020");
   lastLine += 12;
-  doc.setTextColor('#ff5722');
-  doc.setFontType('normal');
+  doc.setTextColor("#ff5722");
+  doc.setFontType("normal");
   doc.setFontSize(20);
   doc.text(10, lastLine, `Ord. ${45}`);
   doc.text(50, lastLine, `Tot: €${24}`);
   doc.text(90, lastLine, `Coperti ${2}`);
   doc.text(140, lastLine, `${date} - ${time}`);
   lastLine += 10;
-  doc.setTextColor('#000000');
+  doc.setTextColor("#000000");
   courseNames.forEach((courseName, i) => {
-    doc.setFontType('bold');
+    doc.setFontType("bold");
     doc.setFontSize(15);
     doc.text(listXStart + 10, lastLine, `${courseName}`);
     lastLine += 7;
-    doc.setFontType('normal');
+    doc.setFontType("normal");
     doc.setFontSize(14);
     storageDishes
-      .filter(dish => dish.courseName === courseName)
+      .filter((dish) => dish.courseName === courseName)
       .forEach(({ storageQt, price, name }, j) => {
         doc.text(listXStart + 15, lastLine, `${name}`);
         doc.text(listXStart + 85, lastLine, `€ ${price.toFixed(2)}`);
@@ -45,7 +45,7 @@ const printOrder = (courseNames: string[], storageDishes: IStorageDish[]) => {
     lastLine += 4;
   });
   doc.autoPrint();
-  doc.output('dataurlnewwindow');
+  doc.output("dataurlnewwindow");
 };
 
 export default printOrder;

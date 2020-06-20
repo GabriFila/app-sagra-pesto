@@ -1,6 +1,6 @@
 import React, { useEffect, useState, createContext } from "react";
 import getServiceRef from "../helpers/getServiceRef";
-import { IService } from "../../types";
+import { IService } from "../../../types";
 
 interface IServiceContext {
   service: IService | undefined;
