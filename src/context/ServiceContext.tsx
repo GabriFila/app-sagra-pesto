@@ -1,6 +1,6 @@
-import React, { useEffect, useState, createContext } from 'react';
-import getServiceRef from '../helpers/getServiceRef';
-import { IService } from '../../types';
+import React, { useEffect, useState, createContext } from "react";
+import getServiceRef from "../helpers/getServiceRef";
+import { IService } from "../../types";
 
 interface IServiceContext {
   service: IService | undefined;
@@ -8,7 +8,7 @@ interface IServiceContext {
 }
 export const ServiceContext = createContext<IServiceContext>({
   service: undefined,
-  serviceRef: null
+  serviceRef: null,
 });
 
 const ServiceContextProvider: React.FunctionComponent = ({ children }) => {
@@ -19,17 +19,17 @@ const ServiceContextProvider: React.FunctionComponent = ({ children }) => {
 
   useEffect(() => {
     const unsubscribeService = getServiceRef().onSnapshot(
-      snaps => {
+      (snaps) => {
         if (snaps.docs.length === 0) setCurrentService(undefined);
         else if (snaps.docs.length > 1) {
           // TODO add error to tell user
         } else
-          snaps.forEach(snap => {
+          snaps.forEach((snap) => {
             setCurrentService(snap.data() as IService);
-            setCurrentServiceRef(snap.ref);
+            setCurrentServiceRef(snap.ref as any);
           });
       },
-      err => console.error('Service context: ', err)
+      (err) => console.error("Service context: ", err)
     );
     return () => unsubscribeService();
   }, []);
