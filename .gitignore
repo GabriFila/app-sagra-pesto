@@ -1,6 +1,9 @@
 #Firebase files
 .firebase/
 
+#Node related
+package-lock.json
+
 # Logs
 logs
 *.log
