@@ -5,7 +5,7 @@ import PrivateRoleRoute from "./components/PrivateRoleRoute";
 import LoginPage from "./components/LoginPage";
 import RegisterPage from "./components/RegisterPage";
 import HomePage from "./components/HomePage";
-import AdminPage from "./components/Admin/AdminPage";
+import AdminPage from "./components/admin/AdminPage";
 import AuthProvider from "./context/AuthContext";
 import Menu from "./components/TopBar";
 import CashRegisterPage from "./components/cashRegister/CashRegisterPage";
