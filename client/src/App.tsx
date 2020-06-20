@@ -1,14 +1,14 @@
-import React from 'react';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import React from "react";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
 
-import PrivateRoleRoute from './components/PrivateRoleRoute';
-import LoginPage from './Pages/LoginPage';
-import RegisterPage from './Pages/RegisterPage';
-import HomePage from './Pages/HomePage';
-import AdminPage from './components/Admin/AdminPage';
-import AuthProvider from './context/AuthContext';
-import Menu from './components/TopBar';
-import CashRegisterPage from './components/cashRegister/CashRegisterPage';
+import PrivateRoleRoute from "./components/PrivateRoleRoute";
+import LoginPage from "./components/LoginPage";
+import RegisterPage from "./components/RegisterPage";
+import HomePage from "./components/HomePage";
+import AdminPage from "./components/Admin/AdminPage";
+import AuthProvider from "./context/AuthContext";
+import Menu from "./components/TopBar";
+import CashRegisterPage from "./components/cashRegister/CashRegisterPage";
 
 function App() {
   return (
@@ -23,13 +23,13 @@ function App() {
               component={HomePage}
             />
             <PrivateRoleRoute
-              requiredRoles={['admin']}
+              requiredRoles={["admin"]}
               exact
               path="/admin"
               component={AdminPage}
             />
             <PrivateRoleRoute
-              requiredRoles={['cassa']}
+              requiredRoles={["cassa"]}
               exact
               path="/cassa"
               component={CashRegisterPage}
