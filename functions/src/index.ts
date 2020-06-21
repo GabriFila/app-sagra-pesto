@@ -1,56 +1,43 @@
-import * as functions from 'firebase-functions';
-import * as admin from 'firebase-admin';
+import * as functions from "firebase-functions";
+import * as admin from "firebase-admin";
 // import { IService, IOrder } from '../../types';
-import { IUserSagraRolesDoc } from '../../types';
-import rolesToClaims from './helpers/rolesToClaims';
+import { IUserSagraRolesDoc } from "../../types";
+import rolesToClaims from "./helpers/rolesToClaims";
 
 admin.initializeApp();
 const db = admin.firestore();
 
-// // Start writing Firebase Functions
-// // https://firebase.google.com/docs/functions/typescript
-//
 export const onUserCreate = functions
-  .region('europe-west2')
+  .region("europe-west2")
   .auth.user()
-  .onCreate(user => {
+  .onCreate((user) => {
     const { uid, email } = user;
     return db
-      .collection('userSagraRoles')
+      .collection("userSagraRoles")
       .doc(`sr_${uid}`)
       .set({ roles: [], email })
       .then(() => console.log(`User roles of ${email}  created`))
-      .then(() =>
-        db
-          .collection('users')
-          .doc(uid)
-          .set({})
-      )
-      .catch(err => console.error(err));
+      .then(() => db.collection("users").doc(uid).set({}))
+      .catch((err) => console.error(err));
   });
 
 export const onUserDelete = functions
-  .region('europe-west2')
+  .region("europe-west2")
   .auth.user()
-  .onDelete(user => {
+  .onDelete((user) => {
     const { uid, email } = user;
     return db
-      .collection('userSagraRoles')
+      .collection("userSagraRoles")
       .doc(`sr_${uid}`)
       .delete()
       .then(() => console.log(`User roles of ${email} deleted`))
-      .then(() =>
-        db
-          .collection('users')
-          .doc(uid)
-          .delete()
-      )
-      .catch(err => console.error(err));
+      .then(() => db.collection("users").doc(uid).delete())
+      .catch((err) => console.error(err));
   });
 
 export const onUserSagraRolesUpdate = functions
-  .region('europe-west2')
-  .firestore.document('userSagraRoles/{docId}')
+  .region("europe-west2")
+  .firestore.document("userSagraRoles/{docId}")
   .onUpdate((change, ctx) => {
     const uid = (ctx.params.docId as string).substring(3);
     const { roles, name } = change.after.data() as IUserSagraRolesDoc;
@@ -65,7 +52,7 @@ export const onUserSagraRolesUpdate = functions
       .then(() =>
         console.log(`Roles of ${name} updated to ${roles.toString()}`)
       )
-      .catch(err => console.error(err));
+      .catch((err) => console.error(err));
   });
 
 // export const createOrder = functions
