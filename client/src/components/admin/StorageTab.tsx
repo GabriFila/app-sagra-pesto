@@ -26,7 +26,7 @@ const StorageTab: React.FunctionComponent = () => {
         <StorageCourse
           key={courseName}
           courseName={courseName}
-          storageDishes={storageDishes.filter(
+          courseDishes={storageDishes.filter(
             dish => dish.courseName === courseName
           )}
         />

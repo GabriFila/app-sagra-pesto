@@ -1,5 +1,4 @@
 import React, { useContext, useState } from 'react';
-import { IStorageDish } from '../../../../types';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Divider from '@material-ui/core/Divider';
@@ -13,7 +12,11 @@ import CancelIcon from '@material-ui/icons/Cancel';
 import { ServiceContext } from '../../context/ServiceContext';
 
 interface IStorageDishProps {
-  storageDish: IStorageDish;
+  name: string;
+  price: number;
+  storageQt: number;
+  shortName: string;
+  isInMenu: boolean;
 }
 const useStyle = makeStyles(theme =>
   createStyles({
@@ -25,11 +28,9 @@ const useStyle = makeStyles(theme =>
   })
 );
 
-const StorageDish: React.FunctionComponent<IStorageDishProps> = ({
-  storageDish
-}) => {
+const StorageDish: React.FunctionComponent<IStorageDishProps> = props => {
   const classes = useStyle();
-  const { name, price, storageQt, shortName, isInMenu } = storageDish;
+  const { name, price, storageQt, shortName, isInMenu } = props;
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
 
@@ -47,16 +48,26 @@ const StorageDish: React.FunctionComponent<IStorageDishProps> = ({
   const [inputQt, setInputQt] = useState(storageQt);
 
   const changeInMenu = () => {
-    storageDishes.find(dish => dish.name === name).isInMenu = !isInMenu;
-    storageRef.set({ storageDishes });
+    storageRef.set({
+      storageDishes: storageDishes.map(dish => {
+        if (dish.name === name) dish.isInMenu = !isInMenu;
+        return dish;
+      })
+    });
   };
 
   const setQtAndPrice = () => {
-    storageDishes.find(dish => dish.name === name).price = inputPrice;
-    storageDishes.find(dish => dish.name === name).storageQt = inputQt;
-
-    storageRef.set({ storageCourses: storageDishes });
+    storageRef.set({
+      storageDishes: storageDishes.map(dish => {
+        if (dish.name === name) {
+          dish.price = inputPrice;
+          dish.storageQt = inputQt;
+        }
+        return dish;
+      })
+    });
   };
+
   return (
     <div className={classes.dish}>
       <Typography variant="body1" style={{ flex: 4 }}>
