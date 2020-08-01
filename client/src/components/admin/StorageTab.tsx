@@ -18,17 +18,16 @@ const useStyles = makeStyles(theme => ({
 
 const StorageTab: React.FunctionComponent = () => {
   const classes = useStyles();
-  const { storageDishes, courseNames } = useContext(StorageContext);
+  const { storageCourses } = useContext(StorageContext);
 
   return (
     <Paper elevation={6} className={classes.storageTab}>
-      {courseNames.map(courseName => (
+      {storageCourses.map(({ courseName, dishes, kitchen }) => (
         <StorageCourse
           key={courseName}
           courseName={courseName}
-          courseDishes={storageDishes.filter(
-            dish => dish.courseName === courseName
-          )}
+          courseDishes={dishes}
+          kitchen={kitchen}
         />
       ))}
     </Paper>

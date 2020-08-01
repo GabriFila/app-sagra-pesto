@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import { IStorageDish } from '../../../../types';
 import { CashRegisterContext } from '../../context/CashRegisterContext';
 import { ActionType } from '../../reducers/CashRegisterReducer';
 import Typography from '@material-ui/core/Typography';
@@ -10,10 +9,16 @@ import RemoveIcon from '@material-ui/icons/Remove';
 import IconButton from '@material-ui/core/IconButton';
 
 interface ICashRegisterDishProps {
-  dish: IStorageDish;
+  name: string;
+  price: number;
+  storageQt: number;
+  shortName: string;
+  courseName: string;
+  kitchen: string;
+  orderQt: number;
 }
 
-const useStyle = makeStyles(theme =>
+const useStyle = makeStyles(() =>
   createStyles({
     base: {
       display: 'flex',
@@ -24,18 +29,22 @@ const useStyle = makeStyles(theme =>
   })
 );
 
-const CashRegisterDish: React.FunctionComponent<ICashRegisterDishProps> = ({
-  dish
-}) => {
+const CashRegisterDish: React.FunctionComponent<ICashRegisterDishProps> = props => {
   const classes = useStyle();
 
-  const { name, price, storageQt, shortName } = dish;
+  const {
+    name,
+    price,
+    storageQt,
+    shortName,
+    courseName,
+    orderQt,
+    kitchen
+  } = props;
 
   const theme = useTheme();
   const isTablet = useMediaQuery(theme.breakpoints.down('sm'));
-  const { state, dispatch } = useContext(CashRegisterContext);
-  let dishQtInOrder =
-    state.dishes.find(dish => dish.shortName === shortName)?.qt || 0;
+  const { dispatch } = useContext(CashRegisterContext);
 
   return (
     <div className={classes.base}>
@@ -53,11 +62,11 @@ const CashRegisterDish: React.FunctionComponent<ICashRegisterDishProps> = ({
         {storageQt}
       </Typography>
       <IconButton
-        disabled={dishQtInOrder === 0}
+        disabled={orderQt === 0}
         onClick={() =>
           dispatch({
             type: ActionType.RemoveDish,
-            payload: { dishShortName: shortName }
+            payload: { dishShortName: shortName, courseName }
           })
         }
         color="secondary"
@@ -65,14 +74,14 @@ const CashRegisterDish: React.FunctionComponent<ICashRegisterDishProps> = ({
         <RemoveIcon style={{ flex: 1 }} />
       </IconButton>
       <Typography align="center" variant="body1" style={{ flex: 1 }}>
-        {dishQtInOrder || 0}
+        {orderQt || 0}
       </Typography>
       <IconButton
-        disabled={dishQtInOrder >= storageQt}
+        disabled={orderQt >= storageQt}
         onClick={() =>
           dispatch({
             type: ActionType.AddDish,
-            payload: { dishShortName: shortName }
+            payload: { dishShortName: shortName, price, courseName, kitchen }
           })
         }
         color="primary"
@@ -83,4 +92,4 @@ const CashRegisterDish: React.FunctionComponent<ICashRegisterDishProps> = ({
   );
 };
 
-export default CashRegisterDish;
+export default React.memo(CashRegisterDish);

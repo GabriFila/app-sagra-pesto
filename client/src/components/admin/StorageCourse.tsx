@@ -12,23 +12,25 @@ const useStyle = makeStyles(theme =>
 interface IStorageCourseProps {
   courseDishes: IStorageDish[];
   courseName: string;
+  kitchen: string;
 }
 
 const StorageCourse: React.FunctionComponent<IStorageCourseProps> = ({
   courseDishes,
-  courseName
+  courseName,
+  kitchen
 }) => {
   const classes = useStyle();
   return (
     <div className={classes.storageCourse}>
       <Typography color="primary" variant="h5">
-        {courseName}
+        {courseName} @ {kitchen}
       </Typography>
       {courseDishes.map((dish, i) => (
         <StorageDish
           name={dish.name}
           price={dish.price}
-          storageQt={dish.storageQt}
+          storageQt={dish.qt}
           shortName={dish.shortName}
           isInMenu={dish.isInMenu}
           key={dish.name}

@@ -1,3 +1,4 @@
 #Firebase files
 .firebase/
+.history/
 *.log

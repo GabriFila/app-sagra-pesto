@@ -1,33 +1,26 @@
 import React, { useEffect, useState, createContext } from 'react';
 import getStorageRef from '../helpers/getStorageRef';
-import { IStorage, IStorageDish } from '../../../types';
+import { IStorage, IStorageCourse } from '../../../types';
 
 interface IStorageContext {
-  storageDishes: IStorageDish[];
-  courseNames: string[];
+  storageCourses: IStorageCourse[];
   storageRef: any;
 }
 export const StorageContext = createContext<IStorageContext>({
-  storageDishes: [],
-  courseNames: [],
+  storageCourses: [],
   storageRef: null
 });
 
 const StorageContextProvider: React.FunctionComponent = ({ children }) => {
-  const [storageDishes, setStorageDishes] = useState<IStorageDish[]>([]);
+  const [storageCourses, setStorageCourses] = useState<IStorageCourse[]>([]);
   const [storageRef, setStroageRef] = useState(getStorageRef);
-  const [courseNames, setCourseNames] = useState([]);
 
   useEffect(() => {
     const unsubscribe = getStorageRef().onSnapshot(
       snap => {
         setStroageRef(snap.ref);
-        setStorageDishes((snap.data() as IStorage).storageDishes);
-        setCourseNames(
-          (snap.data() as IStorage).storageDishes
-            .map(dish => dish.courseName)
-            .filter((x, i, a) => a.indexOf(x) === i)
-        );
+        console.log(snap.data());
+        setStorageCourses((snap.data() as IStorage).storageCourses);
       },
       err => console.error('storage context', err)
     );
@@ -36,7 +29,7 @@ const StorageContextProvider: React.FunctionComponent = ({ children }) => {
 
   return (
     <StorageContext.Provider
-      value={{ storageDishes: storageDishes, storageRef, courseNames }}
+      value={{ storageCourses: storageCourses, storageRef }}
     >
       {children}
     </StorageContext.Provider>

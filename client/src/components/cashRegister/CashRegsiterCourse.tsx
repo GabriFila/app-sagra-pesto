@@ -1,14 +1,18 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Paper from '@material-ui/core/Paper';
-import { IStorageDish } from '../../../../types';
+import { IStorageDish, IOrderDish } from '../../../../types';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import CashRegisterDish from './CashRegisterDish';
 import TextField from '@material-ui/core/TextField';
+import { CashRegisterContext } from '../../context/CashRegisterContext';
+import { ActionType } from '../../reducers/CashRegisterReducer';
 
 interface ICashRegisterCourseProps {
   courseName: string;
+  kitchen: string;
   storageDishes: IStorageDish[];
+  orderDishes: IOrderDish[];
 }
 
 const useStyle = makeStyles(theme =>
@@ -29,11 +33,15 @@ const useStyle = makeStyles(theme =>
     }
   })
 );
+
 const CashRegisterCourse: React.FunctionComponent<ICashRegisterCourseProps> = ({
   courseName,
-  storageDishes: dishes
+  storageDishes: dishes,
+  kitchen,
+  orderDishes
 }) => {
   const classes = useStyle();
+  const { dispatch } = useContext(CashRegisterContext);
   return (
     <Paper elevation={6} className={classes.course}>
       <div
@@ -49,9 +57,21 @@ const CashRegisterCourse: React.FunctionComponent<ICashRegisterCourseProps> = ({
         {courseName}
       </Typography>
       {dishes
-        .filter(dish => dish.isInMenu)
-        .map(dish => (
-          <CashRegisterDish key={dish.shortName} dish={dish} />
+        .filter(({ isInMenu }) => isInMenu)
+        .map(({ price, qt, shortName, name }) => (
+          <CashRegisterDish
+            key={shortName}
+            name={name}
+            kitchen={kitchen}
+            price={price}
+            storageQt={qt}
+            shortName={shortName}
+            courseName={courseName}
+            orderQt={
+              orderDishes &&
+              orderDishes.find(dish => dish.shortName === shortName)?.qt
+            }
+          />
         ))}
       <TextField
         multiline
@@ -59,9 +79,15 @@ const CashRegisterCourse: React.FunctionComponent<ICashRegisterCourseProps> = ({
         placeholder={`Note ${courseName}`}
         variant="standard"
         className={classes.notes}
+        onChange={e =>
+          dispatch({
+            type: ActionType.ChangeNotes,
+            payload: { notes: e.target.value, courseName, kitchen }
+          })
+        }
       />
     </Paper>
   );
 };
 
-export default CashRegisterCourse;
+export default React.memo(CashRegisterCourse);

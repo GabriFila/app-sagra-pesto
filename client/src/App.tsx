@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 
 import PrivateRoleRoute from './components/PrivateRoleRoute';
 import LoginPage from './components/LoginPage';
@@ -36,6 +36,9 @@ function App() {
             />
             <Route exact path="/login" component={LoginPage} />
             <Route exact path="/register" component={RegisterPage} />
+            <Route path="/">
+              <Redirect to="/" />
+            </Route>
           </Switch>
         </Menu>
       </BrowserRouter>

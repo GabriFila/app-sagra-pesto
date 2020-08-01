@@ -34,7 +34,7 @@ const StorageDish: React.FunctionComponent<IStorageDishProps> = props => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
 
-  const { storageDishes, storageRef } = useContext(StorageContext);
+  const { storageCourses, storageRef } = useContext(StorageContext);
   const { service } = useContext(ServiceContext);
 
   const { startingDishes } = service || {};
@@ -49,22 +49,37 @@ const StorageDish: React.FunctionComponent<IStorageDishProps> = props => {
 
   const changeInMenu = () => {
     storageRef.set({
-      storageDishes: storageDishes.map(dish => {
-        if (dish.name === name) dish.isInMenu = !isInMenu;
-        return dish;
-      })
+      storageCourses: storageCourses.map(course => ({
+        ...course,
+        dishes: course.dishes.map(dish => {
+          if (dish.name === name) dish.isInMenu = !isInMenu;
+          return dish;
+        })
+        //     .map(dish => {
+        //   if (dish.name === name) dish.isInMenu = !isInMenu;
+        //   return dish;
+        // })
+      }))
     });
   };
 
   const setQtAndPrice = () => {
     storageRef.set({
-      storageDishes: storageDishes.map(dish => {
-        if (dish.name === name) {
-          dish.price = inputPrice;
-          dish.storageQt = inputQt;
-        }
-        return dish;
-      })
+      storageCourses: storageCourses.map(course => ({
+        ...course,
+        dishes: course.dishes.map(dish => {
+          if (dish.name === name) dish.price = inputPrice;
+          dish.qt = inputQt;
+          return dish;
+        })
+        // })).map(dish => {
+        //   if (dish.name === name) {
+        //     dish.price = inputPrice;
+        //     dish.storageQt = inputQt;
+        //   }
+        //   return dish;
+        // })
+      }))
     });
   };
 

@@ -15,7 +15,8 @@
     "jsx": "react",
     "sourceMap": true,
     "strictNullChecks": false,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "downlevelIteration": true
   },
   "include": ["src"]
 }

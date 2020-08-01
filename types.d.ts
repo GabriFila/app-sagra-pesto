@@ -4,7 +4,20 @@ export interface IUserSagraRolesDoc {
 }
 
 export interface IStorage {
-  storageDishes: IStorageDish[];
+  storageCourses: IStorageCourse[];
+}
+
+export interface IStorageCourse extends ICourse {
+  dishes: IStorageDish[];
+}
+
+export interface ICourse {
+  courseName: string;
+  kitchen: string;
+}
+export interface IOrderCourse extends ICourse {
+  dishes: IOrderDish[];
+  notes: string;
 }
 
 export interface IService {
@@ -16,25 +29,24 @@ export interface IService {
   lastOrderNum: number; // progressive counter for orders
   totalInstantOrders: number;
   totalOrders: number;
-  startingDishes: ICourseDish[];
+  startingDishes: IDish[];
 }
 interface IDish {
   shortName: string;
-}
-export interface ICourseDish extends IDish {
   qt: number;
 }
-
-export interface IStorageDish extends IDish {
-  courseName: string;
-  name: string;
-  storageQt: number;
+export interface IOrderDish extends IDish {
   price: number;
+}
+
+export interface IStorageDish extends IOrderDish {
+  name: string;
   isInMenu: boolean;
   isInstant: boolean;
 }
 
 export interface IOrder {
+  people: number;
   orderNum: number;
   status: string; // (pending, active, completed, deleted)
   waiterName: string; // display name of waiter
@@ -44,11 +56,9 @@ export interface IOrder {
   notes: string;
 }
 
-export interface ICourse {
-  courseName: string;
-  kitchen: string;
+export interface IDBCourse extends ICourse {
+  dishes: IDish[];
   orderNum: number;
   status: string; // (wait,prep,ready,delivered)
   notes: string;
-  dishes: ICourseDish[];
 }

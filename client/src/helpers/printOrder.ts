@@ -1,14 +1,16 @@
 import jsPDF from 'jspdf';
-import { IStorageDish } from '../../../types';
+import { IOrderCourse, IStorageCourse } from '../../../types';
 
-const printOrder = (courseNames: string[], storageDishes: IStorageDish[]) => {
+const printOrder = (
+  storageCourses: IStorageCourse[],
+  courses: IOrderCourse[]
+) => {
   // prep useful data
   const today = new Date();
   const year = today.getFullYear();
   const date = `${year}/${today.getMonth() + 1}/${today.getDate()}`;
   const time = `${today.getHours()}:${today.getMinutes()}`;
   const listXStart = 30;
-  // start x = 10
 
   const doc = new jsPDF();
 
@@ -27,21 +29,22 @@ const printOrder = (courseNames: string[], storageDishes: IStorageDish[]) => {
   doc.text(140, lastLine, `${date} - ${time}`);
   lastLine += 10;
   doc.setTextColor('#000000');
-  courseNames.forEach((courseName, i) => {
+  storageCourses.forEach(({ courseName, dishes }) => {
     doc.setFontType('bold');
     doc.setFontSize(15);
     doc.text(listXStart + 10, lastLine, `${courseName}`);
     lastLine += 7;
     doc.setFontType('normal');
     doc.setFontSize(14);
-    storageDishes
-      .filter(dish => dish.courseName === courseName)
-      .forEach(({ storageQt, price, name }, j) => {
-        doc.text(listXStart + 15, lastLine, `${name}`);
-        doc.text(listXStart + 85, lastLine, `€ ${price.toFixed(2)}`);
-        doc.text(listXStart + 120, lastLine, `${2}`);
-        lastLine += 6;
-      });
+    dishes.forEach(({ qt, price, name, shortName }) => {
+      const orderQt = courses
+        .find(course => course.courseName === courseName)
+        ?.dishes.find(dish => dish.shortName === shortName)?.qt;
+      doc.text(listXStart + 15, lastLine, `${name}`);
+      doc.text(listXStart + 85, lastLine, `€ ${price.toFixed(2)}`);
+      doc.text(listXStart + 120, lastLine, `${orderQt || '-'}`);
+      lastLine += 6;
+    });
     lastLine += 4;
   });
   doc.autoPrint();

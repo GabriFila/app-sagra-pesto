@@ -7,7 +7,6 @@ import PrintIcon from '@material-ui/icons/Print';
 import ReplayIcon from '@material-ui/icons/Replay';
 import { StorageContext } from '../../context/StorageContext';
 import { CashRegisterContext } from '../../context/CashRegisterContext';
-
 import { ActionType } from '../../reducers/CashRegisterReducer';
 import printOrder from '../../helpers/printOrder';
 
@@ -37,21 +36,19 @@ const useStyle = makeStyles(theme =>
     }
   })
 );
+
 const CashRegisterConsole: React.FunctionComponent<ICashRegisterMenuProps> = () => {
   const classes = useStyle();
 
-  const { storageDishes, courseNames } = useContext(StorageContext);
+  const { storageCourses } = useContext(StorageContext);
+
   const { state, dispatch } = useContext(CashRegisterContext);
 
-  const { dishes } = state;
-  let total = 0;
-
-  dishes.forEach(dishInOrder => {
-    const { price } = storageDishes.find(
-      dish => dish.shortName === dishInOrder.shortName
-    );
-    total += price * dishInOrder.qt;
-  });
+  const { courses } = state;
+  const total = courses
+    .map(course => course.dishes)
+    .reduce((acc, val) => [...acc, ...val], [])
+    .reduce((acc, val) => acc + val.price * val.qt, 0);
 
   const resetOrder = () => {
     dispatch({ type: ActionType.ResetOrder });
@@ -74,7 +71,7 @@ const CashRegisterConsole: React.FunctionComponent<ICashRegisterMenuProps> = () 
       <IconButton
         className={classes.doneBtn}
         color="primary"
-        onClick={() => printOrder(courseNames, storageDishes)}
+        onClick={() => printOrder(storageCourses, courses)}
       >
         <PrintIcon fontSize="large" />
       </IconButton>

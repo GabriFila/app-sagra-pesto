@@ -1,8 +1,10 @@
 import firebase from 'firebase/app';
+import 'firebase/functions';
 import 'firebase/auth';
 import 'firebase/firestore';
 import 'firebase/analytics';
-// Your web app's Firebase configuration
+
+// Firebase configuration
 const firebaseConfig = {
   apiKey: 'AIzaSyAuq8KSe5pyxqEH8n4GbFcfXHw8RlmFg6U',
   authDomain: 'its-cngei-genova.firebaseapp.com',
@@ -19,3 +21,10 @@ firebase.analytics();
 export default firebase;
 export const db = firebase.firestore();
 export const auth = firebase.auth();
+
+const functions = firebase.functions();
+if (window.location.hostname === 'localhost') {
+  // functions.useFunctionsEmulator('http://172.24.90.98:5001');
+}
+
+// const func = functions.httpsCallable('helloWorld');
