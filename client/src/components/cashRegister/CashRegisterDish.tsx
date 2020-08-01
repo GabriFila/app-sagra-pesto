@@ -92,4 +92,7 @@ const CashRegisterDish: React.FunctionComponent<ICashRegisterDishProps> = props 
   );
 };
 
-export default React.memo(CashRegisterDish);
+export default React.memo(
+  CashRegisterDish,
+  (prevProps, nextProps) => prevProps.orderQt == nextProps.orderQt
+);
