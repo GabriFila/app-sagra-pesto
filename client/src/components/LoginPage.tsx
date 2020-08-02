@@ -95,7 +95,7 @@ export default function LoginPage() {
             id="password"
             autoComplete="current-password"
             onChange={e => setPsw(e.target.value)}
-          />{' '}
+          />
           {loginOutcome === 'error' ? (
             <Typography color="error">
               Le credenziali non sono valide
@@ -111,10 +111,7 @@ export default function LoginPage() {
           >
             Login
           </Button>
-          <Link
-            to="/register"
-            style={{ textDecoration: 'none', color: 'black' }}
-          >
+          <Link to="/register">
             <Button fullWidth variant="contained" color="secondary">
               Registrati
             </Button>

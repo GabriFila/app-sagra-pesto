@@ -18,6 +18,10 @@ const theme = createMuiTheme({
         html: {
           'scroll-behavior': 'smooth'
         },
+        a: {
+          textDecoration: 'none',
+          color: 'black'
+        },
         '*::-webkit-scrollbar': {
           width: '4px'
         },

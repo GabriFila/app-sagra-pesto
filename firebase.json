@@ -19,5 +19,16 @@
   "firestore": {
     "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"
+  },
+  "emulators": {
+    "functions": {
+      "host": "172.20.143.13",
+      "port": 5001
+    },
+    "firestore": {
+      "host": "172.20.143.13",
+      "port": 8080
+    },
+    "ui": { "enabled": true }
   }
 }

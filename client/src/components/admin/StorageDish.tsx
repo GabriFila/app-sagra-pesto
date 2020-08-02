@@ -55,10 +55,6 @@ const StorageDish: React.FunctionComponent<IStorageDishProps> = props => {
           if (dish.name === name) dish.isInMenu = !isInMenu;
           return dish;
         })
-        //     .map(dish => {
-        //   if (dish.name === name) dish.isInMenu = !isInMenu;
-        //   return dish;
-        // })
       }))
     });
   };
@@ -68,17 +64,12 @@ const StorageDish: React.FunctionComponent<IStorageDishProps> = props => {
       storageCourses: storageCourses.map(course => ({
         ...course,
         dishes: course.dishes.map(dish => {
-          if (dish.name === name) dish.price = inputPrice;
-          dish.qt = inputQt;
+          if (dish.name === name) {
+            dish.price = inputPrice;
+            dish.qt = inputQt;
+          }
           return dish;
         })
-        // })).map(dish => {
-        //   if (dish.name === name) {
-        //     dish.price = inputPrice;
-        //     dish.storageQt = inputQt;
-        //   }
-        //   return dish;
-        // })
       }))
     });
   };

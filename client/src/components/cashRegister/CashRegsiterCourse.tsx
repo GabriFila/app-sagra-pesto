@@ -21,8 +21,7 @@ const useStyle = makeStyles(theme =>
       padding: theme.spacing(3),
       width: '100%',
       maxWidth: 500,
-      margin: 10,
-      [theme.breakpoints.down('sm')]: {}
+      margin: 10
     },
     courseName: {
       paddingBottom: 10
@@ -30,6 +29,12 @@ const useStyle = makeStyles(theme =>
     notes: {
       margin: 20,
       width: '90%'
+    },
+    courseAnchor: {
+      position: 'relative',
+      top: '-80px',
+      visibility: 'hidden',
+      display: 'block'
     }
   })
 );
@@ -44,15 +49,7 @@ const CashRegisterCourse: React.FunctionComponent<ICashRegisterCourseProps> = ({
   const { dispatch } = useContext(CashRegisterContext);
   return (
     <Paper elevation={6} className={classes.course}>
-      <div
-        id={courseName}
-        style={{
-          position: 'relative',
-          top: '-80px',
-          visibility: 'hidden',
-          display: 'block'
-        }}
-      ></div>
+      <div id={courseName} className={classes.courseAnchor}></div>
       <Typography color="primary" variant="h5" className={classes.courseName}>
         {courseName}
       </Typography>
@@ -81,8 +78,8 @@ const CashRegisterCourse: React.FunctionComponent<ICashRegisterCourseProps> = ({
         className={classes.notes}
         onChange={e =>
           dispatch({
-            type: ActionType.ChangeNotes,
-            payload: { notes: e.target.value, courseName, kitchen }
+            type: ActionType.ChangeNote,
+            payload: { note: e.target.value, courseName, kitchen }
           })
         }
       />

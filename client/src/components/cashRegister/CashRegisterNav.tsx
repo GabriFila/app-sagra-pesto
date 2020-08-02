@@ -7,7 +7,7 @@ import {
 } from '@material-ui/core/styles';
 import { StorageContext } from '../../context/StorageContext';
 import Typography from '@material-ui/core/Typography';
-import { useMediaQuery } from '@material-ui/core';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 const consoleHeight = 400;
 const useStyles = makeStyles((theme: Theme) =>

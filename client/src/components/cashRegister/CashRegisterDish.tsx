@@ -57,12 +57,16 @@ const CashRegisterDish: React.FunctionComponent<ICashRegisterDishProps> = props 
       <Typography
         align="center"
         variant="body1"
-        style={{ flex: 3, backgroundColor: storageQt < 30 ? '#db9486' : null }}
+        style={{
+          flex: 3,
+          backgroundColor: storageQt < 30 ? '#db9486' : null,
+          borderRadius: 5
+        }}
       >
         {storageQt}
       </Typography>
       <IconButton
-        disabled={orderQt === 0}
+        disabled={orderQt === undefined || orderQt === 0}
         onClick={() =>
           dispatch({
             type: ActionType.RemoveDish,
@@ -77,7 +81,6 @@ const CashRegisterDish: React.FunctionComponent<ICashRegisterDishProps> = props 
         {orderQt || 0}
       </Typography>
       <IconButton
-        disabled={orderQt >= storageQt}
         onClick={() =>
           dispatch({
             type: ActionType.AddDish,
@@ -92,7 +95,4 @@ const CashRegisterDish: React.FunctionComponent<ICashRegisterDishProps> = props 
   );
 };
 
-export default React.memo(
-  CashRegisterDish,
-  (prevProps, nextProps) => prevProps.orderQt == nextProps.orderQt
-);
+export default React.memo(CashRegisterDish);

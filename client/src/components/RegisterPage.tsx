@@ -158,7 +158,7 @@ export default function RegisterPage() {
           >
             Registrati
           </Button>
-          <Link to="/login" style={{ textDecoration: 'none', color: 'black' }}>
+          <Link to="/login">
             <Button fullWidth variant="contained" color="secondary">
               Accedi
             </Button>

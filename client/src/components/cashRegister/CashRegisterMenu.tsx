@@ -1,8 +1,11 @@
 import React, { useContext } from 'react';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import CashRegisterCourse from './CashRegsiterCourse';
+import TextField from '@material-ui/core/TextField';
+import Paper from '@material-ui/core/Paper';
 import { StorageContext } from '../../context/StorageContext';
 import { CashRegisterContext } from '../../context/CashRegisterContext';
+import { ActionType } from '../../reducers/CashRegisterReducer';
 
 interface ICashRegisterMenuProps {}
 
@@ -14,15 +17,44 @@ const useStyle = makeStyles(theme =>
       alignItems: 'center',
       flex: 1,
       width: '100%'
+    },
+    notes: {
+      width: '90%'
+    },
+    orderNote: {
+      padding: theme.spacing(3),
+      width: '100%',
+      maxWidth: 500,
+      margin: 10
     }
   })
 );
 const CashRegisterMenu: React.FunctionComponent<ICashRegisterMenuProps> = () => {
   const classes = useStyle();
   const { storageCourses } = useContext(StorageContext);
-  const { state } = useContext(CashRegisterContext);
+  const { state, dispatch } = useContext(CashRegisterContext);
+  const { courses, waitingOrderRes } = state;
+  console.log(waitingOrderRes);
   return (
-    <div className={classes.menu}>
+    <div
+      className={classes.menu}
+      style={waitingOrderRes ? { pointerEvents: 'none', opacity: '50%' } : {}}
+    >
+      <Paper className={classes.orderNote} elevation={6}>
+        <TextField
+          multiline
+          rows="2"
+          placeholder={'Note ordine'}
+          variant="standard"
+          className={classes.notes}
+          onChange={e =>
+            dispatch({
+              type: ActionType.ChangeOrderNote,
+              payload: { note: e.target.value }
+            })
+          }
+        />
+      </Paper>
       {storageCourses.map(({ courseName, dishes, kitchen }) => (
         <CashRegisterCourse
           key={courseName}
@@ -30,7 +62,7 @@ const CashRegisterMenu: React.FunctionComponent<ICashRegisterMenuProps> = () => 
           kitchen={kitchen}
           storageDishes={dishes}
           orderDishes={
-            state.courses.filter(course => course.courseName === courseName)[0]
+            courses.filter(course => course.courseName === courseName)[0]
               ?.dishes
           }
         />

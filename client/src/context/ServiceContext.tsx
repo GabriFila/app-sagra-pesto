@@ -5,10 +5,12 @@ import { IService } from '../../../types';
 interface IServiceContext {
   service: IService | undefined;
   serviceRef: any;
+  serviceId: string;
 }
 export const ServiceContext = createContext<IServiceContext>({
   service: undefined,
-  serviceRef: null
+  serviceRef: null,
+  serviceId: undefined
 });
 
 const ServiceContextProvider: React.FunctionComponent = ({ children }) => {
@@ -16,6 +18,7 @@ const ServiceContextProvider: React.FunctionComponent = ({ children }) => {
     undefined
   );
   const [serviceRef, setCurrentServiceRef] = useState();
+  const [serviceId, setCurrentServiceId] = useState('');
 
   useEffect(() => {
     const unsubscribeService = getServiceRef().onSnapshot(
@@ -27,6 +30,7 @@ const ServiceContextProvider: React.FunctionComponent = ({ children }) => {
           snaps.forEach(snap => {
             setCurrentService(snap.data() as IService);
             setCurrentServiceRef(snap.ref as any);
+            setCurrentServiceId(snap.id);
           });
       },
       err => console.error('Service context: ', err)
@@ -35,7 +39,7 @@ const ServiceContextProvider: React.FunctionComponent = ({ children }) => {
   }, []);
 
   return (
-    <ServiceContext.Provider value={{ service, serviceRef }}>
+    <ServiceContext.Provider value={{ service, serviceRef, serviceId }}>
       {children}
     </ServiceContext.Provider>
   );

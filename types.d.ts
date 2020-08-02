@@ -17,7 +17,7 @@ export interface ICourse {
 }
 export interface IOrderCourse extends ICourse {
   dishes: IOrderDish[];
-  notes: string;
+  note: string;
 }
 
 export interface IService {
@@ -53,12 +53,13 @@ export interface IOrder {
   waiterId: string; // id of waiter to link
   table: number;
   revenue: number;
-  notes: string;
+  note?: string;
+  // TODO implement notes in UI
 }
 
 export interface IDBCourse extends ICourse {
   dishes: IDish[];
   orderNum: number;
   status: string; // (wait,prep,ready,delivered)
-  notes: string;
+  note: string;
 }

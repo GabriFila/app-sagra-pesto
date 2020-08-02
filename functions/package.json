@@ -22,5 +22,14 @@
     "typescript": "^3.2.2",
     "firebase-functions-test": "^0.1.6"
   },
-  "private": true
+  "private": true,
+  "prettier": {
+    "printWidth": 80,
+    "trailingComma": "none",
+    "tabWidth": 2,
+    "semi": true,
+    "singleQuote": true,
+    "arrowParens": "avoid",
+    "endOfLine": "lf"
+  }
 }

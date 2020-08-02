@@ -29,10 +29,10 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
             name: user.displayName
           });
         });
-        console.log(`User is logged in`);
+        console.info(`User is logged in`);
       } else {
         setAuthState({ phase: 'out', userRoles: [], name: '' });
-        console.log('User is logged out');
+        console.info('User is logged out');
       }
     });
     return () => unsubscribe();

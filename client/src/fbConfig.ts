@@ -21,10 +21,9 @@ firebase.analytics();
 export default firebase;
 export const db = firebase.firestore();
 export const auth = firebase.auth();
+export const functions = firebase.functions();
 
-const functions = firebase.functions();
 if (window.location.hostname === 'localhost') {
-  // functions.useFunctionsEmulator('http://172.24.90.98:5001');
+  console.log('HELLO');
+  functions.useFunctionsEmulator('http://172.20.143.13:5001');
 }
-
-// const func = functions.httpsCallable('helloWorld');

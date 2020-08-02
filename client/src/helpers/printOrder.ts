@@ -3,7 +3,10 @@ import { IOrderCourse, IStorageCourse } from '../../../types';
 
 const printOrder = (
   storageCourses: IStorageCourse[],
-  courses: IOrderCourse[]
+  courses: IOrderCourse[],
+  orderNum: number,
+  revenue: number,
+  people: number
 ) => {
   // prep useful data
   const today = new Date();
@@ -23,16 +26,16 @@ const printOrder = (
   doc.setTextColor('#ff5722');
   doc.setFontType('normal');
   doc.setFontSize(20);
-  doc.text(10, lastLine, `Ord. ${45}`);
-  doc.text(50, lastLine, `Tot: €${24}`);
-  doc.text(90, lastLine, `Coperti ${2}`);
+  doc.text(10, lastLine, `Ord. ${orderNum || 0}`);
+  doc.text(50, lastLine, `Tot: €${revenue || 0}`);
+  doc.text(90, lastLine, `Coperti ${people || 0}`);
   doc.text(140, lastLine, `${date} - ${time}`);
   lastLine += 10;
   doc.setTextColor('#000000');
   storageCourses.forEach(({ courseName, dishes }) => {
     doc.setFontType('bold');
     doc.setFontSize(15);
-    doc.text(listXStart + 10, lastLine, `${courseName}`);
+    doc.text(listXStart, lastLine, `${courseName}`);
     lastLine += 7;
     doc.setFontType('normal');
     doc.setFontSize(14);

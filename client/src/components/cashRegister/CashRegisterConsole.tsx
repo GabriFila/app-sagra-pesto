@@ -1,6 +1,8 @@
 import React, { useContext } from 'react';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
-import { Typography, IconButton } from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
+import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import DoneIcon from '@material-ui/icons/Done';
 import PrintIcon from '@material-ui/icons/Print';
@@ -9,6 +11,10 @@ import { StorageContext } from '../../context/StorageContext';
 import { CashRegisterContext } from '../../context/CashRegisterContext';
 import { ActionType } from '../../reducers/CashRegisterReducer';
 import printOrder from '../../helpers/printOrder';
+import { functions } from '../../fbConfig';
+import { ServiceContext } from '../../context/ServiceContext';
+
+const createOrder = functions.httpsCallable('createOrder');
 
 interface ICashRegisterMenuProps {}
 const consoleHeight = 300;
@@ -31,8 +37,17 @@ const useStyle = makeStyles(theme =>
         padding: theme.spacing(1)
       }
     },
+    peopleInput: {
+      width: '80%'
+    },
     doneBtn: {
       borderRadius: '50%'
+    },
+    orderNum: {
+      border: '3px solid green',
+      borderRadius: 10,
+      cursor: 'default',
+      padding: 3
     }
   })
 );
@@ -41,14 +56,11 @@ const CashRegisterConsole: React.FunctionComponent<ICashRegisterMenuProps> = () 
   const classes = useStyle();
 
   const { storageCourses } = useContext(StorageContext);
+  const { serviceId } = useContext(ServiceContext);
 
   const { state, dispatch } = useContext(CashRegisterContext);
 
-  const { courses } = state;
-  const total = courses
-    .map(course => course.dishes)
-    .reduce((acc, val) => [...acc, ...val], [])
-    .reduce((acc, val) => acc + val.price * val.qt, 0);
+  const { courses, people, revenue, orderNote, orderNum } = state;
 
   const resetOrder = () => {
     dispatch({ type: ActionType.ResetOrder });
@@ -56,22 +68,65 @@ const CashRegisterConsole: React.FunctionComponent<ICashRegisterMenuProps> = () 
 
   return (
     <Paper elevation={6} className={classes.console}>
+      <TextField
+        type="number"
+        value={people || ''}
+        variant="outlined"
+        margin="dense"
+        inputProps={{ min: 0, style: { textAlign: 'center' } }}
+        className={classes.peopleInput}
+        onChange={e => {
+          const newPeople = Number(e.target.value) || undefined;
+          dispatch({
+            type: ActionType.SetPeople,
+            payload: { people: newPeople }
+          });
+        }}
+      />
+
       <Typography variant="h6" color="secondary">
-        € {total}
-      </Typography>
-      <IconButton className={classes.doneBtn} color="primary">
-        <DoneIcon fontSize="large" />
-      </IconButton>
-      <Typography
-        variant="h5"
-        style={{ border: '3px solid green', borderRadius: 10 }}
-      >
-        &nbsp; &nbsp; &nbsp; &nbsp;
+        € {revenue}
       </Typography>
       <IconButton
         className={classes.doneBtn}
         color="primary"
-        onClick={() => printOrder(storageCourses, courses)}
+        disabled={courses.length === 0 || people === 0 || people === undefined}
+        onClick={() => {
+          dispatch({
+            type: ActionType.SendOrder
+          });
+          createOrder({ revenue, courses, people, serviceId, orderNote })
+            .then(res => {
+              const { outcome, newOrderNum } = res.data;
+              if (outcome) {
+                dispatch({
+                  type: ActionType.SetOrderNum,
+                  payload: { orderNum: newOrderNum }
+                });
+              } else {
+              }
+              console.log(res);
+            })
+            .catch(err => console.error('ERROR WHEN CREATING ORDER: ', err));
+        }}
+      >
+        <DoneIcon fontSize="large" />
+      </IconButton>
+      <Typography
+        variant="h5"
+        className={classes.orderNum}
+        style={{
+          color: orderNum ? 'black' : 'white'
+        }}
+      >
+        {orderNum || 123}
+      </Typography>
+      <IconButton
+        className={classes.doneBtn}
+        color="primary"
+        onClick={() =>
+          printOrder(storageCourses, courses, orderNum, revenue, people)
+        }
       >
         <PrintIcon fontSize="large" />
       </IconButton>

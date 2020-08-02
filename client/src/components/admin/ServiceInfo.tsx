@@ -6,25 +6,30 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { IService } from '../../../../types';
-import { useTheme } from '@material-ui/core/styles';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { makeStyles } from '@material-ui/core/styles';
 
 interface IServiceInfoProps {
   service: IService | undefined;
 }
 
+const useStyles = makeStyles(theme => ({
+  serviceInfoTable: {
+    margin: 'auto',
+    maxWidth: 200,
+    [theme.breakpoints.down('xs')]: {
+      maxWidth: 'none'
+    }
+  }
+}));
+
 const ServiceInfo: React.FunctionComponent<IServiceInfoProps> = ({
   service
 }) => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
+  const classes = useStyles();
 
   return (
     <Paper elevation={6}>
-      <Table
-        aria-label="simple table"
-        style={{ maxWidth: isMobile ? 'none' : 200, margin: 'auto' }}
-      >
+      <Table aria-label="simple table" className={classes.serviceInfoTable}>
         <TableHead>
           <TableRow>
             <TableCell>Dati</TableCell>
@@ -37,7 +42,7 @@ const ServiceInfo: React.FunctionComponent<IServiceInfoProps> = ({
               Ordini
             </TableCell>
             <TableCell align="right">{service?.totalOrders}</TableCell>
-          </TableRow>{' '}
+          </TableRow>
           <TableRow>
             <TableCell component="th" scope="row">
               Incasso ordini

@@ -12,13 +12,20 @@ export enum ActionType {
   AddDish = 'AddDish',
   RemoveDish = 'RemoveDish',
   ResetOrder = 'ResetOrder',
-  SendOrder = 'SendOrder',
-  ChangeNotes = 'ChangeNotes'
+  SetOrderNum = 'SetOrderNum',
+  ChangeNote = 'ChangeNotes',
+  ChangeOrderNote = 'ChangeOrderNote',
+  SetPeople = 'SetPeople',
+  SendOrder = 'SendOrder'
 }
 
 export interface ICashRegisterReducerState {
   orderNum: number | undefined;
+  orderNote: string;
   courses: IOrderCourse[];
+  people: number;
+  revenue: number;
+  waitingOrderRes: boolean;
 }
 
 export interface ICashRegisterAction {
@@ -28,13 +35,19 @@ export interface ICashRegisterAction {
     price?: number;
     courseName?: string;
     kitchen?: string;
-    notes?: string;
+    note?: string;
+    people?: number;
+    orderNum?: number;
   };
 }
 
 export const initialCashRegsiterState: ICashRegisterReducerState = {
   orderNum: undefined,
-  courses: []
+  orderNote: '',
+  people: undefined,
+  courses: [],
+  revenue: 0,
+  waitingOrderRes: false
 };
 
 const addDish = (
@@ -50,7 +63,7 @@ const addDish = (
       kitchen,
       courseName,
       dishes: [{ shortName, price, qt: 1 }],
-      notes: ''
+      note: ''
     });
   else if (isDishAlreadyInOrder(newState.courses, shortName))
     newState.courses.map(course => {
@@ -71,7 +84,7 @@ const addDish = (
         });
       return course;
     });
-  console.log(newState);
+  newState.revenue += price;
   return newState;
 };
 
@@ -79,7 +92,7 @@ const changeNote = (
   prevState: ICashRegisterReducerState,
   courseName: string,
   kitchen: string,
-  notes: string
+  note: string
 ): ICashRegisterReducerState => {
   const newState = { ...prevState };
   if (!isCourseAlreadyInOrder(newState.courses, courseName))
@@ -87,14 +100,13 @@ const changeNote = (
       kitchen,
       courseName,
       dishes: [],
-      notes
+      note: note
     });
   else
     newState.courses.map(course => {
-      if (course.courseName === courseName) course.notes = notes;
+      if (course.courseName === courseName) course.note = note;
       return course;
     });
-  console.log(newState);
   return newState;
 };
 
@@ -109,7 +121,10 @@ const removeDish = (
     .map(course => {
       if (course.courseName === courseName) {
         course.dishes.map(dish => {
-          if (dish.shortName === shortName) dish.qt--;
+          if (dish.shortName === shortName) {
+            dish.qt--;
+            newState.revenue -= dish.price;
+          }
           return dish;
         });
         course.dishes = course.dishes.filter(dish => dish.qt > 0);
@@ -117,7 +132,6 @@ const removeDish = (
       return course;
     })
     .filter(course => course.dishes.length > 0);
-  console.log(newState);
   return newState;
 };
 
@@ -141,14 +155,34 @@ const CashRegisterReducer: React.Reducer<
         action.payload.courseName
       );
     case ActionType.ResetOrder:
-      return { orderNum: undefined, courses: [] };
-    case ActionType.ChangeNotes:
+      return {
+        orderNum: undefined,
+        orderNote: '',
+        people: undefined,
+        courses: [],
+        revenue: 0,
+        waitingOrderRes: false
+      };
+    case ActionType.ChangeNote:
       return changeNote(
         state,
         action.payload.courseName,
         action.payload.kitchen,
-        action.payload.notes
+        action.payload.note
       );
+    case ActionType.ChangeOrderNote:
+      return { ...state, orderNote: action.payload.note };
+    case ActionType.SendOrder:
+      return { ...state, waitingOrderRes: true };
+    case ActionType.SetPeople:
+      return { ...state, people: action.payload.people };
+    case ActionType.SetOrderNum:
+      return {
+        ...state,
+        orderNum: action.payload.orderNum,
+        waitingOrderRes: false
+      };
+
     default:
       throw new Error();
   }
