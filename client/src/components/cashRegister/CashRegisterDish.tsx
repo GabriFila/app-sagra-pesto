@@ -67,12 +67,12 @@ const CashRegisterDish: React.FunctionComponent<ICashRegisterDishProps> = props 
       </Typography>
       <IconButton
         disabled={orderQt === undefined || orderQt === 0}
-        onClick={() =>
+        onClick={() => {
           dispatch({
             type: ActionType.RemoveDish,
             payload: { dishShortName: shortName, courseName }
-          })
-        }
+          });
+        }}
         color="secondary"
       >
         <RemoveIcon style={{ flex: 1 }} />
@@ -81,12 +81,12 @@ const CashRegisterDish: React.FunctionComponent<ICashRegisterDishProps> = props 
         {orderQt || 0}
       </Typography>
       <IconButton
-        onClick={() =>
+        onClick={() => {
           dispatch({
             type: ActionType.AddDish,
             payload: { dishShortName: shortName, price, courseName, kitchen }
-          })
-        }
+          });
+        }}
         color="primary"
       >
         <AddIcon style={{ flex: 1 }} />

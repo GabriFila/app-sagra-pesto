@@ -11,11 +11,13 @@ const isCourseAlreadyInOrder = (courses: IOrderCourse[], courseName: string) =>
 export enum ActionType {
   AddDish = 'AddDish',
   RemoveDish = 'RemoveDish',
+  AddPerson = 'AddPerson',
+  RemovePerson = 'RemovePerson',
+  SetPeople = 'SetPeople',
   ResetOrder = 'ResetOrder',
   SetOrderNum = 'SetOrderNum',
   ChangeNote = 'ChangeNotes',
   ChangeOrderNote = 'ChangeOrderNote',
-  SetPeople = 'SetPeople',
   SendOrder = 'SendOrder'
 }
 
@@ -44,7 +46,7 @@ export interface ICashRegisterAction {
 export const initialCashRegsiterState: ICashRegisterReducerState = {
   orderNum: undefined,
   orderNote: '',
-  people: undefined,
+  people: 0,
   courses: [],
   revenue: 0,
   waitingOrderRes: false
@@ -158,7 +160,7 @@ const CashRegisterReducer: React.Reducer<
       return {
         orderNum: undefined,
         orderNote: '',
-        people: undefined,
+        people: 0,
         courses: [],
         revenue: 0,
         waitingOrderRes: false
@@ -182,7 +184,13 @@ const CashRegisterReducer: React.Reducer<
         orderNum: action.payload.orderNum,
         waitingOrderRes: false
       };
-
+    case ActionType.AddPerson:
+      return {
+        ...state,
+        people: state.people + 1
+      };
+    case ActionType.RemovePerson:
+      return { ...state, people: state.people - 1 };
     default:
       throw new Error();
   }
