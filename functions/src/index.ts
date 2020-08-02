@@ -12,10 +12,6 @@ import rolesToClaims from './helpers/rolesToClaims';
 admin.initializeApp();
 const db = admin.firestore();
 
-exports.helloWorld = functions.https.onCall((data, context) => {
-  return 'kawabanga';
-});
-
 export const onUserCreate = functions
   .region('europe-west2')
   .auth.user()
