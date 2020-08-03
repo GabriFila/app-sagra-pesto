@@ -6,6 +6,7 @@ import Paper from '@material-ui/core/Paper';
 import { StorageContext } from '../../context/StorageContext';
 import { CashRegisterContext } from '../../context/CashRegisterContext';
 import { ActionType } from '../../reducers/CashRegisterReducer';
+import { disableUIOnCondition } from '../../helpers/disableUIOnCondition';
 
 interface ICashRegisterMenuProps {
   onlyIstant: boolean;
@@ -35,13 +36,13 @@ const CashRegisterMenu: React.FunctionComponent<ICashRegisterMenuProps> = props 
   const classes = useStyle();
   const { storageCourses } = useContext(StorageContext);
   const { state, dispatch } = useContext(CashRegisterContext);
-  const { courses, waitingOrderRes } = state;
+  const { courses, waitingOrderRes, waitingToEndOrder } = state;
   const { onlyIstant } = props;
 
   return (
     <div
       className={classes.menu}
-      style={waitingOrderRes ? { pointerEvents: 'none', opacity: '50%' } : {}}
+      style={disableUIOnCondition(waitingOrderRes || waitingToEndOrder)}
     >
       {!onlyIstant && (
         <Paper className={classes.orderNote} elevation={6}>

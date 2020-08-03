@@ -15,6 +15,7 @@ import { functions } from '../../fbConfig';
 import { ServiceContext } from '../../context/ServiceContext';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
+import { disableUIOnCondition } from '../../helpers/disableUIOnCondition';
 
 const createOrder = functions.httpsCallable('createOrder');
 
@@ -60,8 +61,8 @@ const useStyle = makeStyles(theme =>
       }
     },
     peopleInput: {
-      width: '80%',
-      maxWidth: 50
+      width: '100%',
+      maxWidth: 60
     },
     doneBtn: {
       borderRadius: '50%'
@@ -83,7 +84,15 @@ const CashRegisterConsole: React.FunctionComponent = () => {
 
   const { state, dispatch } = useContext(CashRegisterContext);
 
-  const { courses, people, revenue, orderNote, orderNum } = state;
+  const {
+    courses,
+    people,
+    revenue,
+    orderNote,
+    orderNum,
+    waitingOrderRes,
+    waitingToEndOrder
+  } = state;
 
   const resetOrder = () => {
     dispatch({ type: ActionType.ResetOrder });
@@ -98,7 +107,7 @@ const CashRegisterConsole: React.FunctionComponent = () => {
         const { outcome, newOrderNum } = res.data;
         if (outcome) {
           dispatch({
-            type: ActionType.SetOrderNum,
+            type: ActionType.OrderReceived,
             payload: { orderNum: newOrderNum }
           });
         } else {
@@ -108,8 +117,15 @@ const CashRegisterConsole: React.FunctionComponent = () => {
   };
 
   return (
-    <Paper elevation={6} className={classes.console}>
-      <div className={classes.consoleSection}>
+    <Paper
+      elevation={6}
+      className={classes.console}
+      style={disableUIOnCondition(waitingOrderRes)}
+    >
+      <div
+        className={classes.consoleSection}
+        style={disableUIOnCondition(waitingToEndOrder)}
+      >
         <div className={classes.peopleSelector}>
           <IconButton
             onClick={() => {

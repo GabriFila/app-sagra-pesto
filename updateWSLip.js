@@ -2,7 +2,7 @@ const ifaces = require("os").networkInterfaces();
 const fs = require("fs");
 
 const currentWSLip = ifaces["eth0"][0]["address"];
-console.log("new address", currentWSLip);
+console.info("new address", currentWSLip);
 
 const filesToUpdate = ["firebase.json", "client/src/fbConfig.ts"];
 
@@ -16,7 +16,7 @@ filesToUpdate
         currentWSLip
       );
       fs.writeFile(fileName, newFile, (err) => {
-        if (err) console.log(err);
+        if (err) console.info(err.message, err.stack);
       });
     });
   });

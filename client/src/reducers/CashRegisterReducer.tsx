@@ -5,6 +5,7 @@ const isDishAlreadyInOrder = (courses: IOrderCourse[], shortName: string) =>
   courses.some(course =>
     course.dishes.some(dish => dish.shortName === shortName)
   );
+
 const isCourseAlreadyInOrder = (courses: IOrderCourse[], courseName: string) =>
   courses.some(course => course.courseName === courseName);
 
@@ -15,7 +16,7 @@ export enum ActionType {
   RemovePerson = 'RemovePerson',
   SetPeople = 'SetPeople',
   ResetOrder = 'ResetOrder',
-  SetOrderNum = 'SetOrderNum',
+  OrderReceived = 'OrderReceived',
   ChangeNote = 'ChangeNotes',
   ChangeOrderNote = 'ChangeOrderNote',
   SendOrder = 'SendOrder',
@@ -29,6 +30,7 @@ export interface ICashRegisterReducerState {
   people: number;
   revenue: number;
   waitingOrderRes: boolean;
+  waitingToEndOrder: boolean;
 }
 
 export interface ICashRegisterAction {
@@ -50,7 +52,8 @@ export const initialCashRegsiterState: ICashRegisterReducerState = {
   people: 0,
   courses: [],
   revenue: 0,
-  waitingOrderRes: false
+  waitingOrderRes: false,
+  waitingToEndOrder: false
 };
 
 const addDish = (
@@ -91,28 +94,6 @@ const addDish = (
   return newState;
 };
 
-const changeNote = (
-  prevState: ICashRegisterReducerState,
-  courseName: string,
-  kitchen: string,
-  note: string
-): ICashRegisterReducerState => {
-  const newState = { ...prevState };
-  if (!isCourseAlreadyInOrder(newState.courses, courseName))
-    newState.courses.push({
-      kitchen,
-      courseName,
-      dishes: [],
-      note: note
-    });
-  else
-    newState.courses.map(course => {
-      if (course.courseName === courseName) course.note = note;
-      return course;
-    });
-  return newState;
-};
-
 const removeDish = (
   prevState: ICashRegisterReducerState,
   shortName: string,
@@ -135,6 +116,28 @@ const removeDish = (
       return course;
     })
     .filter(course => course.dishes.length > 0);
+  return newState;
+};
+
+const changeNote = (
+  prevState: ICashRegisterReducerState,
+  courseName: string,
+  kitchen: string,
+  note: string
+): ICashRegisterReducerState => {
+  const newState = { ...prevState };
+  if (!isCourseAlreadyInOrder(newState.courses, courseName))
+    newState.courses.push({
+      kitchen,
+      courseName,
+      dishes: [],
+      note: note
+    });
+  else
+    newState.courses.map(course => {
+      if (course.courseName === courseName) course.note = note;
+      return course;
+    });
   return newState;
 };
 
@@ -170,11 +173,12 @@ const CashRegisterReducer: React.Reducer<
       return { ...state, waitingOrderRes: true };
     case ActionType.SetPeople:
       return { ...state, people: action.payload.people };
-    case ActionType.SetOrderNum:
+    case ActionType.OrderReceived:
       return {
         ...state,
         orderNum: action.payload.orderNum,
-        waitingOrderRes: false
+        waitingOrderRes: false,
+        waitingToEndOrder: true
       };
     case ActionType.AddPerson:
       return {
@@ -197,7 +201,8 @@ const CashRegisterReducer: React.Reducer<
         people: 0,
         courses: [],
         revenue: 0,
-        waitingOrderRes: false
+        waitingOrderRes: false,
+        waitingToEndOrder: false
       };
     default:
       throw new Error();

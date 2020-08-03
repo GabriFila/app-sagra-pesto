@@ -29,7 +29,6 @@ const HomePage = () => {
   const { userRoles } = useContext(AuthContext);
 
   const classes = useStyles();
-  console.log(userRoles);
   return (
     <div className={classes.root}>
       {userRoles.length === 0 ? (

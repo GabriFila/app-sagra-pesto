@@ -172,7 +172,7 @@ export const createOrder = functions
         return Promise.all(toFullfill);
       })
       .then(() => {
-        console.log('Order creation succeded, with: ', newOrderNum);
+        console.info('Order creation succeded, with order: ', newOrderNum);
         return { outcome: true, newOrderNum };
       })
       .catch((err: Error) => {

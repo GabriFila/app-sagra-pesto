@@ -16,7 +16,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Button from '@material-ui/core/Button';
 import { AuthContext } from '../context/AuthContext';
 import { auth } from '../fbConfig';
-import { Link, useHistory } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
 const drawerWidth = 100;
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -87,9 +87,8 @@ const useStyles = makeStyles((theme: Theme) =>
     role: {
       width: '100%'
     },
-    link: {
-      textDecoration: 'none',
-      color: 'black'
+    activeLink: {
+      color: theme.palette.primary.main
     }
   })
 );
@@ -168,11 +167,15 @@ const TopBar: React.FunctionComponent = ({ children }) => {
         <Divider />
         <List>
           {userRoles.map(role => (
-            <Link key={role.name} to={`${role.route}`} className={classes.link}>
+            <NavLink
+              key={role.name}
+              to={`${role.route}`}
+              activeClassName={classes.activeLink}
+            >
               <ListItem button key={role.name}>
                 <ListItemText primary={role.name.replace('-', ' ')} />
               </ListItem>
-            </Link>
+            </NavLink>
           ))}
         </List>
       </Drawer>
