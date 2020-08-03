@@ -38,8 +38,8 @@ const CashRegisterPage = () => {
     <Container className={classes.cashRegisterPage}>
       {service !== undefined ? (
         <>
-          <CashRegisterNav />
-          <CashRegisterMenu onlyIstant={false} />
+          <CashRegisterNav onlyInstant={false} />
+          <CashRegisterMenu onlyInstant={false} />
           <CashRegisterConsole />
         </>
       ) : (
