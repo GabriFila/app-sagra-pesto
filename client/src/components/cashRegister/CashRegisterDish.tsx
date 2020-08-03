@@ -59,7 +59,10 @@ const CashRegisterDish: React.FunctionComponent<ICashRegisterDishProps> = props 
         variant="body1"
         style={{
           flex: 3,
-          backgroundColor: storageQt < 30 ? '#db9486' : null,
+          backgroundColor:
+            storageQt < 30
+              ? theme.palette.warning.main
+              : theme.palette.background.paper,
           borderRadius: 5
         }}
       >

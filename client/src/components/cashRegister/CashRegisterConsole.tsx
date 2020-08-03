@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { makeStyles, createStyles } from '@material-ui/core/styles';
+import { makeStyles, createStyles, useTheme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
@@ -78,6 +78,7 @@ const useStyle = makeStyles(theme =>
 
 const CashRegisterConsole: React.FunctionComponent = () => {
   const classes = useStyle();
+  const theme = useTheme();
 
   const { storageCourses } = useContext(StorageContext);
   const { serviceId } = useContext(ServiceContext);
@@ -184,7 +185,7 @@ const CashRegisterConsole: React.FunctionComponent = () => {
           variant="h5"
           className={classes.orderNum}
           style={{
-            color: orderNum ? 'black' : 'white'
+            color: orderNum ? 'black' : theme.palette.background.paper
           }}
         >
           {orderNum || 123}

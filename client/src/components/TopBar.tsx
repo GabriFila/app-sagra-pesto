@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, Dispatch, SetStateAction } from 'react';
 import clsx from 'clsx';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -17,7 +17,14 @@ import Button from '@material-ui/core/Button';
 import { AuthContext } from '../context/AuthContext';
 import { auth } from '../fbConfig';
 import { NavLink, useHistory } from 'react-router-dom';
+import ToLightIcon from '@material-ui/icons/BrightnessHigh';
+import ToDarkIcon from '@material-ui/icons/Brightness4';
 const drawerWidth = 100;
+
+interface IMenuProps {
+  isLightTheme: boolean;
+  setIsLigthTheme: Dispatch<SetStateAction<boolean>>;
+}
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -87,16 +94,19 @@ const useStyles = makeStyles((theme: Theme) =>
     role: {
       width: '100%'
     },
+    link: {
+      color: theme.palette.text.primary
+    },
     activeLink: {
       color: theme.palette.primary.main
     }
   })
 );
 
-const TopBar: React.FunctionComponent = ({ children }) => {
+const TopBar: React.FunctionComponent<IMenuProps> = props => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
-
+  const { children, isLightTheme, setIsLigthTheme } = props;
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -143,6 +153,13 @@ const TopBar: React.FunctionComponent = ({ children }) => {
                   .replace(/([A-Z][a-z])/g, ' $1')}`
               : ''}
           </Typography>
+          <IconButton
+            onClick={() => {
+              setIsLigthTheme(!isLightTheme);
+            }}
+          >
+            {isLightTheme ? <ToDarkIcon /> : <ToLightIcon />}
+          </IconButton>
           {phase === 'in' ? (
             <Button color="inherit" onClick={logOutUser}>
               Logout
@@ -170,6 +187,7 @@ const TopBar: React.FunctionComponent = ({ children }) => {
             <NavLink
               key={role.name}
               to={`${role.route}`}
+              className={classes.link}
               activeClassName={classes.activeLink}
             >
               <ListItem button key={role.name}>
