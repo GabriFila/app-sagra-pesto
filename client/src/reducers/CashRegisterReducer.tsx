@@ -18,7 +18,8 @@ export enum ActionType {
   SetOrderNum = 'SetOrderNum',
   ChangeNote = 'ChangeNotes',
   ChangeOrderNote = 'ChangeOrderNote',
-  SendOrder = 'SendOrder'
+  SendOrder = 'SendOrder',
+  InstantOrderCreated = 'InstantOrderCreated'
 }
 
 export interface ICashRegisterReducerState {
@@ -156,15 +157,6 @@ const CashRegisterReducer: React.Reducer<
         action.payload.dishShortName,
         action.payload.courseName
       );
-    case ActionType.ResetOrder:
-      return {
-        orderNum: undefined,
-        orderNote: '',
-        people: 0,
-        courses: [],
-        revenue: 0,
-        waitingOrderRes: false
-      };
     case ActionType.ChangeNote:
       return changeNote(
         state,
@@ -191,6 +183,22 @@ const CashRegisterReducer: React.Reducer<
       };
     case ActionType.RemovePerson:
       return { ...state, people: state.people - 1 };
+    case ActionType.InstantOrderCreated:
+      return {
+        ...state,
+        waitingOrderRes: false,
+        courses: [],
+        revenue: 0
+      };
+    case ActionType.ResetOrder:
+      return {
+        orderNum: undefined,
+        orderNote: '',
+        people: 0,
+        courses: [],
+        revenue: 0,
+        waitingOrderRes: false
+      };
     default:
       throw new Error();
   }

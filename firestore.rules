@@ -7,6 +7,20 @@ service cloud.firestore {
           allow create: if isLoggedIn() && hasRole('admin');
           allow update: if isLoggedIn() && hasRole('admin');
           allow delete: if false;
+          match /orders/{orderId} {
+            allow write: if false;
+            allow read: if false;
+          }
+          match /courses/{courseId} {
+            allow write: if false;
+            allow read: if false;
+          }
+          match /instantOrders/{instantOrderId} {
+          allow create: if isLoggedIn() && hasRole('cassa-istantanea') ;
+          allow update: if false;
+          allow delete: if false;
+            allow read: if false;
+          }
         }
         match /storage/{storageid} {
         	allow get: if isLoggedIn() && hasRole('admin');

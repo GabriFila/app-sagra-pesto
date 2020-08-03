@@ -4,7 +4,9 @@ import { IService } from '../../../types';
 
 interface IServiceContext {
   service: IService | undefined;
-  serviceRef: any;
+  serviceRef: firebase.firestore.DocumentReference<
+    firebase.firestore.DocumentData
+  >;
   serviceId: string;
 }
 export const ServiceContext = createContext<IServiceContext>({
@@ -17,7 +19,9 @@ const ServiceContextProvider: React.FunctionComponent = ({ children }) => {
   const [service, setCurrentService] = useState<IService | undefined>(
     undefined
   );
-  const [serviceRef, setCurrentServiceRef] = useState();
+  const [serviceRef, setCurrentServiceRef] = useState<
+    firebase.firestore.DocumentReference<firebase.firestore.DocumentData>
+  >();
   const [serviceId, setCurrentServiceId] = useState('');
 
   useEffect(() => {
@@ -29,7 +33,7 @@ const ServiceContextProvider: React.FunctionComponent = ({ children }) => {
         } else
           snaps.forEach(snap => {
             setCurrentService(snap.data() as IService);
-            setCurrentServiceRef(snap.ref as any);
+            setCurrentServiceRef(snap.ref);
             setCurrentServiceId(snap.id);
           });
       },

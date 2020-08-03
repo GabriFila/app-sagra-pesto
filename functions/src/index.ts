@@ -5,9 +5,11 @@ import {
   IStorage,
   IService,
   IDBCourse,
-  IUserSagraRolesDoc
+  IUserSagraRolesDoc,
+  IInstantOrderCourse
 } from '../../types';
 import rolesToClaims from './helpers/rolesToClaims';
+import { removeDishesFromStorage } from './helpers/storageHelpers';
 
 admin.initializeApp();
 const db = admin.firestore();
@@ -23,7 +25,14 @@ export const onUserCreate = functions
       .set({ roles: [], email })
       .then(() => console.info(`User roles of ${email}  created`))
       .then(() => db.collection('users').doc(uid).set({}))
-      .catch(err => console.error(err));
+      .catch((err: Error) => {
+        console.error(
+          'ERROR WHEN CREATING USER ROLES INFO AFTER USER CREATED',
+          err.message,
+          err.stack
+        );
+        return;
+      });
   });
 
 export const onUserDelete = functions
@@ -37,7 +46,14 @@ export const onUserDelete = functions
       .delete()
       .then(() => console.info(`User roles of ${email} deleted`))
       .then(() => db.collection('users').doc(uid).delete())
-      .catch(err => console.error(err));
+      .catch((err: Error) => {
+        console.error(
+          'ERROR WHEN DELETING USER ROLE INFO AFTER USER DELETION',
+          err.message,
+          err.stack
+        );
+        return;
+      });
   });
 
 export const onUserSagraRolesUpdate = functions
@@ -57,7 +73,10 @@ export const onUserSagraRolesUpdate = functions
       .then(() =>
         console.info(`Roles of ${name} updated to ${roles.toString()}`)
       )
-      .catch(err => console.error(err));
+      .catch((err: Error) => {
+        console.error(err.message, err.stack);
+        return;
+      });
   });
 
 export const createOrder = functions
@@ -156,9 +175,72 @@ export const createOrder = functions
         console.log('Order creation succeded, with: ', newOrderNum);
         return { outcome: true, newOrderNum };
       })
-      .catch(err => {
-        console.error('ERROR IN CREATING ORDER', err.message);
+      .catch((err: Error) => {
+        console.error('ERROR IN CREATING ORDER', err.message, err.stack);
         return { outcome: 'false', err: err.message };
+      });
+  });
+
+export const onInstantOrderCreate = functions
+  .region('europe-west2')
+  .firestore.document(
+    'sagre/{sagraId}/services/{serviceId}/instantOrders/{instantOrderId}'
+  )
+  .onCreate((change, ctx) => {
+    const courses = change.data()?.courses as IInstantOrderCourse[];
+    const revenue = change.data()?.revenue as number;
+    const sagraId = ctx.params.sagraId;
+    const serviceId = ctx.params.serviceId;
+    const instantOrderId = ctx.params.instantOrderId;
+
+    const currentServiceRef = db
+      .collection('sagre')
+      .doc(sagraId)
+      .collection('services')
+      .doc(serviceId);
+
+    const currentStroageRef = db
+      .collection('sagre')
+      .doc(sagraId)
+      .collection('storage')
+      .doc('storage');
+
+    const toFullFill: Promise<any>[] = [];
+    toFullFill.push(
+      currentServiceRef.set(
+        {
+          totalInstantOrders: admin.firestore.FieldValue.increment(1),
+          totalInstantRevenue: admin.firestore.FieldValue.increment(revenue)
+        },
+        { merge: true }
+      )
+    );
+
+    toFullFill.push(
+      db.runTransaction(t =>
+        t.get(currentStroageRef).then(storageSnap => {
+          const storage = storageSnap.data() as IStorage;
+
+          const { storageCourses } = storage;
+
+          removeDishesFromStorage(courses, storageCourses);
+
+          t.set(currentStroageRef, { storageCourses });
+        })
+      )
+    );
+    return Promise.all(toFullFill)
+      .then(() => {
+        console.info(`Storage udpated after instant order ${instantOrderId}`);
+        return;
+      })
+      .catch((err: Error) => {
+        console.error(
+          'ERROR IN UDPATING STORAGE AFTER INSTANT ORDER CREATED',
+          err.message,
+          err.stack
+        );
+        return;
       });
   });
 

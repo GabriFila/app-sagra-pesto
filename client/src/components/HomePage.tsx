@@ -29,7 +29,7 @@ const HomePage = () => {
   const { userRoles } = useContext(AuthContext);
 
   const classes = useStyles();
-
+  console.log(userRoles);
   return (
     <div className={classes.root}>
       {userRoles.length === 0 ? (
@@ -38,13 +38,13 @@ const HomePage = () => {
         </Typography>
       ) : null}
       {userRoles.map(role => (
-        <Link key={role} to={`/${role}`} className={classes.pageLink}>
+        <Link key={role.name} to={`${role.route}`} className={classes.pageLink}>
           <Button
             color="primary"
             variant="contained"
             className={classes.pageLinkButton}
           >
-            {role}
+            {role.name.replace('-', ' ')}
           </Button>
         </Link>
       ))}

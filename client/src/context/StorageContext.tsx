@@ -19,7 +19,7 @@ const StorageContextProvider: React.FunctionComponent = ({ children }) => {
     const unsubscribe = getStorageRef().onSnapshot(
       snap => {
         setStroageRef(snap.ref);
-        setStorageCourses((snap.data() as IStorage).storageCourses);
+        setStorageCourses((snap.data() as IStorage)?.storageCourses);
       },
       err => console.error('storage context', err)
     );

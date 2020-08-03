@@ -1,10 +1,11 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { auth } from '../fbConfig';
+import { IRole } from '../../../types';
 import claimsToRoles from '../helpers/claimsToRoles';
 
 interface IAuthContext {
   phase: string;
-  userRoles: string[];
+  userRoles: IRole[];
   name: string | null;
 }
 export const AuthContext = createContext<IAuthContext>({

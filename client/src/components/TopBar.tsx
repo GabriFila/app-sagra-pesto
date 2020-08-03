@@ -138,7 +138,10 @@ const TopBar: React.FunctionComponent = ({ children }) => {
           <Typography variant="h6" noWrap className={classes.title}>
             {name ? `${name}` : 'Sagra del Pesto'}
             {location.pathname.substring(1).length > 0
-              ? ` - ${location.pathname.substring(1)}`
+              ? ` - ${location.pathname
+                  .substring(1)
+                  .replace(/([A-Z]+)/g, ' $1')
+                  .replace(/([A-Z][a-z])/g, ' $1')}`
               : ''}
           </Typography>
           {phase === 'in' ? (
@@ -165,9 +168,9 @@ const TopBar: React.FunctionComponent = ({ children }) => {
         <Divider />
         <List>
           {userRoles.map(role => (
-            <Link key={role} to={`/${role}`} className={classes.link}>
-              <ListItem button key={role}>
-                <ListItemText primary={role} />
+            <Link key={role.name} to={`${role.route}`} className={classes.link}>
+              <ListItem button key={role.name}>
+                <ListItemText primary={role.name.replace('-', ' ')} />
               </ListItem>
             </Link>
           ))}

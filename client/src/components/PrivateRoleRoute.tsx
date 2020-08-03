@@ -26,12 +26,13 @@ const PrivateRoute: React.FunctionComponent<IPrivateRouteProps> = ({
           case 'in':
             if (
               requiredRoles.some(reqRole =>
-                userRoles.some(userRole => userRole.includes(reqRole))
+                userRoles.map(userRole => userRole.name).includes(reqRole)
               ) ||
               routeProps.location.pathname === '/'
             ) {
               return <RouteComponent {...routeProps} />;
             } else {
+              console.info('User does not have required role');
               return <Redirect to={'/'} />;
             }
           case 'out':

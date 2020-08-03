@@ -18,7 +18,6 @@ import RemoveIcon from '@material-ui/icons/Remove';
 
 const createOrder = functions.httpsCallable('createOrder');
 
-interface ICashRegisterMenuProps {}
 const consoleHeight = 400;
 const useStyle = makeStyles(theme =>
   createStyles({
@@ -32,6 +31,18 @@ const useStyle = makeStyles(theme =>
       position: 'sticky',
       top: `calc(50vh + 32px - ${consoleHeight / 2}px)`,
       [theme.breakpoints.down('xs')]: {
+        top: 80,
+        maxWidth: consoleHeight,
+        width: '100%',
+        padding: theme.spacing(1)
+      }
+    },
+    consoleSection: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'space-around',
+      [theme.breakpoints.down('xs')]: {
         flexDirection: 'row',
         top: 80,
         maxWidth: consoleHeight,
@@ -39,8 +50,18 @@ const useStyle = makeStyles(theme =>
         padding: theme.spacing(1)
       }
     },
+    peopleSelector: {
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'space-around',
+      alignItems: 'center',
+      [theme.breakpoints.down('xs')]: {
+        flexDirection: 'row-reverse'
+      }
+    },
     peopleInput: {
-      width: '80%'
+      width: '80%',
+      maxWidth: 50
     },
     doneBtn: {
       borderRadius: '50%'
@@ -54,7 +75,7 @@ const useStyle = makeStyles(theme =>
   })
 );
 
-const CashRegisterConsole: React.FunctionComponent<ICashRegisterMenuProps> = () => {
+const CashRegisterConsole: React.FunctionComponent = () => {
   const classes = useStyle();
 
   const { storageCourses } = useContext(StorageContext);
@@ -67,99 +88,108 @@ const CashRegisterConsole: React.FunctionComponent<ICashRegisterMenuProps> = () 
   const resetOrder = () => {
     dispatch({ type: ActionType.ResetOrder });
   };
-  console.log(people);
+
+  const sendOrder = () => {
+    dispatch({
+      type: ActionType.SendOrder
+    });
+    createOrder({ revenue, courses, people, serviceId, orderNote })
+      .then(res => {
+        const { outcome, newOrderNum } = res.data;
+        if (outcome) {
+          dispatch({
+            type: ActionType.SetOrderNum,
+            payload: { orderNum: newOrderNum }
+          });
+        } else {
+        }
+      })
+      .catch(err => console.error('ERROR WHEN CREATING ORDER: ', err));
+  };
+
   return (
     <Paper elevation={6} className={classes.console}>
-      <IconButton
-        onClick={() => {
-          dispatch({
-            type: ActionType.AddPerson
-          });
-        }}
-        color="primary"
-      >
-        <AddIcon style={{ flex: 1 }} />
-      </IconButton>
-      <TextField
-        type="number"
-        value={people || ''}
-        variant="outlined"
-        margin="dense"
-        inputProps={{ min: 0, style: { textAlign: 'center' } }}
-        className={classes.peopleInput}
-        onChange={e => {
-          const newPeople = Number(e.target.value) || undefined;
-          dispatch({
-            type: ActionType.SetPeople,
-            payload: { people: newPeople }
-          });
-        }}
-      />
-      <IconButton
-        disabled={people === undefined || people === 0}
-        onClick={() => {
-          dispatch({
-            type: ActionType.RemovePerson
-          });
-        }}
-        color="secondary"
-      >
-        <RemoveIcon style={{ flex: 1 }} />
-      </IconButton>
+      <div className={classes.consoleSection}>
+        <div className={classes.peopleSelector}>
+          <IconButton
+            onClick={() => {
+              dispatch({
+                type: ActionType.AddPerson
+              });
+            }}
+            color="primary"
+          >
+            <AddIcon style={{ flex: 1 }} />
+          </IconButton>
+          <TextField
+            type="number"
+            value={people || ''}
+            variant="outlined"
+            margin="dense"
+            inputProps={{ min: 0, style: { textAlign: 'center' } }}
+            className={classes.peopleInput}
+            onChange={e => {
+              const newPeople = Number(e.target.value) || undefined;
+              dispatch({
+                type: ActionType.SetPeople,
+                payload: { people: newPeople }
+              });
+            }}
+          />
+          <IconButton
+            disabled={people === undefined || people === 0}
+            onClick={() => {
+              dispatch({
+                type: ActionType.RemovePerson
+              });
+            }}
+            color="secondary"
+          >
+            <RemoveIcon style={{ flex: 1 }} />
+          </IconButton>
+        </div>
+        <Typography variant="h6" color="secondary">
+          € {revenue}
+        </Typography>
+        <IconButton
+          className={classes.doneBtn}
+          color="primary"
+          disabled={
+            courses.length === 0 || people === 0 || people === undefined
+          }
+          onClick={sendOrder}
+        >
+          <DoneIcon fontSize="large" />
+        </IconButton>
+      </div>
 
-      <Typography variant="h6" color="secondary">
-        € {revenue}
-      </Typography>
-      <IconButton
-        className={classes.doneBtn}
-        color="primary"
-        disabled={courses.length === 0 || people === 0 || people === undefined}
-        onClick={() => {
-          dispatch({
-            type: ActionType.SendOrder
-          });
-          createOrder({ revenue, courses, people, serviceId, orderNote })
-            .then(res => {
-              const { outcome, newOrderNum } = res.data;
-              if (outcome) {
-                dispatch({
-                  type: ActionType.SetOrderNum,
-                  payload: { orderNum: newOrderNum }
-                });
-              } else {
-              }
-              console.log(res);
-            })
-            .catch(err => console.error('ERROR WHEN CREATING ORDER: ', err));
-        }}
-      >
-        <DoneIcon fontSize="large" />
-      </IconButton>
-      <Typography
-        variant="h5"
-        className={classes.orderNum}
-        style={{
-          color: orderNum ? 'black' : 'white'
-        }}
-      >
-        {orderNum || 123}
-      </Typography>
-      <IconButton
-        className={classes.doneBtn}
-        color="primary"
-        onClick={() =>
-          printOrder(storageCourses, courses, orderNum, revenue, people)
-        }
-      >
-        <PrintIcon fontSize="large" />
-      </IconButton>
-      <IconButton
-        className={classes.doneBtn}
-        color="secondary"
-        onClick={resetOrder}
-      >
-        <ReplayIcon fontSize="large" />
-      </IconButton>
+      <div className={classes.consoleSection}>
+        <Typography
+          variant="h5"
+          className={classes.orderNum}
+          style={{
+            color: orderNum ? 'black' : 'white'
+          }}
+        >
+          {orderNum || 123}
+        </Typography>
+        <IconButton
+          className={classes.doneBtn}
+          color="primary"
+          onClick={() =>
+            printOrder(storageCourses, courses, orderNum, revenue, people)
+          }
+        >
+          <PrintIcon fontSize="large" />
+        </IconButton>
+        <IconButton
+          className={classes.doneBtn}
+          color="secondary"
+          onClick={resetOrder}
+        >
+          <ReplayIcon fontSize="large" />
+        </IconButton>
+      </div>
     </Paper>
   );
 };

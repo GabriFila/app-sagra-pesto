@@ -2,10 +2,10 @@ import React, { useContext } from 'react';
 import Container from '@material-ui/core/Container';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import withStorageContext from '../../context/StorageContext';
-import CashRegisterMenu from './CashRegisterMenu';
+import CashRegisterMenu from '../cashRegister/CashRegisterMenu';
 import withCashRegisterContext from '../../context/CashRegisterContext';
-import CashRegisterConsole from './CashRegisterConsole';
-import CashRegisterNav from './CashRegisterNav';
+import InstantCashRegisterConsole from './InstantCashRegisterConsole';
+import CashRegisterNav from '../cashRegister/CashRegisterNav';
 import withServiceContext, {
   ServiceContext
 } from '../../context/ServiceContext';
@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const CashRegisterPage = () => {
+const InstantCashRegisterPage = () => {
   const classes = useStyles();
   const { service } = useContext(ServiceContext);
   return (
@@ -39,8 +39,8 @@ const CashRegisterPage = () => {
       {service !== undefined ? (
         <>
           <CashRegisterNav />
-          <CashRegisterMenu onlyIstant={false} />
-          <CashRegisterConsole />
+          <CashRegisterMenu onlyIstant={true} />
+          <InstantCashRegisterConsole />
         </>
       ) : (
         <Typography
@@ -57,5 +57,5 @@ const CashRegisterPage = () => {
 };
 
 export default withServiceContext(
-  withStorageContext(withCashRegisterContext(CashRegisterPage))
+  withStorageContext(withCashRegisterContext(InstantCashRegisterPage))
 );

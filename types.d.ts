@@ -9,11 +9,16 @@ export interface IStorage {
 
 export interface IStorageCourse extends ICourse {
   dishes: IStorageDish[];
+  isInstant: boolean;
 }
 
 export interface ICourse {
   courseName: string;
   kitchen: string;
+}
+
+export interface IInstantOrderCourse extends ICourse {
+  dishes: IDish[];
 }
 export interface IOrderCourse extends ICourse {
   dishes: IOrderDish[];
@@ -42,7 +47,6 @@ export interface IOrderDish extends IDish {
 export interface IStorageDish extends IOrderDish {
   name: string;
   isInMenu: boolean;
-  isInstant: boolean;
 }
 
 export interface IOrder {
@@ -62,4 +66,14 @@ export interface IDBCourse extends ICourse {
   orderNum: number;
   status: string; // (wait,prep,ready,delivered)
   note: string;
+}
+
+export interface IRole {
+  name: string;
+  route: string;
+}
+
+interface IInstantOrder {
+  revenue: number;
+  courses: IInstantOrderCourse[];
 }

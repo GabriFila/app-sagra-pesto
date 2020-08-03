@@ -10,14 +10,17 @@ App relies on 2 main technologies:
 
 ## Index
 
-- [Cloud functions](#cloud-functions)
-- [Firestore DB structure](#firestore-db-structure)
-- [Security rules](#security-rules)
-- [Typescript Interfaces](#typescript-interfaces)
-- [URLs](#urls)
-- [React Components](#react-components)
-- [Helper Functions](#helper-functions)
+- [Design](#design)
+  - [Index](#index)
+  - [Firestore DB structure](#firestore-db-structure)
+  - [Security rules](#security-rules)
+  - [Typescript Interfaces](#typescript-interfaces)
+  - [URLs](#urls)
+  - [React Components](#react-components)
+  - [Cloud functions](#cloud-functions)
+- [Helper functions](#helper-functions)
 - [Logging](#logging)
+- [Appunti](#appunti)
 
 ## Firestore DB structure
 
@@ -665,10 +668,6 @@ SmazzoCourse (course : ICourseWithId)
   5. update service consumed props
 
 ### triggers
-
-- [ ] onCreate on orders
-
-  1. in a single transaction update qts in storage
 
 - [ ] onUpdate on orders
 

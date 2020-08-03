@@ -14,18 +14,16 @@ interface IStorageCourseProps {
   courseDishes: IStorageDish[];
   courseName: string;
   kitchen: string;
+  isInstant: boolean;
 }
 
-const StorageCourse: React.FunctionComponent<IStorageCourseProps> = ({
-  courseDishes,
-  courseName,
-  kitchen
-}) => {
+const StorageCourse: React.FunctionComponent<IStorageCourseProps> = props => {
   const classes = useStyle();
+  const { courseDishes, courseName, kitchen, isInstant } = props;
   return (
     <div className={classes.storageCourse}>
       <Typography color="primary" variant="h5">
-        {courseName} @ {kitchen}
+        {courseName} {isInstant && ' - istantanea'} @ {kitchen}
       </Typography>
       {courseDishes.map((dish, i) => (
         <StorageDish

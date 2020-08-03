@@ -3,6 +3,7 @@ import Paper from '@material-ui/core/Paper';
 import StorageCourse from './StorageCourse';
 import { StorageContext } from '../../context/StorageContext';
 import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles(theme => ({
   storageTab: {
@@ -21,16 +22,25 @@ const StorageTab: React.FunctionComponent = () => {
   const { storageCourses } = useContext(StorageContext);
 
   return (
-    <Paper elevation={6} className={classes.storageTab}>
-      {storageCourses.map(({ courseName, dishes, kitchen }) => (
-        <StorageCourse
-          key={courseName}
-          courseName={courseName}
-          courseDishes={dishes}
-          kitchen={kitchen}
-        />
-      ))}
-    </Paper>
+    <>
+      {storageCourses !== undefined ? (
+        <Paper elevation={6} className={classes.storageTab}>
+          {storageCourses.map(({ courseName, dishes, kitchen, isInstant }) => (
+            <StorageCourse
+              key={courseName}
+              courseName={courseName}
+              courseDishes={dishes}
+              kitchen={kitchen}
+              isInstant={isInstant}
+            />
+          ))}
+        </Paper>
+      ) : (
+        <Typography variant="h4" color="error">
+          Ci sono dei problemi con l'app, chiedi all'amministratore
+        </Typography>
+      )}
+    </>
   );
 };
 

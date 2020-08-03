@@ -9,6 +9,7 @@ import AdminPage from './components/admin/AdminPage';
 import AuthProvider from './context/AuthContext';
 import Menu from './components/TopBar';
 import CashRegisterPage from './components/cashRegister/CashRegisterPage';
+import InstantCashRegisterPage from './components/instantCashRegister/InstantCashRegisterPage';
 
 function App() {
   return (
@@ -33,6 +34,12 @@ function App() {
               exact
               path="/cassa"
               component={CashRegisterPage}
+            />
+            <PrivateRoleRoute
+              requiredRoles={['cassa-istantanea']}
+              exact
+              path="/cassaBar"
+              component={InstantCashRegisterPage}
             />
             <Route exact path="/login" component={LoginPage} />
             <Route exact path="/register" component={RegisterPage} />

@@ -7,7 +7,9 @@ import { StorageContext } from '../../context/StorageContext';
 import { CashRegisterContext } from '../../context/CashRegisterContext';
 import { ActionType } from '../../reducers/CashRegisterReducer';
 
-interface ICashRegisterMenuProps {}
+interface ICashRegisterMenuProps {
+  onlyIstant: boolean;
+}
 
 const useStyle = makeStyles(theme =>
   createStyles({
@@ -29,44 +31,48 @@ const useStyle = makeStyles(theme =>
     }
   })
 );
-const CashRegisterMenu: React.FunctionComponent<ICashRegisterMenuProps> = () => {
+const CashRegisterMenu: React.FunctionComponent<ICashRegisterMenuProps> = props => {
   const classes = useStyle();
   const { storageCourses } = useContext(StorageContext);
   const { state, dispatch } = useContext(CashRegisterContext);
   const { courses, waitingOrderRes } = state;
-  console.log(waitingOrderRes);
+  const { onlyIstant } = props;
+
   return (
     <div
       className={classes.menu}
       style={waitingOrderRes ? { pointerEvents: 'none', opacity: '50%' } : {}}
     >
-      <Paper className={classes.orderNote} elevation={6}>
-        <TextField
-          multiline
-          rows="2"
-          placeholder={'Note ordine'}
-          variant="standard"
-          className={classes.notes}
-          onChange={e =>
-            dispatch({
-              type: ActionType.ChangeOrderNote,
-              payload: { note: e.target.value }
-            })
-          }
-        />
-      </Paper>
-      {storageCourses.map(({ courseName, dishes, kitchen }) => (
-        <CashRegisterCourse
-          key={courseName}
-          courseName={courseName}
-          kitchen={kitchen}
-          storageDishes={dishes}
-          orderDishes={
-            courses.filter(course => course.courseName === courseName)[0]
-              ?.dishes
-          }
-        />
-      ))}
+      {!onlyIstant && (
+        <Paper className={classes.orderNote} elevation={6}>
+          <TextField
+            multiline
+            rows="2"
+            placeholder={'Note ordine'}
+            variant="standard"
+            className={classes.notes}
+            onChange={e =>
+              dispatch({
+                type: ActionType.ChangeOrderNote,
+                payload: { note: e.target.value }
+              })
+            }
+          />
+        </Paper>
+      )}
+      {storageCourses
+        .filter(({ isInstant }) => !onlyIstant || isInstant)
+        .map(({ courseName, dishes, kitchen }) => (
+          <CashRegisterCourse
+            key={courseName}
+            courseName={courseName}
+            kitchen={kitchen}
+            storageDishes={dishes}
+            orderDishes={
+              courses.find(course => course.courseName === courseName)?.dishes
+            }
+          />
+        ))}
     </div>
   );
 };

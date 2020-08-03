@@ -21,11 +21,11 @@
   },
   "emulators": {
     "functions": {
-      "host": "172.20.143.13",
+      "host": "172.25.159.91",
       "port": 5001
     },
     "firestore": {
-      "host": "172.20.143.13",
+      "host": "172.25.159.91",
       "port": 8080
     },
     "ui": { "enabled": true }
