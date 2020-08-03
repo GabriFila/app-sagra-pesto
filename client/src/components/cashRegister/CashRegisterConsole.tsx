@@ -6,7 +6,7 @@ import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import DoneIcon from '@material-ui/icons/Done';
 import PrintIcon from '@material-ui/icons/Print';
-import ReplayIcon from '@material-ui/icons/Replay';
+import ResetIcon from '@material-ui/icons/Replay';
 import { StorageContext } from '../../context/StorageContext';
 import { CashRegisterContext } from '../../context/CashRegisterContext';
 import { ActionType } from '../../reducers/CashRegisterReducer';
@@ -204,7 +204,7 @@ const CashRegisterConsole: React.FunctionComponent = () => {
           color="secondary"
           onClick={resetOrder}
         >
-          <ReplayIcon fontSize="large" />
+          <ResetIcon fontSize="large" />
         </IconButton>
       </div>
     </Paper>

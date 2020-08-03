@@ -13,7 +13,6 @@ App relies on 2 main technologies:
 - [Design](#design)
   - [Index](#index)
   - [Firestore DB structure](#firestore-db-structure)
-  - [Security rules](#security-rules)
   - [Typescript Interfaces](#typescript-interfaces)
   - [URLs](#urls)
   - [React Components](#react-components)
@@ -52,145 +51,7 @@ Each document corresponds to a user and contains a 'roles' property which is a s
 
 <div style="page-break-after: always;"></div>
 
-## Security rules
-
-```ts
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-        allow read: if false;
-        allow write: if false;
-
-      match /sagre/{sagraId} {
-        allow read: if false;
-        allow write: if false;
-
-        match /services/{serviceId} {
-          allow read: if isLoggedIn() && hasRole('admin');
-          allow create: if isLoggedIn() && hasRole('admin') && //end date is null;
-          // also creation if there are no services with endDate == nulll
-          allow update: if isLoggedIn() && hasRole('admin');
-          allow delete: if false;
-        }
-        match /storage/{storageid} {
-          allow get: if isLoggedIn() && hasRole('admin') && hasRole('cassa');
-          allow create: if false;
-          allow update: if isLoggedIn() && hasRole('admin');
-          allow delete: if false;
-        }
-
-      }
-  }
-}
-
-
-function hasRole(reqRole) {
-  return request.auth.token[reqRole] == true;
-}
-
-function isLoggedIn() {
-  return request.auth.uid != null;
-}
-```
-
-[⮝ back to table of contents](##index)
-
-<div style="page-break-after: always;"></div>
-
 ## Typescript Interfaces
-
-### Firestore
-
-```ts
-interface IUserSagraRolesDoc {
-  name: string;
-  roles: string[];
-}
-```
-
-```ts
-interface ISagra {
-  year: number;
-  totalRevenue: number;
-  totalInstantRevenue: number;
-  totalPeople: number;
-  totalOrders: number;
-  totalInstantOrders: number;
-}
-```
-
-```ts
-interface IDish {
-  shortName: string;
-}
-```
-
-```ts
-interface ICourseDish extends IDish {
-  qt: number;
-}
-```
-
-```ts
-interface IStorageDish extends IDish {
-  courseName: string;
-  name: string;
-  storageQt: number;
-  price: number;
-  isInMenu: boolean;
-  isInstant: boolean;
-}
-```
-
-```ts
-export interface IStorage {
-  storageDishes: IStorageDish[];
-}
-```
-
-```ts
-interface IService {
-  start: Date | null;
-  end: Date | null;
-  totalRevenue: number;
-  totalInstantRevenue: number;
-  totalPeople: number; // total number of people
-  lastOrderNum: number; // progressive counter for orders
-  totalInstantOrders: number;
-  totalOrders: number;
-  startingDishes: ICourseDish[];
-}
-```
-
-```ts
-interface IInstantOrder {
-  revenue: number;
-  dishes: ICourseDish[];
-}
-```
-
-```ts
-interface IOrder {
-  orderNum: number;
-  status: string; // (pending, active, completed, deleted)
-  waiterName: string; // display name of waiter
-  waiterId: string; // id of waiter to link
-  table: number;
-  revenue: number;
-  notes: string;
-}
-```
-
-```ts
-interface ICourse {
-  courseName: string;
-  kitchen: string;
-  orderNum: number;
-  status: string; // (wait,prep,ready,delivered)
-  notes: string;
-  dishes: ICourseDish[];
-}
-```
 
 ```ts
 interface IOrderWithId extends IOrder {
@@ -236,22 +97,14 @@ domain = (e.g. sagra.genova.cngei.it)
 
 ### Contextes
 
-- [ ] AuthContext
-- [ ] StorageContext
-- [ ] ServiceContext
-- [ ] CashRegisterReducerContext
-
-AuthContext
-
-StorageContext
-
-ServiceContext
-
-CashRegisterReducerContext
+- [x] AuthContext
+- [x] StorageContext
+- [x] ServiceContext
+- [x] CashRegisterReducerContext
 
 ### Reducers
 
-- [ ] CashRegisterReducer
+- [x] CashRegisterReducer
 
 CashRegisterReducer
 
@@ -278,17 +131,17 @@ Actions:
 
 Base structure:
 
-- [ ] App
-  - [ ] SagraContextProvider
-  - [ ] TopBar
-    - [ ] MenuDrawer
-    - [ ] PendingOrders
-    - [ ] DeleteOrderButton
-      - [ ] DeleteOrderModal
-    - [ ] SearchOrderButton
-      - [ ] SearchOrderModal
-        - [ ] SearchOrderModalCourse
-  - [ ] PrivateRoleRoute
+- [x] App
+  - [x] SagraContextProvider
+  - [x] TopBar
+    - [x] MenuDrawer
+    - [x] PendingOrders
+    - [x] DeleteOrderButton
+      - [x] DeleteOrderModal
+    - [x] SearchOrderButton
+      - [x] SearchOrderModal
+        - [x] SearchOrderModalCourse
+  - [x] PrivateRoleRoute
 
 App
 
@@ -360,7 +213,7 @@ PrivateRoleRoute (component : FComponent, authed : boolean, required roles : str
 
 ### domain/
 
-- [ ] HomePage
+- [x] HomePage
 
 HomePage
 
@@ -370,7 +223,7 @@ HomePage
 
 ### domain/login
 
-- [ ] LoginPage
+- [x] LoginPage
 
 LoginPage
 
@@ -382,7 +235,7 @@ LoginPage
 
 ### domain/register
 
-- [ ] RegisterPage
+- [x] RegisterPage
 
 RegisterPage
 
@@ -449,11 +302,11 @@ ServiceInfo (service : IService)
 
 ### domain/cassa
 
-- [ ] CashRegisterPage
-  - [ ] CashRegisterMenu
-    - [ ] CashRegisterCourse
-      - [ ] CashRegisterDish
-  - [ ] CashRegisterConsole
+- [x] CashRegisterPage
+  - [x] CashRegisterMenu
+    - [x] CashRegisterCourse
+      - [x] CashRegisterDish
+  - [x] CashRegisterConsole
 
 CashRegisterPage
 
@@ -490,11 +343,11 @@ CashRegisterConsole (revenue: number, orderNum : number | undefined, onlyInstant
 
 ### domain/cassaBar
 
-- [ ] InstantCashRegisterPage
-  - [ ] CashRegisterMenu
-    - [ ] CashRegisterCourse
-      - [ ] CashRegisterDish
-  - [ ] CashRegisterConsole
+- [x] InstantCashRegisterPage
+  - [x] CashRegisterMenu
+    - [x] CashRegisterCourse
+      - [x] CashRegisterDish
+  - [x] CashRegisterConsole
 
 InstantCashRegisterPage
 
@@ -644,7 +497,7 @@ SmazzoCourse (course : ICourseWithId)
 
 ### callables
 
-- [ ] createOrder
+- [x] createOrder
 
   (dishesInOrder : ICourseDish[], orderRevenue : number, orderCovers : number) => {} : number
 
@@ -673,7 +526,7 @@ SmazzoCourse (course : ICourseWithId)
 
   1. in a single transaction update check difference in dishes qts in storage
 
-- [ ] onCreate on instantOrders
+- [x] onCreate on instantOrders
 
   1. update totalRevenue of current service
   2. update totalInstantOrders of current service

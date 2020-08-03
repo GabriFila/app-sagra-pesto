@@ -49,22 +49,28 @@ export interface IStorageDish extends IOrderDish {
   isInMenu: boolean;
 }
 
+export type OrderStatus = "pending" | "active" | "completed" | "deleted";
 export interface IOrder {
   people: number;
   orderNum: number;
-  status: string; // (pending, active, completed, deleted)
+  status: OrderStatus;
   waiterName: string; // display name of waiter
   waiterId: string; // id of waiter to link
-  table: number;
+  tableNum: number;
   revenue: number;
   note?: string;
-  // TODO implement notes in UI
 }
 
+export interface IDBOrder extends IOrder {
+  orderId: string;
+}
+
+export type CourseStatus = "wait" | "prep" | "ready" | "delivered";
 export interface IDBCourse extends ICourse {
+  courseId?: string;
   dishes: IDish[];
   orderNum: number;
-  status: string; // (wait,prep,ready,delivered)
+  status: CourseStatus;
   note: string;
 }
 

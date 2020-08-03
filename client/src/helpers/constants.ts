@@ -7,6 +7,6 @@ export const ROLES: IRole[] = [
   { name: 'primi', route: '/cucina/primi' },
   { name: 'secondi', route: '/cucina/secondi' },
   { name: 'bar', route: '/cucina/bar' },
-  { name: 'cameriere', route: 'cameriere' },
-  { name: 'smazzo', route: 'smazzo' }
+  { name: 'cameriere', route: '/cameriere' },
+  { name: 'smazzo', route: '/smazzo' }
 ];

@@ -6,13 +6,16 @@ Le parti precedute da _LAST_ sono funzioni non essenziali che potrebbero non ess
 
 ## Indice
 
-- [Obbiettivi](#obbiettivi)
-- [Evoluzione di un ordine](#evoluzione-di-un-ordine)
-- [Ruoli utente](#ruoli-utente)
-- [Attività dei ruoli](#attività-dei-ruoli)
-- [Permessi dei ruoli](#permessi-dei-ruoli)
-- [Mockup pagine](#mokcup-pagine)
-- [Stima dei costi](#stima-dei-costi)
+- [Requisiti](#requisiti)
+  - [Indice](#indice)
+  - [Obbiettivi](#obbiettivi)
+  - [Evoluzione di un ordine](#evoluzione-di-un-ordine)
+  - [Ruoli Utente](#ruoli-utente)
+  - [Attività dei ruoli](#attività-dei-ruoli)
+  - [Permessi dei ruoli](#permessi-dei-ruoli)
+  - [Mokcup pagine](#mokcup-pagine)
+  - [Stima dei costi](#stima-dei-costi)
+  - [Note](#note)
 
 <div style="page-break-after: always;"></div>
 
@@ -203,7 +206,7 @@ Ogni pagina ha una top bar con:
 <br/>
 <br/>
 <p align="center">
-  <img src="docs/mockups/home.png" height=360 style="border: 2px solid DimGray; border-radius: 3px" style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="./mockups/home.png" height=360 style="border: 2px solid DimGray; border-radius: 3px" style="border: 2px solid DimGray; border-radius: 3px">
 </p>
 
 <div style="page-break-after: always;"></div>
@@ -215,7 +218,7 @@ Ogni pagina ha una top bar con:
 <br per lasciare spazio tra testo e immagine >
 <br per lasciare spazio tra testo e immagine >
 <p align="center">
-  <img src="docs/mockups/login.png" height=360 style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="./mockups/login.png" height=360 style="border: 2px solid DimGray; border-radius: 3px">
 </p>
 
 <div style="page-break-after: always;"></div>
@@ -232,7 +235,7 @@ Ogni pagina ha una top bar con:
 <br per lasciare spazio tra testo e immagine >
 <br per lasciare spazio tra testo e immagine >
 <p align="center">
-  <img src="docs/mockups/admin.png" height=360 style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="./mockups/admin.png" height=360 style="border: 2px solid DimGray; border-radius: 3px">
 </p>
 
 <div style="page-break-after: always;"></div>
@@ -252,7 +255,7 @@ Ogni pagina ha una top bar con:
 <br per lasciare spazio tra testo e immagine >
 <br per lasciare spazio tra testo e immagine >
 <p align="center">
-  <img src="docs/mockups/cassaBar.png" height=360 style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="./mockups/cassaBar.png" height=360 style="border: 2px solid DimGray; border-radius: 3px">
 </p>
 
 <div style="page-break-after: always;"></div>
@@ -273,8 +276,8 @@ Ogni pagina ha una top bar con:
   - un tasto per resettare l'ordine per farne uno nuovo
 
 <p align="center">
-  <img src="docs/mockups/cassa.png" height=320 style="border: 2px solid DimGray; border-radius: 3px">
-  <img src="docs/mockups/cassaDelete.png" height=320 style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="./mockups/cassa.png" height=320 style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="./mockups/cassaDelete.png" height=320 style="border: 2px solid DimGray; border-radius: 3px">
 </p>
 
 <div style="page-break-after: always;"></div>
@@ -295,11 +298,11 @@ Ogni pagina ha una top bar con:
 <br per lasciare spazio tra testo e immagine >
 <br per lasciare spazio tra testo e immagine >
 <p align="center">
-  <img src="docs/mockups/cameriere.png" height=300 style="border: 2px solid DimGray; border-radius: 3px">
-  <img src="docs/mockups/cameriereClosed.png" height=300 style="border: 2px solid DimGray; border-radius: 3px">
-  <img src="docs/mockups/cameriereInPrep.png" height=300 style="border: 2px solid DimGray; border-radius: 3px">
-  <img src="docs/mockups/camerierePronto.png" height=300 style="border: 2px solid DimGray; border-radius: 3px">
-  <img src="docs/mockups/cameriereCons.png" height=300 style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="./mockups/cameriere.png" height=300 style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="./mockups/cameriereClosed.png" height=300 style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="./mockups/cameriereInPrep.png" height=300 style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="./mockups/camerierePronto.png" height=300 style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="./mockups/cameriereCons.png" height=300 style="border: 2px solid DimGray; border-radius: 3px">
 </p>
 <div style="page-break-after: always;"></div>
 
@@ -311,8 +314,8 @@ Ogni pagina ha una top bar con:
 <br per lasciare spazio tra testo e immagine >
 <br per lasciare spazio tra testo e immagine >
 <p align="center">
-  <img src="docs/mockups/cucina.png" height=360 style="border: 2px solid DimGray; border-radius: 3px">
-  <img src="docs/mockups/cassaBar.png" height=360 style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="./mockups/cucina.png" height=360 style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="./mockups/cassaBar.png" height=360 style="border: 2px solid DimGray; border-radius: 3px">
 </p>
 
 <div style="page-break-after: always;"></div>
@@ -326,8 +329,8 @@ Ogni pagina ha una top bar con:
 <br per lasciare spazio tra testo e immagine >
 <br per lasciare spazio tra testo e immagine >
 <p align="center">
-  <img src="docs/mockups/smazzo.png" height=360 style="border: 2px solid DimGray; border-radius: 3px">
-  <img src="docs/mockups/smazzoSearch.png" height=360 style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="./mockups/smazzo.png" height=360 style="border: 2px solid DimGray; border-radius: 3px">
+  <img src="./mockups/smazzoSearch.png" height=360 style="border: 2px solid DimGray; border-radius: 3px">
 </p>
 
 [⮝ torna all'indice](##indice)

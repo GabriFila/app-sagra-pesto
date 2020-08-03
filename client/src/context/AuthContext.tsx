@@ -6,20 +6,21 @@ import claimsToRoles from '../helpers/claimsToRoles';
 interface IAuthContext {
   phase: string;
   userRoles: IRole[];
-  name: string | null;
+  userName: string | null;
+  userId: string;
 }
-export const AuthContext = createContext<IAuthContext>({
+
+const initialContextValue: IAuthContext = {
   phase: 'pending',
-  userRoles: [],
-  name: ''
-});
+  userRoles: [] as IRole[],
+  userName: '',
+  userId: ''
+};
+
+export const AuthContext = createContext<IAuthContext>(initialContextValue);
 
 const AuthProvider: React.FunctionComponent = ({ children }) => {
-  const [authState, setAuthState] = useState<IAuthContext>({
-    phase: 'pending',
-    userRoles: [],
-    name: ''
-  });
+  const [authState, setAuthState] = useState<IAuthContext>(initialContextValue);
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
       if (user) {
@@ -27,12 +28,13 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
           setAuthState({
             phase: 'in',
             userRoles: claimsToRoles(idTokenResult.claims),
-            name: user.displayName
+            userName: user.displayName,
+            userId: user.uid
           });
         });
         console.info(`User is logged in`);
       } else {
-        setAuthState({ phase: 'out', userRoles: [], name: '' });
+        setAuthState({ phase: 'out', userRoles: [], userName: '', userId: '' });
         console.info('User is logged out');
       }
     });

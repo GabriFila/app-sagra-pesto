@@ -8,18 +8,23 @@ service cloud.firestore {
           allow update: if isLoggedIn() && hasRole('admin');
           allow delete: if false;
           match /orders/{orderId} {
-            allow write: if false;
-            allow read: if false;
+          allow create: if false;
+          allow update: if isLoggedIn() && hasRole('cameriere') && notUpdating("people") && notUpdating("orderNum") && notUpdating("status")
+                                         && notUpdating("revenue") && notUpdating("note") && isNullInDB("tableNum");
+          allow delete: if false;
+          allow get: if false;
+          allow list: if isLoggedIn() && hasRole('cameriere');
           }
           match /courses/{courseId} {
             allow write: if false;
-            allow read: if false;
+            allow get: if false;
+            allow list: if isLoggedIn() && hasRole('cameriere');
           }
           match /instantOrders/{instantOrderId} {
-          allow create: if isLoggedIn() && hasRole('cassa-istantanea') ;
+          allow create: if isLoggedIn() && hasRole('cassa-istantanea') 
           allow update: if false;
           allow delete: if false;
-            allow read: if false;
+          allow read: if false;
           }
         }
         match /storage/{storageid} {
@@ -44,4 +49,12 @@ function hasRole(reqRole) {
 
 function isLoggedIn() {
 	return request.auth.uid != null;
+}
+
+function isNullInDB(field) {
+	return resource.data[field] == null;
+}
+
+function notUpdating(field) {
+ return !(field in request.resource.data) || resource.data[field] == request.resource.data[field]
 }

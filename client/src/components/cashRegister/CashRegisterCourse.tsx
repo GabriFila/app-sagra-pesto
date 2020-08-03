@@ -28,6 +28,7 @@ const useStyle = makeStyles(theme =>
     },
     notes: {
       margin: 20,
+
       width: '90%'
     },
     courseAnchor: {

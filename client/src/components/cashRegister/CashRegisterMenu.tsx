@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
-import CashRegisterCourse from './CashRegsiterCourse';
+import CashRegisterCourse from './CashRegisterCourse';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import { StorageContext } from '../../context/StorageContext';

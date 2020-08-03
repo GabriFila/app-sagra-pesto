@@ -115,7 +115,7 @@ const TopBar: React.FunctionComponent<IMenuProps> = props => {
     setOpen(false);
   };
 
-  const { phase, userRoles, name } = useContext(AuthContext);
+  const { phase, userRoles, userName: name } = useContext(AuthContext);
 
   const logOutUser = () => {
     auth.signOut();
@@ -155,6 +155,7 @@ const TopBar: React.FunctionComponent<IMenuProps> = props => {
           </Typography>
           <IconButton
             onClick={() => {
+              localStorage.setItem('isLastThemeLight', String(!isLightTheme));
               setIsLigthTheme(!isLightTheme);
             }}
           >
