@@ -7,6 +7,7 @@ import { AuthContext } from '../../context/AuthContext';
 import { IOrder, IDBCourse } from '../../../../types';
 import WaiterOrder from './WaiterOrder';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
+import withServiceActive from '../ShowWhenServiceIsActive';
 
 const useStyle = makeStyles(theme =>
   createStyles({
@@ -94,4 +95,4 @@ function WaiterPage() {
   );
 }
 
-export default withServiceContext(WaiterPage);
+export default withServiceContext(withServiceActive(WaiterPage));

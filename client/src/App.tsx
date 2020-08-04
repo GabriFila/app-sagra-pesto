@@ -54,9 +54,6 @@ const darkTheme = createMuiTheme(darkThemeConfig);
 function App() {
   const [isLightTheme, setIsLightTheme] = useState(() => {
     const isLastThemeLight = localStorage.getItem('isLastThemeLight');
-    console.log(isLastThemeLight);
-    console.log(isLastThemeLight === undefined);
-    console.log(Boolean(isLastThemeLight));
     return isLastThemeLight === undefined
       ? true
       : isLastThemeLight === 'true'

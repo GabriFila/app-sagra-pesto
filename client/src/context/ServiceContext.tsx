@@ -8,11 +8,13 @@ interface IServiceContext {
     firebase.firestore.DocumentData
   >;
   serviceId: string;
+  isServiceActive: boolean;
 }
 export const ServiceContext = createContext<IServiceContext>({
   service: undefined,
   serviceRef: null,
-  serviceId: undefined
+  serviceId: undefined,
+  isServiceActive: undefined
 });
 
 const ServiceContextProvider: React.FunctionComponent = ({ children }) => {
@@ -23,18 +25,21 @@ const ServiceContextProvider: React.FunctionComponent = ({ children }) => {
     firebase.firestore.DocumentReference<firebase.firestore.DocumentData>
   >();
   const [serviceId, setCurrentServiceId] = useState('');
+  const [isServiceActive, setIsServiceActive] = useState<boolean>(undefined);
 
   useEffect(() => {
     const unsubscribeService = getServiceRef().onSnapshot(
       snaps => {
-        if (snaps.docs.length === 0) setCurrentService(undefined);
-        else if (snaps.docs.length > 1) {
+        if (snaps.size === 0 || snaps.size > 1) {
           // TODO add error to tell user
+          setCurrentService(undefined);
+          setIsServiceActive(false);
         } else
           snaps.forEach(snap => {
             setCurrentService(snap.data() as IService);
             setCurrentServiceRef(snap.ref);
             setCurrentServiceId(snap.id);
+            setIsServiceActive(true);
           });
       },
       err => console.error('Service context: ', err)
@@ -43,7 +48,9 @@ const ServiceContextProvider: React.FunctionComponent = ({ children }) => {
   }, []);
 
   return (
-    <ServiceContext.Provider value={{ service, serviceRef, serviceId }}>
+    <ServiceContext.Provider
+      value={{ service, serviceRef, serviceId, isServiceActive }}
+    >
       {children}
     </ServiceContext.Provider>
   );
@@ -58,15 +65,3 @@ const withServiceContext = (BaseComponent: React.FunctionComponent) => (
 );
 
 export default withServiceContext;
-// const initService: IService = {
-//   start: null,
-//   end: null,
-//   totalRevenue: 0,
-//   totalInstantRevenue: 0,
-//   totalPeople: 0,
-//   lastOrderNum: 0,
-//   totalInstantOrders: 0,
-//   totalOrders: 0,
-//   // TODO add storage, get it from props
-//   startingCourses: [] // get set current storage
-// };

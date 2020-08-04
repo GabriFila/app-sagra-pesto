@@ -1,17 +1,15 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import Container from '@material-ui/core/Container';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
 import withStorageContext from '../../context/StorageContext';
 import CashRegisterMenu from './CashRegisterMenu';
 import withCashRegisterContext from '../../context/CashRegisterContext';
 import CashRegisterConsole from './CashRegisterConsole';
 import CashRegisterNav from './CashRegisterNav';
-import withServiceContext, {
-  ServiceContext
-} from '../../context/ServiceContext';
-import Typography from '@material-ui/core/Typography';
+import withServiceContext from '../../context/ServiceContext';
+import withServiceActive from '../ShowWhenServiceIsActive';
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(theme =>
   createStyles({
     cashRegisterPage: {
       display: 'flex',
@@ -33,29 +31,17 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const CashRegisterPage = () => {
   const classes = useStyles();
-  const { service } = useContext(ServiceContext);
   return (
     <Container className={classes.cashRegisterPage}>
-      {service !== undefined ? (
-        <>
-          <CashRegisterNav onlyInstant={false} />
-          <CashRegisterMenu onlyInstant={false} />
-          <CashRegisterConsole />
-        </>
-      ) : (
-        <Typography
-          variant="h3"
-          align="center"
-          color="error"
-          className={classes.errorMsg}
-        >
-          Il servizio non è attivo al momento
-        </Typography>
-      )}
+      <CashRegisterNav onlyInstant={false} />
+      <CashRegisterMenu onlyInstant={false} />
+      <CashRegisterConsole />
     </Container>
   );
 };
 
 export default withServiceContext(
-  withStorageContext(withCashRegisterContext(CashRegisterPage))
+  withServiceActive(
+    withStorageContext(withCashRegisterContext(CashRegisterPage))
+  )
 );

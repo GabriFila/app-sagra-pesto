@@ -26,6 +26,6 @@ export const auth = firebase.auth();
 export const functions = firebase.app().functions('europe-west2');
 
 if (window.location.hostname === 'localhost') {
-  // functions.useFunctionsEmulator('http://172.25.61.46:5001');
+  // functions.useFunctionsEmulator('http://172.29.159.97:5001');
   // db.settings({ host: 'localhost:8080', ssl: false });
 }
