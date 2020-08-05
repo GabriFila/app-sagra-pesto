@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme => ({
     }
   },
   fab: {
-    position: 'absolute',
+    position: 'fixed',
     bottom: 30,
     right: 30
   }

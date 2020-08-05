@@ -4,7 +4,7 @@ import withServiceContext, {
   ServiceContext
 } from '../../context/ServiceContext';
 import { AuthContext } from '../../context/AuthContext';
-import { IOrder, IDBCourse } from '../../../../types';
+import { IDBCourse, IDBOrder } from '../../../../types';
 import WaiterOrder from './WaiterOrder';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import withServiceActive from '../ShowWhenServiceIsActive';
@@ -26,7 +26,7 @@ function WaiterPage() {
   const classes = useStyle();
   const { serviceRef } = useContext(ServiceContext);
   const { userId } = useContext(AuthContext);
-  const [orders, setOrders] = useState<IOrder[]>([]);
+  const [orders, setOrders] = useState<IDBOrder[]>([]);
   const [courses, setCourses] = useState<IDBCourse[]>([]);
 
   useEffect(() => {
@@ -38,7 +38,12 @@ function WaiterPage() {
         .where('waiterId', '==', userId)
         .onSnapshot(
           snap => {
-            setOrders(snap.docs.map(doc => doc.data()) as IOrder[]);
+            setOrders(
+              snap.docs.map(doc => ({
+                ...doc.data(),
+                orderId: doc.id
+              })) as IDBOrder[]
+            );
           },
           err =>
             console.error(
@@ -66,7 +71,12 @@ function WaiterPage() {
         )
         .onSnapshot(
           snap => {
-            setCourses(snap.docs.map(doc => doc.data()) as IDBCourse[]);
+            setCourses(
+              snap.docs.map(doc => ({
+                ...doc.data(),
+                courseId: doc.id
+              })) as IDBCourse[]
+            );
           },
           err =>
             console.error(
@@ -83,11 +93,13 @@ function WaiterPage() {
   return (
     <div className={classes.orderList}>
       <WaiterLinkForm />
-      {orders.map(({ orderNum, tableNum }) => (
+      {orders.map(({ orderNum, tableNum, orderId }) => (
         <WaiterOrder
           key={orderNum}
+          visual="waiter"
           orderNum={orderNum}
           tableNum={tableNum}
+          orderId={orderId}
           courses={courses.filter(course => course.orderNum === orderNum)}
         />
       ))}

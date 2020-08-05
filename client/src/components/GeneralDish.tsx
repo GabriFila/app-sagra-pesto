@@ -17,7 +17,7 @@ const useStyle = makeStyles(theme =>
   })
 );
 
-const WaiterDish: React.FunctionComponent<IWaiterDishProps> = props => {
+const GeneralDish: React.FunctionComponent<IWaiterDishProps> = props => {
   const classes = useStyle();
   const { shortName, qt } = props;
 
@@ -33,4 +33,4 @@ const WaiterDish: React.FunctionComponent<IWaiterDishProps> = props => {
   );
 };
 
-export default React.memo(WaiterDish);
+export default React.memo(GeneralDish);

@@ -3,7 +3,8 @@ service cloud.firestore {
   match /databases/{database}/documents {
       match /sagre/{sagraId} {
       	match /services/{serviceId} {
-    			allow read: if isLoggedIn() && hasRole('admin');
+    			allow get: if isLoggedIn() && hasRole('admin');
+    			allow list: if isLoggedIn() && hasRole('admin');
           allow create: if isLoggedIn() && hasRole('admin');
           allow update: if isLoggedIn() && hasRole('admin') && notUpdating("start") && notUpdating("totalRevenue") && notUpdating("totalRevenue") 
                                         && notUpdating("totalInstantRevenue") && notUpdating("totalPeople") && notUpdating("lastOrderNum") 
@@ -14,16 +15,21 @@ service cloud.firestore {
             allow list: if isLoggedIn() && hasRole('cameriere');
             allow create: if false;
             allow update: if isLoggedIn() && hasRole('cameriere') && notUpdating("people") && notUpdating("orderNum") && notUpdating("status")
-                                         && notUpdating("revenue") && notUpdating("note") && isNullInDB("tableNum");
+                                          && notUpdating("revenue") && notUpdating("note") && isNullInDB("tableNum");
             allow delete: if false;
           }
           match /courses/{courseId} {
             allow get: if false;
             allow list: if isLoggedIn() && hasRole('cameriere');
             allow write: if false;
+            allow create: if false;
+            allow update: if isLoggedIn() && hasRole('cameriere') && notUpdating("dishes") && notUpdating("kitchen") && notUpdating("note")
+                                          && notUpdating("orderNum") && notUpdating("courseName");
+            allow delete: if false;
           }
           match /instantOrders/{instantOrderId} {
-            allow read: if false;
+            allow get: if false;
+            allow list: if false;
             allow create: if isLoggedIn() && hasRole('cassa-istantanea') 
             allow update: if false;
             allow delete: if false;
@@ -44,7 +50,6 @@ service cloud.firestore {
     		allow write: if false;
   }
 }
-
 
 function hasRole(reqRole) {
 	return request.auth.token[reqRole] == true;

@@ -48,6 +48,8 @@ Alcune nozioni fondamentali sull'app:
 
 L'app prevede che ogni membro attivo durante un servizio possieda un account (a parte forse alcuni camerieri). L'utilizzo è consentito esclusivamente agli utenti loggati, con certe limitazioni in base al ruolo. Un utente può avere più ruoli.
 
+Una portata può essere gestita da solo una cucina. Un cucina può gestire più portate.
+
 La minima entità dell'app è la portata di un ordine. E' l'oggetto che viene passato tra i vari 'centri' operativi della sagra (cameriere, cucina, smazzo).
 
 L'evoluzione temporale di un ordine è la seguente:

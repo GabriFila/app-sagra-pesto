@@ -186,13 +186,13 @@ const TopBar: React.FunctionComponent<IMenuProps> = props => {
         <List>
           {userRoles.map(role => (
             <NavLink
-              key={role.name}
-              to={`${role.route}`}
+              key={role.title}
+              to={`${role.path}`}
               className={classes.link}
               activeClassName={classes.activeLink}
             >
-              <ListItem button key={role.name}>
-                <ListItemText primary={role.name.replace('-', ' ')} />
+              <ListItem button>
+                <ListItemText primary={role.title} />
               </ListItem>
             </NavLink>
           ))}

@@ -1,18 +1,18 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { auth } from '../fbConfig';
-import { IRole } from '../../../types';
+import { IRoleRouteInfo } from '../../../types';
 import claimsToRoles from '../helpers/claimsToRoles';
 
 interface IAuthContext {
   phase: string;
-  userRoles: IRole[];
+  userRoles: IRoleRouteInfo[];
   userName: string | null;
   userId: string;
 }
 
 const initialContextValue: IAuthContext = {
   phase: 'pending',
-  userRoles: [] as IRole[],
+  userRoles: [] as IRoleRouteInfo[],
   userName: '',
   userId: ''
 };

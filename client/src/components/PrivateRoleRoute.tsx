@@ -26,7 +26,9 @@ const PrivateRoute: React.FunctionComponent<IPrivateRouteProps> = ({
           case 'in':
             if (
               requiredRoles.some(reqRole =>
-                userRoles.map(userRole => userRole.name).includes(reqRole)
+                userRoles
+                  .map(userRole => userRole.requiredRole)
+                  .includes(reqRole)
               ) ||
               routeProps.location.pathname === '/'
             ) {

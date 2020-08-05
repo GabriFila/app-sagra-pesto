@@ -1,10 +1,11 @@
-import { IRole } from '../../../types';
-import { ROLES } from './constants';
-const claimsToRoles = (claims: { [key: string]: any }): IRole[] => {
-  return ROLES.filter(role =>
+import { IRoleRouteInfo } from '../../../types';
+import { ROUTE_ROLES } from '../Routes';
+
+const claimsToRoles = (claims: { [key: string]: any }): IRoleRouteInfo[] => {
+  return ROUTE_ROLES.filter(role =>
     Object.entries(claims)
       .map(pair => pair[0])
-      .includes(role.name)
+      .includes(role.requiredRole)
   );
 };
 export default claimsToRoles;

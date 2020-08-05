@@ -74,9 +74,11 @@ export interface IDBCourse extends ICourse {
   note: string;
 }
 
-export interface IRole {
-  name: string;
-  route: string;
+export interface IRoleRouteInfo {
+  requiredRole: string;
+  path: string;
+  component: React.FunctionComponent;
+  title: string;
 }
 
 interface IInstantOrder {

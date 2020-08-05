@@ -121,11 +121,11 @@ const CashRegisterConsole: React.FunctionComponent = () => {
     <Paper
       elevation={6}
       className={classes.console}
-      style={disableUIOnCondition(waitingOrderRes)}
+      style={disableUIOnCondition(waitingOrderRes, true)}
     >
       <div
         className={classes.consoleSection}
-        style={disableUIOnCondition(waitingToEndOrder)}
+        style={disableUIOnCondition(waitingToEndOrder, true)}
       >
         <div className={classes.peopleSelector}>
           <IconButton

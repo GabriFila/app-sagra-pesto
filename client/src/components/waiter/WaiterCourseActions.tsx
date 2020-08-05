@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import StoreIcon from '@material-ui/icons/Store';
 import DoneIcon from '@material-ui/icons/Done';
 import ResetIcon from '@material-ui/icons/Replay';
 import SafetyIconButton from '../SafetyButton';
 import { CourseStatus } from '../../../../types';
+import { ServiceContext } from '../../context/ServiceContext';
 
 interface IWaiterCourseActionsProps {
   status: CourseStatus;
+  courseId: string;
 }
 
 const useStyle = makeStyles(theme =>
@@ -25,16 +27,25 @@ const useStyle = makeStyles(theme =>
 
 const WaiterCourseActions: React.FunctionComponent<IWaiterCourseActionsProps> = props => {
   const classes = useStyle();
-  const { status } = props;
+  const { status, courseId } = props;
+  const { serviceRef } = useContext(ServiceContext);
+  const courseRef = serviceRef.collection('courses').doc(courseId);
+  const changeCourseStatus = (newStatus: CourseStatus) => {
+    courseRef
+      .set({ status: newStatus }, { merge: true })
+      .catch((err: Error) => {
+        console.error('ERROR WHEN UPDATING COURSE', err.message, err.stack);
+      });
+  };
 
   return (
     <div className={classes.topRow}>
       {status === 'ready' && (
         <SafetyIconButton
           func={() => {
-            alert('PORTATA SEGNATA COME COMPLETATA');
+            changeCourseStatus('delivered');
           }}
-          action="Vuoi contrassegnare la portata come completata?"
+          action="Vuoi contrassegnare la portata come consegnata?"
         >
           <DoneIcon fontSize="large" color="secondary" />
         </SafetyIconButton>
@@ -42,7 +53,8 @@ const WaiterCourseActions: React.FunctionComponent<IWaiterCourseActionsProps> = 
       {(status === 'prep' || status === 'delivered') && (
         <SafetyIconButton
           func={() => {
-            alert(`COMANDO ANNULLATO`);
+            if (status === 'prep') changeCourseStatus('wait');
+            if (status === 'delivered') changeCourseStatus('ready');
           }}
           action="Vuoi annullare l'invio alla cucina"
         >
@@ -52,7 +64,7 @@ const WaiterCourseActions: React.FunctionComponent<IWaiterCourseActionsProps> = 
       {status === 'wait' && (
         <SafetyIconButton
           func={() => {
-            alert('MANDATO IN CUCINA');
+            changeCourseStatus('prep');
           }}
           action="Vuoi inviare la portata alla cucina?"
         >

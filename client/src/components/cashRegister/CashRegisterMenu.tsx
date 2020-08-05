@@ -42,7 +42,7 @@ const CashRegisterMenu: React.FunctionComponent<ICashRegisterMenuProps> = props 
   return (
     <div
       className={classes.menu}
-      style={disableUIOnCondition(waitingOrderRes || waitingToEndOrder)}
+      style={disableUIOnCondition(waitingOrderRes || waitingToEndOrder, true)}
     >
       {!onlyInstant && (
         <Paper className={classes.orderNote} elevation={6}>

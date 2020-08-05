@@ -37,13 +37,13 @@ const HomePage = () => {
         </Typography>
       ) : null}
       {userRoles.map(role => (
-        <Link key={role.name} to={`${role.route}`} className={classes.pageLink}>
+        <Link key={role.title} to={`${role.path}`} className={classes.pageLink}>
           <Button
             color="primary"
             variant="contained"
             className={classes.pageLinkButton}
           >
-            {role.name.replace('-', ' ')}
+            {role.title}
           </Button>
         </Link>
       ))}
