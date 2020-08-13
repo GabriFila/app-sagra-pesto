@@ -82,6 +82,10 @@ export const onUserSagraRolesUpdate = functions
 export const createOrder = functions
   .region('europe-west2')
   .https.onCall((data, ctx) => {
+    if (!ctx.auth?.token.cassa) {
+      console.error('ERROR IN CREATING ORDER, call by a non auithorized user');
+      return;
+    }
     const courses = data.courses as IOrderCourse[];
     const people = data.people as number;
     const revenue = data.revenue as number;
