@@ -70,10 +70,10 @@ const WaiterOrder: React.FunctionComponent<IWaiterOrderProps> = props => {
     >
       <div className={classes.topRow}>
         <Typography color="primary" variant="h5">
-          T:{tableNum}
+          T: {tableNum}
         </Typography>
         <Typography color="primary" variant="h5">
-          O:{orderNum}
+          O: {orderNum}
         </Typography>
         <IconButton
           size="medium"

@@ -6,10 +6,11 @@ import {
   RouteProps
 } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+import { RoleName } from '../Routes';
 
 interface IPrivateRouteProps extends RouteProps {
   component: React.FunctionComponent<RouteComponentProps>;
-  requiredRoles: string[];
+  requiredRoles: RoleName[];
 }
 
 const PrivateRoute: React.FunctionComponent<IPrivateRouteProps> = ({

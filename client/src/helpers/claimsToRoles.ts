@@ -1,5 +1,5 @@
-import { IRoleRouteInfo } from '../../../types';
 import { ROUTE_ROLES } from '../Routes';
+import { IRoleRouteInfo } from '../clientTypes';
 
 const claimsToRoles = (claims: { [key: string]: any }): IRoleRouteInfo[] => {
   return ROUTE_ROLES.filter(role =>

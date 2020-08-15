@@ -167,7 +167,6 @@ export const createOrder = functions
           status: 'pending',
           revenue,
           people,
-          tableNum: null,
           note: orderNote
         };
         const toFullfill = newCourses.map(newCourse =>

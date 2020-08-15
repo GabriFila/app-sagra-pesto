@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { auth } from '../fbConfig';
-import { IRoleRouteInfo } from '../../../types';
+import { IRoleRouteInfo } from '../clientTypes';
 import claimsToRoles from '../helpers/claimsToRoles';
 
 interface IAuthContext {

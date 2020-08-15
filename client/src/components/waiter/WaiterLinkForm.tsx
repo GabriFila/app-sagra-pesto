@@ -21,7 +21,8 @@ const useStyles = makeStyles(theme => ({
   fab: {
     position: 'fixed',
     bottom: 30,
-    right: 30
+    right: 30,
+    zIndex: 200
   }
 }));
 
@@ -39,23 +40,22 @@ export default function WaiterLinkForm() {
   const createLink = () => {
     serviceRef
       .collection('orders')
+      .where('status', '==', 'pending')
       .where('orderNum', '==', Number(orderNum))
-      .where('tableNum', '==', null)
       .get()
       .then(snap => {
         if (snap.size === 0) throw new Error('There is no document');
         else if (snap.size > 1) throw new Error('There are too many docuemnts');
         else {
-          snap.docs.forEach(doc =>
-            doc.ref.set(
-              {
-                tableNum: Number(tableNum),
-                waiterId: userId,
-                waiterName: userName
-              },
-              { merge: true }
-            )
-          );
+          snap.docs.forEach(doc => {
+            doc.ref.set({
+              ...doc.data(),
+              tableNum: Number(tableNum),
+              waiterId: userId,
+              waiterName: userName,
+              status: 'active'
+            });
+          });
         }
       })
       .then(() => changeOpen())
@@ -80,6 +80,7 @@ export default function WaiterLinkForm() {
             autoFocus
             type="number"
             value={orderNum}
+            error={orderNum !== '' && Number(orderNum) <= 0}
             autoComplete="off"
             margin="normal"
             id="name"
@@ -92,6 +93,7 @@ export default function WaiterLinkForm() {
           <TextField
             autoComplete="off"
             value={tableNum}
+            error={tableNum !== '' && Number(tableNum) <= 0}
             type="number"
             margin="normal"
             id="name"
@@ -106,7 +108,11 @@ export default function WaiterLinkForm() {
           <Button onClick={changeOpen} color="secondary">
             Chiudi
           </Button>
-          <Button onClick={createLink} color="primary">
+          <Button
+            onClick={createLink}
+            color="primary"
+            disabled={Number(orderNum) <= 0 || Number(tableNum) <= 0}
+          >
             Aggiungi
           </Button>
         </DialogActions>

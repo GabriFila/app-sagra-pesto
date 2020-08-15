@@ -185,7 +185,9 @@ const CashRegisterConsole: React.FunctionComponent = () => {
           variant="h5"
           className={classes.orderNum}
           style={{
-            color: orderNum ? 'black' : theme.palette.background.paper
+            color: orderNum
+              ? theme.palette.text.primary
+              : theme.palette.background.paper
           }}
         >
           {orderNum || 123}

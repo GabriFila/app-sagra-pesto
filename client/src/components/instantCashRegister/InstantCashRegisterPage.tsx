@@ -6,7 +6,6 @@ import CashRegisterMenu from '../cashRegister/CashRegisterMenu';
 import withCashRegisterContext from '../../context/CashRegisterContext';
 import InstantCashRegisterConsole from './InstantCashRegisterConsole';
 import CashRegisterNav from '../cashRegister/CashRegisterNav';
-import withServiceContext from '../../context/ServiceContext';
 import withServiceActive from '../ShowWhenServiceIsActive';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -40,8 +39,6 @@ const InstantCashRegisterPage = () => {
   );
 };
 
-export default withServiceContext(
-  withServiceActive(
-    withStorageContext(withCashRegisterContext(InstantCashRegisterPage))
-  )
+export default withServiceActive(
+  withStorageContext(withCashRegisterContext(InstantCashRegisterPage))
 );

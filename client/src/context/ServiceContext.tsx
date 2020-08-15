@@ -42,7 +42,7 @@ const ServiceContextProvider: React.FunctionComponent = ({ children }) => {
             setIsServiceActive(true);
           });
       },
-      err => console.error('Service context: ', err)
+      err => console.error('ERROR IN RETRIEVING SERVICE: ', err)
     );
     return () => unsubscribeService();
   }, []);
@@ -56,12 +56,12 @@ const ServiceContextProvider: React.FunctionComponent = ({ children }) => {
   );
 };
 
-const withServiceContext = (BaseComponent: React.FunctionComponent) => (
-  props: any
-) => (
-  <ServiceContextProvider>
-    <BaseComponent {...props} />
-  </ServiceContextProvider>
-);
+// const withServiceContext = (BaseComponent: React.FunctionComponent) => (
+//   props: any
+// ) => (
+//   <ServiceContextProvider>
+//     <BaseComponent {...props} />
+//   </ServiceContextProvider>
+// );
 
-export default withServiceContext;
+export default ServiceContextProvider;

@@ -11,6 +11,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import AuthProvider from './context/AuthContext';
 import Menu from './components/TopBar';
 import Routes from './Routes';
+import ServiceContextProvider from './context/ServiceContext';
 
 const baseThemeConfig: ThemeOptions = {
   palette: {
@@ -65,11 +66,13 @@ function App() {
     <ThemeProvider theme={isLightTheme ? lightTheme : darkTheme}>
       <CssBaseline />
       <AuthProvider>
-        <BrowserRouter>
-          <Menu isLightTheme={isLightTheme} setIsLigthTheme={setIsLightTheme}>
-            <Routes />
-          </Menu>
-        </BrowserRouter>
+        <ServiceContextProvider>
+          <BrowserRouter>
+            <Menu isLightTheme={isLightTheme} setIsLigthTheme={setIsLightTheme}>
+              <Routes />
+            </Menu>
+          </BrowserRouter>
+        </ServiceContextProvider>
       </AuthProvider>
     </ThemeProvider>
   );

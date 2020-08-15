@@ -9,56 +9,72 @@ import CashRegisterPage from './components/cashRegister/CashRegisterPage';
 import InstantCashRegisterPage from './components/instantCashRegister/InstantCashRegisterPage';
 import WaiterPage from './components/waiter/WaiterPage';
 import KitchenPage from './components/kitchen/KitchenPage';
+import { IRoleRouteInfo } from './clientTypes';
+import HubPage from './components/hub/HubPage';
 
-import { IRoleRouteInfo } from '../../types';
+export enum RoleName {
+  Admin = 'admin',
+  CashRegister = 'cassa',
+  InstantCashRegister = 'cassa-istantanea',
+  KitchenFirst = 'cucina-primi',
+  KitchenSecond = 'cucina-secondi',
+  KitchenBar = 'cucina-bar',
+  Waiter = 'cameriere',
+  Hub = 'smazzo'
+}
 
 export const ROUTE_ROLES: IRoleRouteInfo[] = [
   {
     title: 'Admin',
-    requiredRole: 'admin',
+    requiredRole: RoleName.Admin,
     path: '/admin',
     component: AdminPage
   },
   {
-    title: '',
-    requiredRole: 'cassa',
+    title: 'Cassa',
+    requiredRole: RoleName.CashRegister,
     path: '/cassa',
     component: CashRegisterPage
   },
   {
     title: 'Cassa bar',
-    requiredRole: 'cassa-istantanea',
+    requiredRole: RoleName.InstantCashRegister,
     path: '/cassaBar',
     component: InstantCashRegisterPage
   },
   {
     title: 'Cucina primi',
-    requiredRole: 'cucina-primi',
+    requiredRole: RoleName.KitchenFirst,
     path: '/cucina/primi',
     component: KitchenPage
   },
   {
     title: 'Cucina secondi',
-    requiredRole: 'cucina-secondi',
+    requiredRole: RoleName.KitchenSecond,
     path: '/cucina/secondi',
     component: KitchenPage
   },
   {
     title: 'Cucina bar',
-    requiredRole: 'cucina-bar',
+    requiredRole: RoleName.KitchenBar,
     path: '/cucina/bar',
     component: KitchenPage
   },
   {
-    title: 'Camerier*',
-    requiredRole: 'cameriere',
+    title: 'Sala',
+    requiredRole: RoleName.Waiter,
     path: '/cameriere',
     component: WaiterPage
+  },
+  {
+    requiredRole: RoleName.Hub,
+    title: 'Smazzo',
+    component: HubPage,
+    path: '/smazzo'
   }
-  // { requiredRole: 'smazzo', route: '/smazzo', component:SmazzoPage }
 ];
 
-export default function Routes() {
+const Routes: React.FunctionComponent = () => {
   return (
     <Switch>
       <PrivateRoleRoute
@@ -83,4 +99,6 @@ export default function Routes() {
       </Route>
     </Switch>
   );
-}
+};
+
+export default Routes;

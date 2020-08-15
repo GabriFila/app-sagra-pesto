@@ -5,7 +5,7 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles(theme =>
   createStyles({
     root: {
       display: 'flex',
@@ -15,7 +15,8 @@ const useStyles = makeStyles(() =>
       alignSelf: 'center'
     },
     infoMsg: {
-      margin: 'auto'
+      margin: theme.spacing(2),
+      fontSize: '1.3rem'
     },
     pageLink: {
       margin: 'auto',
@@ -27,12 +28,15 @@ const useStyles = makeStyles(() =>
 
 const HomePage = () => {
   const { userRoles } = useContext(AuthContext);
-
   const classes = useStyles();
   return (
     <div className={classes.root}>
       {userRoles.length === 0 ? (
-        <Typography variant="h4" className={classes.infoMsg}>
+        <Typography
+          variant="body1"
+          className={classes.infoMsg}
+          color="textPrimary"
+        >
           Non hai ruoli, chiedi che te ne venga assegnato uno!
         </Typography>
       ) : null}
@@ -47,6 +51,14 @@ const HomePage = () => {
           </Button>
         </Link>
       ))}
+      <Typography
+        variant="body1"
+        className={classes.infoMsg}
+        align="center"
+        color="textPrimary"
+      >
+        Se non vedi il tuo ruolo qui, prova ad uscire e riaccedere
+      </Typography>
     </div>
   );
 };

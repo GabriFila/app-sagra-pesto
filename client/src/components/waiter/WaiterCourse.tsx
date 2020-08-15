@@ -41,7 +41,6 @@ const WaiterCourse: React.FunctionComponent<IWaiterCourseProps> = props => {
   const classes = useStyle();
   const theme = useTheme();
   const { courseName, dishes, status, courseId } = props;
-  console.log(status);
   return (
     <div
       className={`${classes.course} ${

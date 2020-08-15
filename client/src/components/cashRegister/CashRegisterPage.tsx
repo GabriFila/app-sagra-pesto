@@ -6,7 +6,6 @@ import CashRegisterMenu from './CashRegisterMenu';
 import withCashRegisterContext from '../../context/CashRegisterContext';
 import CashRegisterConsole from './CashRegisterConsole';
 import CashRegisterNav from './CashRegisterNav';
-import withServiceContext from '../../context/ServiceContext';
 import withServiceActive from '../ShowWhenServiceIsActive';
 
 const useStyles = makeStyles(theme =>
@@ -17,7 +16,6 @@ const useStyles = makeStyles(theme =>
       justifyContent: 'space-around',
       padding: theme.spacing(2),
       [theme.breakpoints.down('xs')]: {
-        // height: 'auto',
         flexDirection: 'column-reverse',
         padding: theme.spacing(1),
         alignItems: 'center'
@@ -40,8 +38,6 @@ const CashRegisterPage = () => {
   );
 };
 
-export default withServiceContext(
-  withServiceActive(
-    withStorageContext(withCashRegisterContext(CashRegisterPage))
-  )
+export default withServiceActive(
+  withStorageContext(withCashRegisterContext(CashRegisterPage))
 );

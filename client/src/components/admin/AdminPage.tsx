@@ -1,10 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Container from '@material-ui/core/Container';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import {
+  makeStyles,
+  createStyles,
+  Theme,
+  useTheme
+} from '@material-ui/core/styles';
 import StorageTab from './StorageTab';
 import ServiceTab from './ServiceTab';
 import withStorageContext from '../../context/StorageContext';
-import withServiceContext from '../../context/ServiceContext';
+import ViewSelector from '../ViewSelector';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import PollIcon from '@material-ui/icons/Poll';
+import ReorderIcon from '@material-ui/icons/Reorder';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -25,13 +33,23 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const AdminPage = () => {
   const classes = useStyles();
+  const [viewSelected, setViewSelected] = useState(0);
+  const isMobile = useMediaQuery(useTheme().breakpoints.down('sm'));
 
   return (
     <Container className={classes.root}>
-      <StorageTab />
-      <ServiceTab />
+      {(!isMobile || viewSelected === 0) && <StorageTab />}
+      {(!isMobile || viewSelected === 1) && <ServiceTab />}
+      <ViewSelector
+        viewSelected={viewSelected}
+        setViewSelected={setViewSelected}
+        data={[<ReorderIcon />, <PollIcon />].map(comp => ({
+          type: 'icon',
+          comp
+        }))}
+      />
     </Container>
   );
 };
 
-export default withStorageContext(withServiceContext(AdminPage));
+export default withStorageContext(AdminPage);

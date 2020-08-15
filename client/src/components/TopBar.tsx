@@ -1,50 +1,32 @@
 import React, { useContext, Dispatch, SetStateAction } from 'react';
 import clsx from 'clsx';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
 import Button from '@material-ui/core/Button';
 import { AuthContext } from '../context/AuthContext';
 import { auth } from '../fbConfig';
-import { NavLink, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import ToLightIcon from '@material-ui/icons/BrightnessHigh';
 import ToDarkIcon from '@material-ui/icons/Brightness4';
-const drawerWidth = 100;
+import Menu from './Menu';
+import PendingOrders from './hub/PendingOrders';
+import { RoleName } from '../Routes';
 
 interface IMenuProps {
   isLightTheme: boolean;
   setIsLigthTheme: Dispatch<SetStateAction<boolean>>;
 }
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(theme =>
   createStyles({
-    root: {
+    topBar: {
       display: 'flex',
       minHeight: '100vh'
-    },
-    appBar: {
-      transition: theme.transitions.create(['margin', 'width'], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen
-      })
-    },
-    appBarShift: {
-      width: `calc(100% - ${drawerWidth}px)`,
-      marginLeft: drawerWidth,
-      transition: theme.transitions.create(['margin', 'width'], {
-        easing: theme.transitions.easing.easeOut,
-        duration: theme.transitions.duration.enteringScreen
-      })
     },
     title: {
       flexGrow: 1
@@ -52,47 +34,15 @@ const useStyles = makeStyles((theme: Theme) =>
     menuButton: {
       marginRight: theme.spacing(2)
     },
-    hide: {
-      display: 'none'
-    },
-    drawer: {
-      width: drawerWidth,
-      flexShrink: 0
-    },
-    drawerPaper: {
-      width: drawerWidth
-    },
-    drawerHeader: {
-      display: 'flex',
-      alignItems: 'center',
-      padding: theme.spacing(0, 1),
-      ...theme.mixins.toolbar,
-      justifyContent: 'flex-end'
-    },
     content: {
       display: 'flex',
       flexGrow: 1,
       width: '100%',
       marginTop: 64,
-      padding: theme.spacing(1),
-      [theme.breakpoints.down('sm')]: {
-        padding: theme.spacing(1)
-      },
       transition: theme.transitions.create('margin', {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen
-      }),
-      marginLeft: -drawerWidth
-    },
-    contentShift: {
-      transition: theme.transitions.create('margin', {
-        easing: theme.transitions.easing.easeOut,
-        duration: theme.transitions.duration.enteringScreen
-      }),
-      marginLeft: 0
-    },
-    role: {
-      width: '100%'
+      })
     },
     link: {
       color: theme.palette.text.primary
@@ -107,11 +57,12 @@ const TopBar: React.FunctionComponent<IMenuProps> = props => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const { children, isLightTheme, setIsLigthTheme } = props;
-  const handleDrawerOpen = () => {
+
+  const openDrawer = () => {
     setOpen(true);
   };
 
-  const handleDrawerClose = () => {
+  const closeDrawer = () => {
     setOpen(false);
   };
 
@@ -120,39 +71,36 @@ const TopBar: React.FunctionComponent<IMenuProps> = props => {
   const logOutUser = () => {
     auth.signOut();
   };
-
   const { location } = useHistory();
-
   return (
-    <div className={classes.root}>
+    <div className={classes.topBar}>
       <CssBaseline />
-      <AppBar
-        position="fixed"
-        className={clsx(classes.appBar, {
-          [classes.appBarShift]: open
-        })}
-      >
+      <AppBar position="fixed">
         <Toolbar>
           {userRoles.length === 0 ? null : (
             <IconButton
               color="inherit"
               aria-label="open drawer"
-              onClick={handleDrawerOpen}
+              onClick={openDrawer}
               edge="start"
-              className={clsx(classes.menuButton)}
+              className={classes.menuButton}
             >
               <MenuIcon />
             </IconButton>
           )}
           <Typography variant="h6" noWrap className={classes.title}>
             {name ? `${name}` : 'Sagra del Pesto'}
-            {location.pathname.substring(1).length > 0
-              ? ` - ${location.pathname
-                  .substring(1)
-                  .replace(/([A-Z]+)/g, ' $1')
-                  .replace(/([A-Z][a-z])/g, ' $1')}`
+            {location.pathname.length > 0 && userRoles.length > 0
+              ? ` - ${
+                  userRoles.find(role => role.path === location.pathname)?.title
+                }`
               : ''}
           </Typography>
+          {location.pathname.length > 0 &&
+            userRoles.length > 0 &&
+            location.pathname ===
+              userRoles.find(userRole => userRole.requiredRole === RoleName.Hub)
+                .path && <PendingOrders />}
           <IconButton
             onClick={() => {
               localStorage.setItem('isLastThemeLight', String(!isLightTheme));
@@ -168,43 +116,8 @@ const TopBar: React.FunctionComponent<IMenuProps> = props => {
           ) : null}
         </Toolbar>
       </AppBar>
-      <Drawer
-        className={classes.drawer}
-        variant="persistent"
-        anchor="left"
-        open={open}
-        classes={{
-          paper: classes.drawerPaper
-        }}
-      >
-        <div className={classes.drawerHeader}>
-          <IconButton onClick={handleDrawerClose}>
-            <ChevronLeftIcon />
-          </IconButton>
-        </div>
-        <Divider />
-        <List>
-          {userRoles.map(role => (
-            <NavLink
-              key={role.title}
-              to={`${role.path}`}
-              className={classes.link}
-              activeClassName={classes.activeLink}
-            >
-              <ListItem button>
-                <ListItemText primary={role.title} />
-              </ListItem>
-            </NavLink>
-          ))}
-        </List>
-      </Drawer>
-      <main
-        className={clsx(classes.content, {
-          [classes.contentShift]: open
-        })}
-      >
-        {children}
-      </main>
+      <Menu userRoles={userRoles} open={open} closeDrawer={closeDrawer} />
+      <main className={clsx(classes.content)}>{children}</main>
     </div>
   );
 };

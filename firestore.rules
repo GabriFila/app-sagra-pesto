@@ -16,7 +16,7 @@ service cloud.firestore {
             allow get: if false;
             allow list: if hasRole('cameriere');
             allow create: if false;
-            allow update: if hasRole('cameriere') && editOnlyCertainFields(['tableNum',"waiterId","waiterName"]) && wasNull("tableNum");
+            allow update: if hasRole('cameriere') && editOnlyCertainFields(['tableNum',"waiterId","waiterName","status"]) && resource.data["status"] == "pending";
             allow delete: if false;
           }
           match /courses/{courseId} {
@@ -51,10 +51,6 @@ service cloud.firestore {
 
 function hasRole(reqRole) {
 	return request.auth.token[reqRole] == true;
-}
-
-function wasNull(field) {
-	return resource.data[field] == null;
 }
 
 function checkFields(requiredFields, optionalFields) {

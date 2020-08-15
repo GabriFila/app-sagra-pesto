@@ -2,7 +2,6 @@ import firebase from 'firebase/app';
 import 'firebase/functions';
 import 'firebase/auth';
 import 'firebase/firestore';
-import 'firebase/analytics';
 
 // Firebase configuration
 let firebaseConfig: any = {
@@ -18,7 +17,6 @@ let firebaseConfig: any = {
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-firebase.analytics();
 export default firebase;
 export const db = firebase.firestore();
 
@@ -26,6 +24,5 @@ export const auth = firebase.auth();
 export const functions = firebase.app().functions('europe-west2');
 
 if (window.location.hostname === 'localhost') {
-  // functions.useFunctionsEmulator('http://172.29.136.104:5001');
-  // db.settings({ host: 'localhost:8080', ssl: false });
+  // functions.useFunctionsEmulator('http://172.22.20.59:5001');
 }

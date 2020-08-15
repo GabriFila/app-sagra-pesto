@@ -191,14 +191,18 @@ describe('How an order doc should be secured', () => {
       note: 'test',
       people: 'test',
       revenue: 'test',
-      status: 'test',
-      orderNum: 'test',
-      tableNum: null
+      status: 'pending',
+      orderNum: 'test'
     });
     const testDoc = orderDoc(serviceDoc(sagraDoc(db)));
     await firebase.assertSucceeds(
       testDoc.set(
-        { tableNum: 'num', waiterId: 'test', waiterName: 'name' },
+        {
+          tableNum: 'num',
+          waiterId: 'test',
+          waiterName: 'name',
+          status: 'active'
+        },
         { merge: true }
       )
     );

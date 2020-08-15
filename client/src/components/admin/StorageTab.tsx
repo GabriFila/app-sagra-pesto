@@ -37,7 +37,7 @@ const StorageTab: React.FunctionComponent = () => {
         </Paper>
       ) : (
         <Typography variant="h4" color="error">
-          Ci sono dei problemi con l'app, chiedi all'amministratore
+          Ci sono dei problemi con l'app, chiedi a Gengio
         </Typography>
       )}
     </>

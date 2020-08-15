@@ -28,7 +28,7 @@ const ShowWhenServiceIsActive: React.FunctionComponent = ({ children }) => {
           Il servizio non è attivo al momento
         </Typography>
       ) : (
-        <div>prova</div>
+        <></>
       )}
     </>
   );

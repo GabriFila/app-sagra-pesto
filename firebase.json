@@ -41,11 +41,11 @@
   },
   "emulators": {
     "functions": {
-      "host": "172.29.136.104",
+      "host": "172.22.20.59",
       "port": 5001
     },
     "firestore": {
-      "host": "172.29.136.104",
+      "host": "172.22.20.59",
       "port": 8080
     },
     "ui": { "enabled": true }
