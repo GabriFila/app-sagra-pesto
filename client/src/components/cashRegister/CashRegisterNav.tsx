@@ -1,10 +1,8 @@
 import React, { useContext } from 'react';
-import {
-  makeStyles,
-  createStyles,
-  Theme,
-  useTheme
-} from '@material-ui/core/styles';
+import { Theme } from '@material-ui/core/styles';
+import makeStyles from '@material-ui/core/styles/makeStyles';
+import createStyles from '@material-ui/core/styles/createStyles';
+import useTheme from '@material-ui/core/styles/useTheme';
 import { StorageContext } from '../../context/StorageContext';
 import Typography from '@material-ui/core/Typography';
 import useMediaQuery from '@material-ui/core/useMediaQuery';

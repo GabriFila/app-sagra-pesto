@@ -67,6 +67,7 @@ const Menu: React.FunctionComponent<IMenuProps> = props => {
             to={`${role.path}`}
             className={classes.link}
             activeClassName={classes.activeLink}
+            onClick={closeDrawer}
           >
             <ListItem button>
               <ListItemText primary={role.title} />

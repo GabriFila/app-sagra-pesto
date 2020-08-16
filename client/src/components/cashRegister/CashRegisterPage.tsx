@@ -1,6 +1,7 @@
 import React from 'react';
 import Container from '@material-ui/core/Container';
-import { makeStyles, createStyles } from '@material-ui/core/styles';
+import makeStyles from '@material-ui/core/styles/makeStyles';
+import createStyles from '@material-ui/core/styles/createStyles';
 import withStorageContext from '../../context/StorageContext';
 import CashRegisterMenu from './CashRegisterMenu';
 import withCashRegisterContext from '../../context/CashRegisterContext';

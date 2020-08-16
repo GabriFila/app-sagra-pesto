@@ -8,9 +8,10 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@material-ui/core/styles/makeStyles';
 import { ServiceContext } from '../../context/ServiceContext';
 import { AuthContext } from '../../context/AuthContext';
+import { db } from '../../fbConfig';
 
 const useStyles = makeStyles(theme => ({
   input: {
@@ -38,17 +39,30 @@ export default function WaiterLinkForm() {
   };
 
   const createLink = () => {
-    serviceRef
-      .collection('orders')
-      .where('status', '==', 'pending')
-      .where('orderNum', '==', Number(orderNum))
-      .get()
-      .then(snap => {
-        if (snap.size === 0) throw new Error('There is no document');
-        else if (snap.size > 1) throw new Error('There are too many docuemnts');
+    const toFullfill = [
+      serviceRef
+        .collection('orders')
+        .where('status', '==', 'pending')
+        .where('orderNum', '==', Number(orderNum))
+        .get()
+    ];
+    toFullfill.push(
+      serviceRef
+        .collection('courses')
+        .where('status', '==', 'wait')
+        .where('orderNum', '==', Number(orderNum))
+        .get()
+    );
+    Promise.all(toFullfill)
+      .then(([orderSnap, coursesSnap]) => {
+        console.log('HERE');
+        if (orderSnap.size === 0) throw new Error('There is no document');
+        else if (orderSnap.size > 1)
+          throw new Error('There are too many docuemnts');
         else {
-          snap.docs.forEach(doc => {
-            doc.ref.set({
+          const batch = db.batch();
+          orderSnap.docs.forEach(doc => {
+            batch.set(doc.ref, {
               ...doc.data(),
               tableNum: Number(tableNum),
               waiterId: userId,
@@ -56,9 +70,20 @@ export default function WaiterLinkForm() {
               status: 'active'
             });
           });
+          coursesSnap.docs.forEach(courseSnap => {
+            batch.set(courseSnap.ref, {
+              ...courseSnap.data(),
+              waiterId: userId
+            });
+          });
+          batch.commit();
         }
       })
-      .then(() => changeOpen())
+      .then(() => {
+        setOrderNum('');
+        setTableNum('');
+        changeOpen();
+      })
       .catch(err => {
         console.error('ERROR IN CREATING LINK IN DB', err.message, err.stack);
       });

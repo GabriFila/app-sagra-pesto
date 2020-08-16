@@ -2,7 +2,9 @@ import React, { useContext } from 'react';
 import { CashRegisterContext } from '../../context/CashRegisterContext';
 import { ActionType } from '../../reducers/CashRegisterReducer';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles, createStyles, useTheme } from '@material-ui/core/styles';
+import makeStyles from '@material-ui/core/styles/makeStyles';
+import createStyles from '@material-ui/core/styles/createStyles';
+import useTheme from '@material-ui/core/styles/useTheme';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
@@ -51,7 +53,12 @@ const CashRegisterDish: React.FunctionComponent<ICashRegisterDishProps> = props 
       <Typography variant="body1" style={{ flex: 7 }}>
         {isTablet ? shortName : name}
       </Typography>
-      <Typography align="left" variant="body1" style={{ flex: 3 }}>
+      <Typography
+        align="left"
+        variant="body1"
+        style={{ flex: 3 }}
+        color="secondary"
+      >
         € {price}
       </Typography>
       <Typography

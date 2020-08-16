@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
-import { makeStyles, createStyles } from '@material-ui/core/styles';
+import makeStyles from '@material-ui/core/styles/makeStyles';
+import createStyles from '@material-ui/core/styles/createStyles';
 import { ServiceContext } from '../context/ServiceContext';
 import Typography from '@material-ui/core/Typography';
 

@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import Paper from '@material-ui/core/Paper';
 import StorageCourse from './StorageCourse';
 import { StorageContext } from '../../context/StorageContext';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@material-ui/core/styles/makeStyles';
 import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles(theme => ({

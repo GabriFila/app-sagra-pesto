@@ -1,5 +1,6 @@
 import React from 'react';
-import { makeStyles, createStyles } from '@material-ui/core/styles';
+import makeStyles from '@material-ui/core/styles/makeStyles';
+import createStyles from '@material-ui/core/styles/createStyles';
 import Paper from '@material-ui/core/Paper';
 import GeneralDish from '../GeneralDish';
 import Typography from '@material-ui/core/Typography';
@@ -35,7 +36,7 @@ const DishTotal: React.FunctionComponent<IDishMapProps> = props => {
     <Paper className={classes.dishMap}>
       <Typography
         variant="h4"
-        color="primary"
+        color="secondary"
         align="center"
         className={classes.title}
       >
@@ -47,6 +48,7 @@ const DishTotal: React.FunctionComponent<IDishMapProps> = props => {
             key={shortName}
             shortName={shortName}
             qt={dishMap[shortName]}
+            color="secondary"
           ></GeneralDish>
         ) : (
           <></>

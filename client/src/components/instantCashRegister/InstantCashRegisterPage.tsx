@@ -1,6 +1,8 @@
 import React from 'react';
 import Container from '@material-ui/core/Container';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import makeStyles from '@material-ui/core/styles/makeStyles';
+import createStyles from '@material-ui/core/styles/createStyles';
+
 import withStorageContext from '../../context/StorageContext';
 import CashRegisterMenu from '../cashRegister/CashRegisterMenu';
 import withCashRegisterContext from '../../context/CashRegisterContext';
@@ -8,7 +10,7 @@ import InstantCashRegisterConsole from './InstantCashRegisterConsole';
 import CashRegisterNav from '../cashRegister/CashRegisterNav';
 import withServiceActive from '../ShowWhenServiceIsActive';
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(theme =>
   createStyles({
     cashRegisterPage: {
       display: 'flex',

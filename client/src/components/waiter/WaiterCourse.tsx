@@ -1,6 +1,7 @@
 import React from 'react';
 import { IDish, CourseStatus } from '../../../../types';
-import { makeStyles, createStyles, useTheme } from '@material-ui/core/styles';
+import makeStyles from '@material-ui/core/styles/makeStyles';
+import createStyles from '@material-ui/core/styles/createStyles';
 import Typography from '@material-ui/core/Typography';
 import GeneralDish from '../GeneralDish';
 import WaiterCourseActions from './WaiterCourseActions';
@@ -39,7 +40,6 @@ const useStyle = makeStyles(theme =>
 
 const WaiterCourse: React.FunctionComponent<IWaiterCourseProps> = props => {
   const classes = useStyle();
-  const theme = useTheme();
   const { courseName, dishes, status, courseId } = props;
   return (
     <div
@@ -47,10 +47,7 @@ const WaiterCourse: React.FunctionComponent<IWaiterCourseProps> = props => {
         status === 'ready' ? classes.ready : ' '
       }`}
       style={{
-        ...disableUIOnCondition(status === 'prep', false),
-        ...(status === 'ready'
-          ? { backgroundColor: theme.palette.warning.light }
-          : {})
+        ...disableUIOnCondition(status === 'prep', false)
       }}
     >
       <div

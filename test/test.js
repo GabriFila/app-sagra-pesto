@@ -1,13 +1,27 @@
 const firebase = require('@firebase/testing');
 
+const myWaiterId = 'myWaiterId';
+
 const PROJECT_ID = 'its-cngei-genova';
 const adminAuth = { uid: 'myId', email: 'test@test.com', admin: true };
-const waiterAuth = { uid: 'myId', email: 'test@test.com', cameriere: true };
+const waiterAuth = {
+  uid: 'myWaiterId',
+  email: 'test@test.com',
+  cameriere: true
+};
+
+const firstKitchenAuth = {
+  uid: 'firstCook',
+  email: 'test@test.com',
+  'cucina-primi': true
+};
+
 const instantCashRegisterAuth = {
   uid: 'myId',
   email: 'test@test.com',
   'cassa-istantanea': true
 };
+
 const mostAuth = {
   uid: 'myId',
   email: 'test@test.com',
@@ -234,7 +248,7 @@ describe('How a course doc should be secured', () => {
     await firebase.assertFails(testDoc.set({ foo: 'bar' }));
   });
 
-  it('Can be updated by a waiter', async () => {
+  it('Can be updated by a waiter when it has not yet been assigned to a waiter', async () => {
     const db = firestore(waiterAuth);
     await courseDoc(serviceDoc(sagraDoc(admin))).set({
       courseName: 'test',
@@ -246,7 +260,72 @@ describe('How a course doc should be secured', () => {
     });
     const testDoc = courseDoc(serviceDoc(sagraDoc(db)));
     await firebase.assertSucceeds(
+      testDoc.set({ waiterId: 'myId' }, { merge: true })
+    );
+  });
+
+  it('Can be updated by only its waiter when it is already linked to him', async () => {
+    const db = firestore(waiterAuth);
+    await courseDoc(serviceDoc(sagraDoc(admin))).set({
+      courseName: 'test',
+      dishes: 'test',
+      kitchen: 'test',
+      note: 'test',
+      orderNum: 'test',
+      status: 'test',
+      waiterId: myWaiterId
+    });
+    const testDoc = courseDoc(serviceDoc(sagraDoc(db)));
+    await firebase.assertSucceeds(
       testDoc.set({ status: 'new' }, { merge: true })
+    );
+  });
+
+  it('Can be updated by kitchen only when is in "prep" status and is the right kitchen', async () => {
+    const db = firestore(firstKitchenAuth);
+    await courseDoc(serviceDoc(sagraDoc(admin))).set({
+      courseName: 'test',
+      dishes: 'test',
+      kitchen: 'Primi',
+      note: 'test',
+      orderNum: 'test',
+      status: 'prep'
+    });
+    const testDoc = courseDoc(serviceDoc(sagraDoc(db)));
+    await firebase.assertSucceeds(
+      testDoc.set({ status: 'ready' }, { merge: true })
+    );
+  });
+
+  it('Can`t be updated by kitchen only when is in "prep" status but is the wrong kitchen', async () => {
+    const db = firestore(firstKitchenAuth);
+    await courseDoc(serviceDoc(sagraDoc(admin))).set({
+      courseName: 'test',
+      dishes: 'test',
+      kitchen: 'Bar',
+      note: 'test',
+      orderNum: 'test',
+      status: 'prep'
+    });
+    const testDoc = courseDoc(serviceDoc(sagraDoc(db)));
+    await firebase.assertFails(
+      testDoc.set({ status: 'ready' }, { merge: true })
+    );
+  });
+
+  it('Can`t be updated by kitchen only when is in "wait" status', async () => {
+    const db = firestore(firstKitchenAuth);
+    await courseDoc(serviceDoc(sagraDoc(admin))).set({
+      courseName: 'test',
+      dishes: 'test',
+      kitchen: 'Primi',
+      note: 'test',
+      orderNum: 'test',
+      status: 'wait'
+    });
+    const testDoc = courseDoc(serviceDoc(sagraDoc(db)));
+    await firebase.assertFails(
+      testDoc.set({ status: 'ready' }, { merge: true })
     );
   });
 

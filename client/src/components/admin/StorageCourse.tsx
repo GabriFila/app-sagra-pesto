@@ -2,7 +2,8 @@ import React from 'react';
 import { IStorageDish } from '../../../../types';
 import StorageDish from './StorageDish';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles, createStyles } from '@material-ui/core/styles';
+import makeStyles from '@material-ui/core/styles/makeStyles';
+import createStyles from '@material-ui/core/styles/createStyles';
 
 const useStyle = makeStyles(theme =>
   createStyles({

@@ -1,18 +1,16 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import Paper from '@material-ui/core/Paper';
-import { IDish } from '../../../../types';
+import { IDish, CourseStatus } from '../../../../types';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import createStyles from '@material-ui/core/styles/createStyles';
 import Typography from '@material-ui/core/Typography';
 import GeneralDish from '../GeneralDish';
-import IconButton from '@material-ui/core/IconButton';
-import DoneIcon from '@material-ui/icons/Done';
-import { ServiceContext } from '../../context/ServiceContext';
 
-interface IKitchenCourse {
+interface IHubCourse {
   orderNum: number;
   courseId: string;
   note: string;
+  status: CourseStatus;
   dishes: IDish[];
 }
 
@@ -34,38 +32,34 @@ const useStyle = makeStyles(theme =>
     },
     note: {
       padding: theme.spacing(2)
+    },
+    ready: {
+      animationName: '$blinker',
+      animationDuration: '3s',
+      animationTimingFunction: 'ease-out',
+      animationIterationCount: 'infinite'
+    },
+    '@keyframes blinker': {
+      '0%': { backgroundColor: theme.palette.background.paper },
+      '50%': { backgroundColor: theme.palette.warning.light },
+      '100%': { backgroundColor: theme.palette.background.paper }
     }
   })
 );
 
-const KitchenCourse: React.FunctionComponent<IKitchenCourse> = props => {
+const HubCourse: React.FunctionComponent<IHubCourse> = props => {
   const classes = useStyle();
-  const { orderNum, note, dishes, courseId } = props;
-  const { serviceRef } = useContext(ServiceContext);
-
-  const makeCourseReady = () => {
-    serviceRef
-      .collection('courses')
-      .doc(courseId)
-      .set({ status: 'ready' }, { merge: true })
-      .catch(err => {
-        console.error(
-          'ERROR IN SETTING THE COURSE READY',
-          err.stack,
-          err.message
-        );
-      });
-  };
+  const { orderNum, note, dishes, status } = props;
 
   return (
-    <Paper elevation={4} className={classes.course}>
+    <Paper
+      elevation={4}
+      className={`${classes.course} ${status === 'ready' ? classes.ready : ''}`}
+    >
       <div className={classes.topRow}>
         <Typography color="primary" variant="h5">
           O:{orderNum}
         </Typography>
-        <IconButton color="secondary" onClick={makeCourseReady}>
-          <DoneIcon />
-        </IconButton>
       </div>
       {dishes.map(({ shortName, qt }) => (
         <GeneralDish key={shortName} shortName={shortName} qt={qt} />
@@ -75,4 +69,4 @@ const KitchenCourse: React.FunctionComponent<IKitchenCourse> = props => {
   );
 };
 
-export default React.memo(KitchenCourse);
+export default React.memo(HubCourse);

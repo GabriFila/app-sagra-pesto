@@ -1,14 +1,15 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { ServiceContext } from '../../context/ServiceContext';
 import { IDBCourse } from '../../../../types';
-import { makeStyles, createStyles } from '@material-ui/core/styles';
+import makeStyles from '@material-ui/core/styles/makeStyles';
+import createStyles from '@material-ui/core/styles/createStyles';
 import withServiceActive from '../ShowWhenServiceIsActive';
 import { useLocation } from 'react-router-dom';
 import KitchenCourse from './KitchenCourse';
 import Container from '@material-ui/core/Container';
 import DishTotal from './DishTotal';
 import ViewSelector from '../ViewSelector';
-import { useMediaQuery, useTheme } from '@material-ui/core';
+import { useMediaQuery, useTheme, Divider } from '@material-ui/core';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import ReorderIcon from '@material-ui/icons/Reorder';
 import ResponsiveGrid from '../ResponsiveGrid';
@@ -18,7 +19,16 @@ const useStyle = makeStyles(theme =>
     kitchenPage: {
       flex: 1,
       padding: theme.spacing(2),
-      display: 'flex'
+      display: 'flex',
+      alignItems: 'start'
+    },
+    divider: {
+      width: 5,
+      borderRadius: 5,
+      backgroundColor: theme.palette.primary.main,
+      [theme.breakpoints.down('sm')]: {
+        display: 'none'
+      }
     }
   })
 );
@@ -43,17 +53,12 @@ function KitchenPage() {
       .where('kitchen', '==', kitchen)
       .onSnapshot(
         snap => {
-          setCourses(oldCourses => {
-            const newCourses = [...oldCourses];
-            snap
-              .docChanges()
-              .filter(change => change.type === 'added')
-              .forEach(change => {
-                const newCourse = change.doc.data() as IDBCourse;
-                newCourses.push({ ...newCourse, courseId: change.doc.id });
-              });
-            return newCourses;
-          });
+          setCourses(
+            snap.docs.map(doc => ({
+              ...(doc.data() as IDBCourse),
+              courseId: doc.id
+            }))
+          );
         },
         err =>
           console.error(
@@ -72,7 +77,7 @@ function KitchenPage() {
       <Container maxWidth={false} className={classes.kitchenPage}>
         {(!isMobile || viewSelected === 0) && (
           <ResponsiveGrid
-            elementList={courses
+            elementsList={courses
               .sort((a, b) => a.orderNum - b.orderNum)
               .map(({ dishes, orderNum, courseId, note }) => (
                 <KitchenCourse
@@ -85,6 +90,7 @@ function KitchenPage() {
               ))}
           />
         )}
+        <Divider orientation="vertical" className={classes.divider} />
         {(!isMobile || viewSelected === 1) && (
           <DishTotal
             dishMap={courses

@@ -3,7 +3,7 @@ import Button from '@material-ui/core/Button';
 import firebase from '../../fbConfig';
 import getServicesRef from '../../helpers/getServicesRef';
 import { StorageContext } from '../../context/StorageContext';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@material-ui/core/styles/makeStyles';
 
 interface IServiceStarterProps {
   isServiceActive: boolean;

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import Paper from '@material-ui/core/Paper';
 import { IDBCourse } from '../../../../types';
-import { makeStyles, createStyles } from '@material-ui/core/styles';
+import makeStyles from '@material-ui/core/styles/makeStyles';
+import createStyles from '@material-ui/core/styles/createStyles';
 import Typography from '@material-ui/core/Typography';
 import ExpandIcon from '@material-ui/icons/ExpandMore';
 import IconButton from '@material-ui/core/IconButton';

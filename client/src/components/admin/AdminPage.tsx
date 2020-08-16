@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
 import Container from '@material-ui/core/Container';
-import {
-  makeStyles,
-  createStyles,
-  Theme,
-  useTheme
-} from '@material-ui/core/styles';
+import makeStyles from '@material-ui/core/styles/makeStyles';
+import createStyles from '@material-ui/core/styles/createStyles';
+import useTheme from '@material-ui/core/styles/useTheme';
 import StorageTab from './StorageTab';
 import ServiceTab from './ServiceTab';
 import withStorageContext from '../../context/StorageContext';
@@ -14,7 +11,7 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import PollIcon from '@material-ui/icons/Poll';
 import ReorderIcon from '@material-ui/icons/Reorder';
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(theme =>
   createStyles({
     root: {
       display: 'flex',
@@ -38,16 +35,18 @@ const AdminPage = () => {
 
   return (
     <Container className={classes.root}>
-      {(!isMobile || viewSelected === 0) && <StorageTab />}
-      {(!isMobile || viewSelected === 1) && <ServiceTab />}
-      <ViewSelector
-        viewSelected={viewSelected}
-        setViewSelected={setViewSelected}
-        data={[<ReorderIcon />, <PollIcon />].map(comp => ({
-          type: 'icon',
-          comp
-        }))}
-      />
+      {(!isMobile || viewSelected === 1) && <StorageTab />}
+      {(!isMobile || viewSelected === 0) && <ServiceTab />}
+      {isMobile && (
+        <ViewSelector
+          viewSelected={viewSelected}
+          setViewSelected={setViewSelected}
+          data={[<PollIcon />, <ReorderIcon />].map(comp => ({
+            type: 'icon',
+            comp
+          }))}
+        />
+      )}
     </Container>
   );
 };

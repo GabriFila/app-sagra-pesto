@@ -1,7 +1,8 @@
 import React, { useContext } from 'react';
 import Paper from '@material-ui/core/Paper';
 import { IStorageDish, IOrderDish } from '../../../../types';
-import { makeStyles, createStyles } from '@material-ui/core/styles';
+import makeStyles from '@material-ui/core/styles/makeStyles';
+import createStyles from '@material-ui/core/styles/createStyles';
 import Typography from '@material-ui/core/Typography';
 import CashRegisterDish from './CashRegisterDish';
 import TextField from '@material-ui/core/TextField';

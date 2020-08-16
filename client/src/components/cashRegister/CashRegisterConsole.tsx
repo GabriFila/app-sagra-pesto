@@ -1,5 +1,7 @@
 import React, { useContext } from 'react';
-import { makeStyles, createStyles, useTheme } from '@material-ui/core/styles';
+import makeStyles from '@material-ui/core/styles/makeStyles';
+import createStyles from '@material-ui/core/styles/createStyles';
+import useTheme from '@material-ui/core/styles/useTheme';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
@@ -71,7 +73,7 @@ const useStyle = makeStyles(theme =>
       border: '3px solid green',
       borderRadius: 10,
       cursor: 'default',
-      padding: 3
+      padding: theme.spacing(1)
     }
   })
 );

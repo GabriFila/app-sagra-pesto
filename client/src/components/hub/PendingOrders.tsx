@@ -12,7 +12,9 @@ const useStyles = makeStyles(theme => ({
     borderStyle: 'solid',
     borderColor: theme.palette.error.light,
     color: theme.palette.text.primary,
-    borderRadius: 5
+    borderRadius: 5,
+    overflow: 'hidden',
+    whiteSpace: 'nowrap'
   }
 }));
 

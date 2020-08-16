@@ -4,7 +4,8 @@ import { ServiceContext } from '../../context/ServiceContext';
 import { AuthContext } from '../../context/AuthContext';
 import { IDBCourse, IDBOrder } from '../../../../types';
 import WaiterOrder from './WaiterOrder';
-import { makeStyles, createStyles } from '@material-ui/core/styles';
+import makeStyles from '@material-ui/core/styles/makeStyles';
+import createStyles from '@material-ui/core/styles/createStyles';
 import withServiceActive from '../ShowWhenServiceIsActive';
 import ResponsiveGrid from '../ResponsiveGrid';
 
@@ -28,9 +29,7 @@ function WaiterPage() {
   const [courses, setCourses] = useState<IDBCourse[]>([]);
 
   useEffect(() => {
-    let unsubscribe: () => void;
-
-    unsubscribe = serviceRef
+    const unsubscribeOrders = serviceRef
       .collection('orders')
       .where('waiterId', '==', userId)
       .onSnapshot(
@@ -49,48 +48,69 @@ function WaiterPage() {
             err.stack
           )
       );
+    const unsubscribeCourses = serviceRef
+      .collection('courses')
+      .where('waiterId', '==', userId)
+      .onSnapshot(
+        coursesSnap => {
+          setCourses(
+            coursesSnap.docs.map(doc => ({
+              ...doc.data(),
+              courseId: doc.id
+            })) as IDBCourse[]
+          );
+        },
+        err =>
+          console.error(
+            "ERROR IN GETTING WAITER'S ORDERS",
+            err.message,
+            err.stack
+          )
+      );
     return () => {
-      unsubscribe();
+      unsubscribeOrders();
+      unsubscribeCourses();
     };
   }, [serviceRef, userId]);
 
-  useEffect(() => {
-    let unsubscribe: () => void;
+  // useEffect(() => {
+  //   let unsubscribe: () => void;
 
-    if (orders.length !== 0) {
-      unsubscribe = serviceRef
-        .collection('courses')
-        .where(
-          'orderNum',
-          'in',
-          orders.map(order => order.orderNum)
-        )
-        .onSnapshot(
-          snap => {
-            setCourses(
-              snap.docs.map(doc => ({
-                ...doc.data(),
-                courseId: doc.id
-              })) as IDBCourse[]
-            );
-          },
-          err =>
-            console.error(
-              "ERROR IN GETTING WAITER'S ORDERS",
-              err.message,
-              err.stack
-            )
-        );
-    }
-    return () => {
-      if (orders.length !== 0) unsubscribe();
-    };
-  }, [serviceRef, orders]);
+  //   if (orders.length !== 0) {
+  //     unsubscribe = serviceRef
+  //       .collection('courses')
+  //       .where(
+  //         'orderNum',
+  //         'in',
+  //         orders.map(order => order.orderNum)
+  //       )
+  //       .onSnapshot(
+  //         snap => {
+  //           setCourses(
+  //             snap.docs.map(doc => ({
+  //               ...doc.data(),
+  //               courseId: doc.id
+  //             })) as IDBCourse[]
+  //           );
+  //         },
+  //         err =>
+  //           console.error(
+  //             "ERROR IN GETTING WAITER'S ORDERS",
+  //             err.message,
+  //             err.stack
+  //           )
+  //       );
+  //   }
+  //   return () => {
+  //     if (orders.length !== 0) unsubscribe();
+  //   };
+  // }, [serviceRef, orders]);
+
   return (
     <div className={classes.orderList}>
       <WaiterLinkForm />
       <ResponsiveGrid
-        elementList={orders
+        elementsList={orders
           .sort((a, b) => a.orderNum - b.orderNum)
           .map(({ orderNum, tableNum, orderId }) => (
             <WaiterOrder

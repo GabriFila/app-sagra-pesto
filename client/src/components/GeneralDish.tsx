@@ -1,10 +1,19 @@
 import React from 'react';
-import { makeStyles, createStyles } from '@material-ui/core/styles';
+import makeStyles from '@material-ui/core/styles/makeStyles';
+import createStyles from '@material-ui/core/styles/createStyles';
 import Typography from '@material-ui/core/Typography';
 
 interface IWaiterDishProps {
   shortName: string;
   qt: number;
+  color?:
+    | 'inherit'
+    | 'initial'
+    | 'textPrimary'
+    | 'primary'
+    | 'secondary'
+    | 'textSecondary'
+    | 'error';
 }
 
 const useStyle = makeStyles(theme =>
@@ -19,14 +28,14 @@ const useStyle = makeStyles(theme =>
 
 const GeneralDish: React.FunctionComponent<IWaiterDishProps> = props => {
   const classes = useStyle();
-  const { shortName, qt } = props;
+  const { shortName, qt, color } = props;
 
   return (
     <div className={classes.dish}>
       <Typography variant="h6" color="textPrimary">
         {shortName}
       </Typography>
-      <Typography variant="h6" color="primary">
+      <Typography variant="h6" color={color || 'primary'}>
         {qt}
       </Typography>
     </div>

@@ -1,6 +1,7 @@
 import React, { useContext, Dispatch, SetStateAction } from 'react';
 import clsx from 'clsx';
-import { makeStyles, createStyles } from '@material-ui/core/styles';
+import makeStyles from '@material-ui/core/styles/makeStyles';
+import createStyles from '@material-ui/core/styles/createStyles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -90,7 +91,9 @@ const TopBar: React.FunctionComponent<IMenuProps> = props => {
           )}
           <Typography variant="h6" noWrap className={classes.title}>
             {name ? `${name}` : 'Sagra del Pesto'}
-            {location.pathname.length > 0 && userRoles.length > 0
+            {location.pathname.length > 0 &&
+            location.pathname !== '/' &&
+            userRoles.length > 0
               ? ` - ${
                   userRoles.find(role => role.path === location.pathname)?.title
                 }`

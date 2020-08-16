@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
-import { makeStyles, createStyles } from '@material-ui/core/styles';
+import makeStyles from '@material-ui/core/styles/makeStyles';
+import createStyles from '@material-ui/core/styles/createStyles';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
@@ -10,7 +11,7 @@ import { ActionType } from '../../reducers/CashRegisterReducer';
 import { ServiceContext } from '../../context/ServiceContext';
 import { IInstantOrder } from '../../../../types';
 
-const consoleHeight = 200;
+const consoleHeight = 250;
 
 const useStyle = makeStyles(theme =>
   createStyles({
