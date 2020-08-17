@@ -65,7 +65,7 @@ export interface IDBOrder extends IOrder {
   orderId: string;
 }
 
-export type CourseStatus = "wait" | "prep" | "ready" | "delivered";
+export type CourseStatus = "wait" | "prep" | "ready" | "delivered" | "deleted";
 export interface IDBCourse extends ICourse {
   courseId?: string;
   dishes: IDish[];

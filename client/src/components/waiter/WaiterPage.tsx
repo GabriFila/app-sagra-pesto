@@ -73,52 +73,19 @@ function WaiterPage() {
     };
   }, [serviceRef, userId]);
 
-  // useEffect(() => {
-  //   let unsubscribe: () => void;
-
-  //   if (orders.length !== 0) {
-  //     unsubscribe = serviceRef
-  //       .collection('courses')
-  //       .where(
-  //         'orderNum',
-  //         'in',
-  //         orders.map(order => order.orderNum)
-  //       )
-  //       .onSnapshot(
-  //         snap => {
-  //           setCourses(
-  //             snap.docs.map(doc => ({
-  //               ...doc.data(),
-  //               courseId: doc.id
-  //             })) as IDBCourse[]
-  //           );
-  //         },
-  //         err =>
-  //           console.error(
-  //             "ERROR IN GETTING WAITER'S ORDERS",
-  //             err.message,
-  //             err.stack
-  //           )
-  //       );
-  //   }
-  //   return () => {
-  //     if (orders.length !== 0) unsubscribe();
-  //   };
-  // }, [serviceRef, orders]);
-
   return (
     <div className={classes.orderList}>
       <WaiterLinkForm />
       <ResponsiveGrid
         elementsList={orders
           .sort((a, b) => a.orderNum - b.orderNum)
-          .map(({ orderNum, tableNum, orderId }) => (
+          .map(({ orderNum, tableNum, orderId, note }) => (
             <WaiterOrder
               key={orderNum}
-              visual="waiter"
               orderNum={orderNum}
               tableNum={tableNum}
               orderId={orderId}
+              note={note}
               courses={courses.filter(course => course.orderNum === orderNum)}
             />
           ))}

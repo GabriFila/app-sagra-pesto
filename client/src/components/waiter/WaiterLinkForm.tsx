@@ -55,7 +55,6 @@ export default function WaiterLinkForm() {
     );
     Promise.all(toFullfill)
       .then(([orderSnap, coursesSnap]) => {
-        console.log('HERE');
         if (orderSnap.size === 0) throw new Error('There is no document');
         else if (orderSnap.size > 1)
           throw new Error('There are too many docuemnts');

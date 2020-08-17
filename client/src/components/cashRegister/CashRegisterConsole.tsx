@@ -197,6 +197,7 @@ const CashRegisterConsole: React.FunctionComponent = () => {
         <IconButton
           className={classes.doneBtn}
           color="primary"
+          disabled={orderNum === undefined}
           onClick={() =>
             printOrder(storageCourses, courses, orderNum, revenue, people)
           }

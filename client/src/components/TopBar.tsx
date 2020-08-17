@@ -8,7 +8,6 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import Button from '@material-ui/core/Button';
 import { AuthContext } from '../context/AuthContext';
 import { auth } from '../fbConfig';
 import { useHistory } from 'react-router-dom';
@@ -17,7 +16,8 @@ import ToDarkIcon from '@material-ui/icons/Brightness4';
 import Menu from './Menu';
 import PendingOrders from './hub/PendingOrders';
 import { RoleName } from '../Routes';
-
+import SearchOrder from './SearchOrder';
+import LogoutIcon from '@material-ui/icons/MeetingRoom';
 interface IMenuProps {
   isLightTheme: boolean;
   setIsLigthTheme: Dispatch<SetStateAction<boolean>>;
@@ -104,6 +104,14 @@ const TopBar: React.FunctionComponent<IMenuProps> = props => {
             location.pathname ===
               userRoles.find(userRole => userRole.requiredRole === RoleName.Hub)
                 .path && <PendingOrders />}
+          {location.pathname.length > 0 &&
+            userRoles.length > 0 &&
+            location.pathname ===
+              userRoles.find(
+                userRole =>
+                  userRole.requiredRole === RoleName.Hub ||
+                  userRole.requiredRole === RoleName.CashRegister
+              ).path && <SearchOrder />}
           <IconButton
             onClick={() => {
               localStorage.setItem('isLastThemeLight', String(!isLightTheme));
@@ -113,9 +121,9 @@ const TopBar: React.FunctionComponent<IMenuProps> = props => {
             {isLightTheme ? <ToDarkIcon /> : <ToLightIcon />}
           </IconButton>
           {phase === 'in' ? (
-            <Button color="inherit" onClick={logOutUser}>
-              Logout
-            </Button>
+            <IconButton color="secondary" onClick={logOutUser}>
+              <LogoutIcon fontSize="large" />
+            </IconButton>
           ) : null}
         </Toolbar>
       </AppBar>

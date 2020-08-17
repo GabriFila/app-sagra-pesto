@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import createMuiTheme from '@material-ui/core/styles/createMuiTheme';
 import { ThemeOptions, ThemeProvider } from '@material-ui/core/styles';
-import orange from '@material-ui/core/colors/orange';
+import amber from '@material-ui/core/colors/amber';
 import green from '@material-ui/core/colors/green';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AuthProvider from './context/AuthContext';
@@ -13,7 +13,7 @@ import ServiceContextProvider from './context/ServiceContext';
 const baseThemeConfig: ThemeOptions = {
   palette: {
     primary: green,
-    secondary: orange
+    secondary: amber
   },
   overrides: {
     MuiCssBaseline: {

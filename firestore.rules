@@ -16,7 +16,7 @@ service cloud.firestore {
             allow get: if false;
             allow list: if hasRole('cameriere');
             allow create: if false;
-            allow update: if hasRole('cameriere') && editOnlyCertainFields(['tableNum',"waiterId","waiterName","status"]) && resource.data["status"] == "pending";
+            allow update: if orderCanBeUpdatedByWaiter();
             allow delete: if false;
           }
           match /courses/{courseId} {
@@ -25,7 +25,7 @@ service cloud.firestore {
             allow write: if false;
             allow create: if false;
             allow update: if (hasRole('cameriere') && (!resource.data.keys().hasAll(["waiterId"]) && editOnlyCertainFields(["waiterId"])
-                                                        || resource.data["waiterId"] == request.auth.uid && editOnlyCertainFields(["status"])))  || canBeModifiedByKitchen();
+                                                        || resource.data["waiterId"] == request.auth.uid && editOnlyCertainFields(["status"])))  || courseCanBeUpdatedByKitchen();
             allow delete: if false;
           }
           match /instantOrders/{instantOrderId} {
@@ -60,9 +60,13 @@ function checkFields(requiredFields, optionalFields) {
 }
 
 function editOnlyCertainFields(editableFields) {
-  return request.resource.data.diff(resource.data).affectedKeys().hasOnly(editableFields) && request.resource.data.diff(resource.data).affectedKeys().hasAll(editableFields)
+  return request.resource.data.diff(resource.data).affectedKeys().hasOnly(editableFields) && request.resource.data.diff(resource.data).affectedKeys().hasAll(editableFields);
 }
 
-function canBeModifiedByKitchen() {
+function orderCanBeUpdatedByWaiter() {
+  return hasRole('cameriere') && (editOnlyCertainFields(['tableNum',"waiterId","waiterName","status"]) && resource.data["status"] == "pending" || editOnlyCertainFields(["note"]) &&  resource.data["status"] != "pending");
+}
+
+function courseCanBeUpdatedByKitchen() {
   return editOnlyCertainFields(["status"]) && resource.data.status == "prep" && request.resource.data.status == "ready" && ((hasRole("cucina-primi") && request.resource.data.kitchen == "Primi") || (hasRole("cucina-secondi") && request.resource.data.kitchen == "Secondi") || (hasRole("cucina-bar") && request.resource.data.kitchen == "Bar"));  
 }
