@@ -82,16 +82,34 @@ export const onUserSagraRolesUpdate = functions
 export const createOrder = functions
   .region('europe-west2')
   .https.onCall((data, ctx) => {
+    const errorRes = { outcome: false };
     if (!ctx.auth?.token.cassa) {
       console.error('ERROR IN CREATING ORDER, call by a non auithorized user');
-      return;
+      return errorRes;
     }
+
     const courses = data.courses as IOrderCourse[];
     const people = data.people as number;
     const revenue = data.revenue as number;
     const orderNote = data.orderNote as string;
     const currentServiceId = data.serviceId;
     const year = new Date().getFullYear();
+
+    if (
+      [courses, people, revenue, orderNote, currentServiceId, year].some(
+        elm => elm === undefined
+      )
+    ) {
+      console.error('ERROR IN CREATING ORDER, some fields were undefined');
+      return errorRes;
+    }
+
+    if (courses.length === 0 || revenue === 0) {
+      console.error(
+        'ERROR IN CREATING ORDER, incorreect value for some parameters'
+      );
+      return errorRes;
+    }
 
     const currentServiceRef = db
       .collection('sagre')
@@ -181,7 +199,7 @@ export const createOrder = functions
       })
       .catch((err: Error) => {
         console.error('ERROR IN CREATING ORDER', err.message, err.stack);
-        return { outcome: 'false', err: err.message };
+        return { ...errorRes, err: err.message };
       });
   });
 
