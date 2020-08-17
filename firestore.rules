@@ -6,25 +6,32 @@ service cloud.firestore {
       match /sagre/{sagraId} {
         allow read: if false;
   			allow write: if false;
+        match /storage/{storageid} {
+        	allow get: if hasRole('admin') || hasRole("cassa") || hasRole("cassa-istantanea");
+          allow list: if false;
+          allow create: if false;
+          allow update: if hasRole('admin') && checkFields(['storageCourses'], []);
+          allow delete: if false;
+        }
       	match /services/{serviceId} {
     			allow get: if hasRole('admin');
-    			allow list: if hasRole('admin');
+    			allow list: if hasRole('admin') || hasRole("cassa") || hasRole("cassa-istantanea") || hasRole("sala") ;
           allow create: if hasRole('admin') && checkFields(['end', 'lastOrderNum','startingCourses', 'start', 'totalInstantOrders', 'totalInstantRevenue', 'totalOrders', 'totalPeople', 'totalRevenue'],[]);
           allow update: if hasRole('admin') && editOnlyCertainFields(['end']) 
           allow delete: if false;
           match /orders/{orderId} {
             allow get: if false;
-            allow list: if hasRole('cameriere');
+            allow list: if hasRole('sala');
             allow create: if false;
             allow update: if orderCanBeUpdatedByWaiter();
             allow delete: if false;
           }
           match /courses/{courseId} {
             allow get: if false;
-            allow list: if hasRole('cameriere');
+            allow list: if hasRole('sala');
             allow write: if false;
             allow create: if false;
-            allow update: if (hasRole('cameriere') && (!resource.data.keys().hasAll(["waiterId"]) && editOnlyCertainFields(["waiterId"])
+            allow update: if (hasRole('sala') && (!resource.data.keys().hasAll(["waiterId"]) && editOnlyCertainFields(["waiterId"])
                                                         || resource.data["waiterId"] == request.auth.uid && editOnlyCertainFields(["status"])))  || courseCanBeUpdatedByKitchen();
             allow delete: if false;
           }
@@ -35,13 +42,6 @@ service cloud.firestore {
             allow update: if false;
             allow delete: if false;
           }
-        }
-        match /storage/{storageid} {
-        	allow get: if hasRole('admin');
-          allow list: if false;
-          allow create: if false;
-          allow update: if hasRole('admin') && checkFields(['storageCourses'], []);
-          allow delete: if false;
         }
 		  	allow read: if false;
   			allow write: if false;
@@ -64,7 +64,7 @@ function editOnlyCertainFields(editableFields) {
 }
 
 function orderCanBeUpdatedByWaiter() {
-  return hasRole('cameriere') && (editOnlyCertainFields(['tableNum',"waiterId","waiterName","status"]) && resource.data["status"] == "pending" || editOnlyCertainFields(["note"]) &&  resource.data["status"] != "pending");
+  return hasRole('sala') && (editOnlyCertainFields(['tableNum',"waiterId","waiterName","status"]) && resource.data["status"] == "pending" || editOnlyCertainFields(["note"]) &&  resource.data["status"] != "pending");
 }
 
 function courseCanBeUpdatedByKitchen() {
