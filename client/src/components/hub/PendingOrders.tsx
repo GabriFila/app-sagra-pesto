@@ -3,7 +3,7 @@ import { ServiceContext } from '../../context/ServiceContext';
 import withServiceActive from '../ShowWhenServiceIsActive';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 
-const useStyles = makeStyles(theme => ({
+const useStyle = makeStyles(theme => ({
   pendingOrders: {
     fontSize: '1.5rem',
     padding: '2px 10px',
@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const PendingOrders = () => {
-  const classes = useStyles();
+  const classes = useStyle();
   const { serviceRef } = useContext(ServiceContext);
 
   const [pendingOrders, setPendingOrders] = useState<number[]>([]);

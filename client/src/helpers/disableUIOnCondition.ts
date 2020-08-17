@@ -2,8 +2,8 @@ import { CSSProperties } from '@material-ui/core/styles/withStyles';
 
 export const disableUIOnCondition = (
   condition: boolean,
-  alsoTouch: boolean
+  preventTouch: boolean
 ): CSSProperties =>
   condition
-    ? { pointerEvents: alsoTouch ? 'none' : 'auto', opacity: '50%' }
+    ? { pointerEvents: preventTouch ? 'none' : 'auto', opacity: '50%' }
     : {};

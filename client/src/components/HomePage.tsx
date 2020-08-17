@@ -6,7 +6,7 @@ import createStyles from '@material-ui/core/styles/createStyles';
 import { Link } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 
-const useStyles = makeStyles(theme =>
+const useStyle = makeStyles(theme =>
   createStyles({
     root: {
       display: 'flex',
@@ -29,7 +29,7 @@ const useStyles = makeStyles(theme =>
 
 const HomePage = () => {
   const { userRoles } = useContext(AuthContext);
-  const classes = useStyles();
+  const classes = useStyle();
   return (
     <div className={classes.root}>
       {userRoles.length === 0 ? (

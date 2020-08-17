@@ -69,7 +69,8 @@ const CashRegisterMenu: React.FunctionComponent<ICashRegisterMenuProps> = props 
             key={courseName}
             courseName={courseName}
             kitchen={kitchen}
-            storageDishes={dishes}
+            dishes={dishes}
+            onlyInstant={onlyInstant}
             orderDishes={
               courses.find(course => course.courseName === courseName)?.dishes
             }

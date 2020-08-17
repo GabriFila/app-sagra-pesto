@@ -12,7 +12,7 @@ interface ICashRegisterNavProps {
 }
 
 const navHeight = 400;
-const useStyles = makeStyles((theme: Theme) =>
+const useStyle = makeStyles((theme: Theme) =>
   createStyles({
     navs: {
       flexBasis: 90,
@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const CashRegisterNav: React.FunctionComponent<ICashRegisterNavProps> = props => {
-  const classes = useStyles();
+  const classes = useStyle();
   const { storageCourses } = useContext(StorageContext);
   const { onlyInstant } = props;
 

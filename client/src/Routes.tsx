@@ -19,7 +19,7 @@ export enum RoleName {
   KitchenFirst = 'cucina-primi',
   KitchenSecond = 'cucina-secondi',
   KitchenBar = 'cucina-bar',
-  Waiter = 'cameriere',
+  Waiter = 'sala',
   Hub = 'smazzo'
 }
 

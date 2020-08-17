@@ -14,7 +14,7 @@ interface IViewSelectorProps {
   data: IViewData[];
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyle = makeStyles(theme => ({
   selector: {
     position: 'fixed',
     bottom: 0,
@@ -31,7 +31,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const ViewSelector: React.FunctionComponent<IViewSelectorProps> = props => {
-  const classes = useStyles();
+  const classes = useStyle();
   const {
     viewSelected: pageSelected,
     setViewSelected: setPageSelected,

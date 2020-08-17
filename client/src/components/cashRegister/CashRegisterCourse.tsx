@@ -12,8 +12,9 @@ import { ActionType } from '../../reducers/CashRegisterReducer';
 interface ICashRegisterCourseProps {
   courseName: string;
   kitchen: string;
-  storageDishes: IStorageDish[];
+  dishes: IStorageDish[];
   orderDishes: IOrderDish[];
+  onlyInstant: boolean;
 }
 
 const useStyle = makeStyles(theme =>
@@ -41,14 +42,10 @@ const useStyle = makeStyles(theme =>
   })
 );
 
-const CashRegisterCourse: React.FunctionComponent<ICashRegisterCourseProps> = ({
-  courseName,
-  storageDishes: dishes,
-  kitchen,
-  orderDishes
-}) => {
+const CashRegisterCourse: React.FunctionComponent<ICashRegisterCourseProps> = props => {
   const classes = useStyle();
   const { dispatch } = useContext(CashRegisterContext);
+  const { courseName, dishes, kitchen, orderDishes, onlyInstant } = props;
   return (
     <Paper elevation={6} className={classes.course}>
       <div id={courseName} className={classes.courseAnchor}></div>
@@ -72,19 +69,21 @@ const CashRegisterCourse: React.FunctionComponent<ICashRegisterCourseProps> = ({
             }
           />
         ))}
-      <TextField
-        multiline
-        rows="2"
-        placeholder={`Note ${courseName}`}
-        variant="standard"
-        className={classes.notes}
-        onChange={e =>
-          dispatch({
-            type: ActionType.ChangeNote,
-            payload: { note: e.target.value, courseName, kitchen }
-          })
-        }
-      />
+      {!onlyInstant && (
+        <TextField
+          multiline
+          rows="2"
+          placeholder={`Note ${courseName}`}
+          variant="standard"
+          className={classes.notes}
+          onChange={e =>
+            dispatch({
+              type: ActionType.ChangeNote,
+              payload: { note: e.target.value, courseName, kitchen }
+            })
+          }
+        />
+      )}
     </Paper>
   );
 };

@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Container from '@material-ui/core/Container';
 
-const useStyles = makeStyles(theme => ({
+const useStyle = makeStyles(theme => ({
   paper: {
     marginTop: theme.spacing(8),
     display: 'flex',
@@ -31,7 +31,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function RegisterPage() {
-  const classes = useStyles();
+  const classes = useStyle();
 
   // form data state (field and field error)
   const [name, setName] = useState('');

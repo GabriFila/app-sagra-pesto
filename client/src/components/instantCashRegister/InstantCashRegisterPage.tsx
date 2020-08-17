@@ -10,7 +10,7 @@ import InstantCashRegisterConsole from './InstantCashRegisterConsole';
 import CashRegisterNav from '../cashRegister/CashRegisterNav';
 import withServiceActive from '../ShowWhenServiceIsActive';
 
-const useStyles = makeStyles(theme =>
+const useStyle = makeStyles(theme =>
   createStyles({
     cashRegisterPage: {
       display: 'flex',
@@ -31,7 +31,7 @@ const useStyles = makeStyles(theme =>
 );
 
 const InstantCashRegisterPage = () => {
-  const classes = useStyles();
+  const classes = useStyle();
   return (
     <Container className={classes.cashRegisterPage}>
       <CashRegisterNav onlyInstant={true} />

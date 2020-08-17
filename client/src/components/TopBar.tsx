@@ -9,21 +9,20 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import { AuthContext } from '../context/AuthContext';
-import { auth } from '../fbConfig';
 import { useHistory } from 'react-router-dom';
-import ToLightIcon from '@material-ui/icons/BrightnessHigh';
-import ToDarkIcon from '@material-ui/icons/Brightness4';
+
 import Menu from './Menu';
 import PendingOrders from './hub/PendingOrders';
 import { RoleName } from '../Routes';
 import SearchOrder from './SearchOrder';
-import LogoutIcon from '@material-ui/icons/MeetingRoom';
+import ThemeToggle from './ThemeToggle';
+import LogoutButton from './LogoutButton';
 interface IMenuProps {
   isLightTheme: boolean;
   setIsLigthTheme: Dispatch<SetStateAction<boolean>>;
 }
 
-const useStyles = makeStyles(theme =>
+const useStyle = makeStyles(theme =>
   createStyles({
     topBar: {
       display: 'flex',
@@ -50,12 +49,15 @@ const useStyles = makeStyles(theme =>
     },
     activeLink: {
       color: theme.palette.primary.main
+    },
+    logout: {
+      color: theme.palette.background.paper
     }
   })
 );
 
 const TopBar: React.FunctionComponent<IMenuProps> = props => {
-  const classes = useStyles();
+  const classes = useStyle();
   const [open, setOpen] = React.useState(false);
   const { children, isLightTheme, setIsLigthTheme } = props;
 
@@ -67,11 +69,7 @@ const TopBar: React.FunctionComponent<IMenuProps> = props => {
     setOpen(false);
   };
 
-  const { phase, userRoles, userName: name } = useContext(AuthContext);
-
-  const logOutUser = () => {
-    auth.signOut();
-  };
+  const { phase, userRoles, userName } = useContext(AuthContext);
   const { location } = useHistory();
   return (
     <div className={classes.topBar}>
@@ -81,7 +79,6 @@ const TopBar: React.FunctionComponent<IMenuProps> = props => {
           {userRoles.length === 0 ? null : (
             <IconButton
               color="inherit"
-              aria-label="open drawer"
               onClick={openDrawer}
               edge="start"
               className={classes.menuButton}
@@ -90,7 +87,7 @@ const TopBar: React.FunctionComponent<IMenuProps> = props => {
             </IconButton>
           )}
           <Typography variant="h6" noWrap className={classes.title}>
-            {name ? `${name}` : 'Sagra del Pesto'}
+            {userName ? `${userName}` : 'Sagra del Pesto'}
             {location.pathname.length > 0 &&
             location.pathname !== '/' &&
             userRoles.length > 0
@@ -103,7 +100,7 @@ const TopBar: React.FunctionComponent<IMenuProps> = props => {
             userRoles.length > 0 &&
             location.pathname ===
               userRoles.find(userRole => userRole.requiredRole === RoleName.Hub)
-                .path && <PendingOrders />}
+                ?.path && <PendingOrders />}
           {location.pathname.length > 0 &&
             userRoles.length > 0 &&
             location.pathname ===
@@ -111,20 +108,12 @@ const TopBar: React.FunctionComponent<IMenuProps> = props => {
                 userRole =>
                   userRole.requiredRole === RoleName.Hub ||
                   userRole.requiredRole === RoleName.CashRegister
-              ).path && <SearchOrder />}
-          <IconButton
-            onClick={() => {
-              localStorage.setItem('isLastThemeLight', String(!isLightTheme));
-              setIsLigthTheme(!isLightTheme);
-            }}
-          >
-            {isLightTheme ? <ToDarkIcon /> : <ToLightIcon />}
-          </IconButton>
-          {phase === 'in' ? (
-            <IconButton color="secondary" onClick={logOutUser}>
-              <LogoutIcon fontSize="large" />
-            </IconButton>
-          ) : null}
+              )?.path && <SearchOrder />}
+          <ThemeToggle
+            isLightTheme={isLightTheme}
+            setIsLigthTheme={setIsLigthTheme}
+          />
+          {phase === 'in' && <LogoutButton />}
         </Toolbar>
       </AppBar>
       <Menu userRoles={userRoles} open={open} closeDrawer={closeDrawer} />

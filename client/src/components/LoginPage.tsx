@@ -9,7 +9,7 @@ import Container from '@material-ui/core/Container';
 import { auth } from '../fbConfig';
 import { AuthContext } from '../context/AuthContext';
 
-const useStyles = makeStyles(theme => ({
+const useStyle = makeStyles(theme => ({
   paper: {
     marginTop: theme.spacing(8),
     display: 'flex',
@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function LoginPage() {
-  const classes = useStyles();
+  const classes = useStyle();
 
   // form data
   const [email, setEmail] = useState('');

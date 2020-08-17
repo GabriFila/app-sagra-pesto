@@ -13,7 +13,7 @@ import { ServiceContext } from '../../context/ServiceContext';
 import { AuthContext } from '../../context/AuthContext';
 import { db } from '../../fbConfig';
 
-const useStyles = makeStyles(theme => ({
+const useStyle = makeStyles(theme => ({
   input: {
     [theme.breakpoints.up('xs')]: {
       margin: 10
@@ -28,7 +28,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function WaiterLinkForm() {
-  const classes = useStyles();
+  const classes = useStyle();
   const [open, setOpen] = useState(false);
   const [orderNum, setOrderNum] = useState('');
   const [tableNum, setTableNum] = useState('');

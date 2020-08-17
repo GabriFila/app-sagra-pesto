@@ -11,7 +11,7 @@ import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import { IRoleRouteInfo } from '../clientTypes';
 
-const useStyles = makeStyles(theme =>
+const useStyle = makeStyles(theme =>
   createStyles({
     drawer: {
       width: 100,
@@ -43,7 +43,7 @@ interface IMenuProps {
 }
 
 const Menu: React.FunctionComponent<IMenuProps> = props => {
-  const classes = useStyles();
+  const classes = useStyle();
 
   const { userRoles, open, closeDrawer } = props;
 

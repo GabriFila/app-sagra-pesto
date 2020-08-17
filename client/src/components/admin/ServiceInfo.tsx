@@ -12,7 +12,7 @@ interface IServiceInfoProps {
   service: IService | undefined;
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyle = makeStyles(theme => ({
   serviceInfoTable: {
     margin: 'auto',
     maxWidth: 200,
@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => ({
 const ServiceInfo: React.FunctionComponent<IServiceInfoProps> = ({
   service
 }) => {
-  const classes = useStyles();
+  const classes = useStyle();
 
   return (
     <Paper elevation={6}>

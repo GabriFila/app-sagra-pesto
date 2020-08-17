@@ -8,6 +8,8 @@ import ExpandIcon from '@material-ui/icons/ExpandMore';
 import IconButton from '@material-ui/core/IconButton';
 import WaiterCouse from './WaiterCourse';
 import EditIcon from '@material-ui/icons/Edit';
+import DoneIcon from '@material-ui/icons/Done';
+import CancelIcon from '@material-ui/icons/Cancel';
 import { ServiceContext } from '../../context/ServiceContext';
 import WaiterOrderNoteSection from './WaiterOrderNoteSection';
 
@@ -88,20 +90,35 @@ const WaiterOrder: React.FunctionComponent<IWaiterOrderProps> = props => {
         <Typography color="primary" variant="h5">
           O: {orderNum}
         </Typography>
-        <IconButton
-          size="medium"
-          onClick={() => setIsEditingOrder(!isEditingOrder)}
-        >
-          <EditIcon color="secondary" />
-        </IconButton>
-        <IconButton
-          size="medium"
-          onClick={() => setShow(!show)}
-          className={classes.expandIcon}
-          style={!show ? { transform: 'rotateZ(180deg)' } : {}}
-        >
-          <ExpandIcon fontSize="large" color="secondary" />
-        </IconButton>
+
+        {show && (
+          <IconButton
+            color="secondary"
+            size="medium"
+            onClick={() => setIsEditingOrder(!isEditingOrder)}
+          >
+            {isEditingOrder ? <CancelIcon /> : <EditIcon />}
+          </IconButton>
+        )}
+        {isEditingOrder && (
+          <IconButton
+            color="secondary"
+            size="medium"
+            onClick={() => setIsEditingOrder(!isEditingOrder)}
+          >
+            <DoneIcon color="secondary" />
+          </IconButton>
+        )}
+        {!isEditingOrder && (
+          <IconButton
+            size="medium"
+            onClick={() => setShow(!show)}
+            className={classes.expandIcon}
+            style={!show ? { transform: 'rotateZ(180deg)' } : {}}
+          >
+            <ExpandIcon fontSize="large" color="secondary" />
+          </IconButton>
+        )}
       </div>
       {show &&
         courses.map(({ courseName, dishes, status, courseId }) => (
@@ -113,15 +130,17 @@ const WaiterOrder: React.FunctionComponent<IWaiterOrderProps> = props => {
             courseId={courseId}
           />
         ))}
-      <WaiterOrderNoteSection
-        setCurrentNote={setCurrentNote}
-        setIsEditingNote={setIsEditingNote}
-        orderId={orderId}
-        serviceRef={serviceRef}
-        isEditingNote={isEditingNote}
-        note={note}
-        currentNote={currentNote}
-      />
+      {!isEditingOrder && (
+        <WaiterOrderNoteSection
+          setCurrentNote={setCurrentNote}
+          setIsEditingNote={setIsEditingNote}
+          orderId={orderId}
+          serviceRef={serviceRef}
+          isEditingNote={isEditingNote}
+          note={note}
+          currentNote={currentNote}
+        />
+      )}
     </Paper>
   );
 };

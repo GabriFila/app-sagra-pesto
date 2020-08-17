@@ -114,9 +114,12 @@ const CashRegisterConsole: React.FunctionComponent = () => {
             payload: { orderNum: newOrderNum }
           });
         } else {
+          console.error('ERROR WHEN CREATING ORDER: ');
         }
       })
-      .catch(err => console.error('ERROR WHEN CREATING ORDER: ', err));
+      .catch(err =>
+        console.error('ERROR WHEN CREATING ORDER: ', err.message, err.stack)
+      );
   };
 
   return (

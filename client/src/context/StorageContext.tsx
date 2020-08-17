@@ -21,7 +21,8 @@ const StorageContextProvider: React.FunctionComponent = ({ children }) => {
         setStroageRef(snap.ref);
         setStorageCourses((snap.data() as IStorage)?.storageCourses);
       },
-      err => console.error('storage context', err)
+      err =>
+        console.error('ERROR IN GETTINFG STORAGE INFO', err.message, err.stack)
     );
     return () => unsubscribe();
   }, []);

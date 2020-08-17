@@ -10,7 +10,7 @@ interface IServiceStarterProps {
   serviceRef: any;
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyle = makeStyles(theme => ({
   serviceOn: {
     backgroundColor: theme.palette.error.main,
     marginBottom: 20
@@ -25,7 +25,7 @@ const ServiceStarter: React.FunctionComponent<IServiceStarterProps> = ({
   isServiceActive,
   serviceRef
 }) => {
-  const classes = useStyles();
+  const classes = useStyle();
   const { storageCourses } = useContext(StorageContext);
 
   const changeServiceState = () => {

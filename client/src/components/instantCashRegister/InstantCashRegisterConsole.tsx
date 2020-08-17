@@ -45,7 +45,7 @@ const InstantCashRegisterConsole: React.FunctionComponent = () => {
 
   const { state, dispatch } = useContext(CashRegisterContext);
 
-  const { courses, revenue } = state;
+  const { courses, revenue, waitingToEndOrder } = state;
 
   const resetOrder = () => {
     dispatch({ type: ActionType.ResetOrder });
@@ -65,7 +65,7 @@ const InstantCashRegisterConsole: React.FunctionComponent = () => {
     serviceRef
       .collection('instantOrders')
       .add(newInstantOrder)
-      .then(res => {
+      .then(() => {
         dispatch({
           type: ActionType.InstantOrderCreated
         });
@@ -81,7 +81,7 @@ const InstantCashRegisterConsole: React.FunctionComponent = () => {
       <IconButton
         className={classes.doneBtn}
         color="primary"
-        disabled={courses.length === 0}
+        disabled={courses.length === 0 || waitingToEndOrder}
         onClick={sendOrder}
       >
         <DoneIcon fontSize="large" />

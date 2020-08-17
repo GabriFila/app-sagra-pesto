@@ -7,7 +7,7 @@ import ServiceStarter from './ServiceStarter';
 import ServiceInfo from './ServiceInfo';
 import { ServiceContext } from '../../context/ServiceContext';
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyle = makeStyles((theme: Theme) =>
   createStyles({
     inner: {
       display: 'flex',
@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 const ServiceTab: React.FunctionComponent = () => {
-  const classes = useStyles();
+  const classes = useStyle();
 
   const { service, serviceRef } = useContext(ServiceContext);
   return (

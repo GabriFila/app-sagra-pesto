@@ -11,7 +11,7 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import PollIcon from '@material-ui/icons/Poll';
 import ReorderIcon from '@material-ui/icons/Reorder';
 
-const useStyles = makeStyles(theme =>
+const useStyle = makeStyles(theme =>
   createStyles({
     root: {
       display: 'flex',
@@ -29,7 +29,7 @@ const useStyles = makeStyles(theme =>
 );
 
 const AdminPage = () => {
-  const classes = useStyles();
+  const classes = useStyle();
   const [viewSelected, setViewSelected] = useState(0);
   const isMobile = useMediaQuery(useTheme().breakpoints.down('sm'));
 

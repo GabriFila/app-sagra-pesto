@@ -191,8 +191,7 @@ const CashRegisterReducer: React.Reducer<
       return {
         ...state,
         waitingOrderRes: false,
-        courses: [],
-        revenue: 0
+        waitingToEndOrder: true
       };
     case ActionType.ResetOrder:
       return {

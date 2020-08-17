@@ -5,7 +5,7 @@ import { StorageContext } from '../../context/StorageContext';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Typography from '@material-ui/core/Typography';
 
-const useStyles = makeStyles(theme => ({
+const useStyle = makeStyles(theme => ({
   storageTab: {
     flex: 4,
     padding: theme.spacing(1, 3),
@@ -18,7 +18,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const StorageTab: React.FunctionComponent = () => {
-  const classes = useStyles();
+  const classes = useStyle();
   const { storageCourses } = useContext(StorageContext);
 
   return (
