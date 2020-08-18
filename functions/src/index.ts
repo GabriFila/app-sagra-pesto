@@ -6,10 +6,15 @@ import {
   IService,
   IDBCourse,
   IUserSagraRolesDoc,
-  IInstantOrderCourse
+  IInstantOrderCourse,
+  CourseStatus,
+  IStorageCourse
 } from '../../types';
 import rolesToClaims from './helpers/rolesToClaims';
-import { removeDishesFromStorage } from './helpers/storageHelpers';
+import {
+  removeDishesFromStorage,
+  addDishesToStorage
+} from './helpers/storageHelpers';
 
 admin.initializeApp();
 const db = admin.firestore();
@@ -258,7 +263,7 @@ export const onInstantOrderCreate = functions
       })
       .catch((err: Error) => {
         console.error(
-          'ERROR IN UDPATING STORAGE AFTER INSTANT ORDER CREATED',
+          'ERROR IN UDPATING STORAGE AND SERVICE AFTER INSTANT ORDER CREATED',
           err.message,
           err.stack
         );
@@ -266,4 +271,75 @@ export const onInstantOrderCreate = functions
       });
   });
 
+export const onCourseDelete = functions
+  .region('europe-west2')
+  .firestore.document('sagre/{sagraId}/services/{serviceId}/courses/{courseId}')
+  .onUpdate((change, ctx) => {
+    console.log(change.after.data());
+    const deletedStatus: CourseStatus = 'deleted';
+    if (change.after.data().status !== deletedStatus) return;
+    else {
+      const course = change.after.data() as IDBCourse;
+      const sagraId = ctx.params.sagraId;
+      const serviceId = ctx.params.serviceId;
+
+      const currentServiceRef = db
+        .collection('sagre')
+        .doc(sagraId)
+        .collection('services')
+        .doc(serviceId);
+
+      const currentStroageRef = db
+        .collection('sagre')
+        .doc(sagraId)
+        .collection('storage')
+        .doc('storage');
+
+      const toFullFill: Promise<any>[] = [];
+      toFullFill.push();
+      let storageCourses: IStorageCourse[];
+      return db
+        .runTransaction(t =>
+          t.get(currentStroageRef).then(storageSnap => {
+            const storage = storageSnap.data() as IStorage;
+
+            storageCourses = storage.storageCourses;
+
+            addDishesToStorage(
+              course.dishes,
+              storageCourses,
+              course.courseName
+            );
+            t.set(currentStroageRef, { storageCourses });
+          })
+        )
+        .then(() => {
+          let courseRevenue = 0;
+          const storageCourseDishes = storageCourses.find(
+            storageCourse => storageCourse.courseName === course.courseName
+          )?.dishes;
+          course.dishes.forEach(dish => {
+            const storageDishFound = storageCourseDishes?.find(
+              storageDish => storageDish.shortName === dish.shortName
+            );
+            if (storageDishFound)
+              courseRevenue += dish.qt * storageDishFound?.price;
+          });
+          return currentServiceRef.set(
+            {
+              totalRevenue: admin.firestore.FieldValue.increment(-courseRevenue)
+            },
+            { merge: true }
+          );
+        })
+        .catch((err: Error) => {
+          console.error(
+            'ERROR IN UDPATING STORAGE AND SERVICE AFTER COURSE CREATED',
+            err.message,
+            err.stack
+          );
+          return;
+        });
+    }
+  });
 // TODO create a function to prevent 2 contemporary services
