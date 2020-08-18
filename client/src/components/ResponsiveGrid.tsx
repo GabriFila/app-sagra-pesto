@@ -17,7 +17,7 @@ const ResponsiveGrid: React.FunctionComponent<IReponsiveGridProps> = props => {
       wrap="wrap"
     >
       {elementsList.map(comp => (
-        <Grid item key={comp.key} xs={12} sm={5} md={3} lg={2}>
+        <Grid item key={comp.key} xs={12} sm={6} md={4} lg={3}>
           {comp}
         </Grid>
       ))}

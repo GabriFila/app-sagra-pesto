@@ -9,6 +9,7 @@ import AuthProvider from './context/AuthContext';
 import Menu from './components/TopBar';
 import Routes from './Routes';
 import ServiceContextProvider from './context/ServiceContext';
+import StorageContextProvider from './context/StorageContext';
 
 const baseThemeConfig: ThemeOptions = {
   palette: {
@@ -63,13 +64,18 @@ function App() {
     <ThemeProvider theme={isLightTheme ? lightTheme : darkTheme}>
       <CssBaseline />
       <AuthProvider>
-        <ServiceContextProvider>
-          <BrowserRouter>
-            <Menu isLightTheme={isLightTheme} setIsLigthTheme={setIsLightTheme}>
-              <Routes />
-            </Menu>
-          </BrowserRouter>
-        </ServiceContextProvider>
+        <StorageContextProvider>
+          <ServiceContextProvider>
+            <BrowserRouter>
+              <Menu
+                isLightTheme={isLightTheme}
+                setIsLigthTheme={setIsLightTheme}
+              >
+                <Routes />
+              </Menu>
+            </BrowserRouter>
+          </ServiceContextProvider>
+        </StorageContextProvider>
       </AuthProvider>
     </ThemeProvider>
   );

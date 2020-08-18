@@ -11,6 +11,7 @@ import { disableUIOnCondition } from '../../helpers/disableUIOnCondition';
 
 interface ICashRegisterMenuProps {
   onlyInstant: boolean;
+  whichCourse: string | undefined;
 }
 
 const useStyle = makeStyles(theme =>
@@ -38,14 +39,18 @@ const CashRegisterMenu: React.FunctionComponent<ICashRegisterMenuProps> = props 
   const { storageCourses } = useContext(StorageContext);
   const { state, dispatch } = useContext(CashRegisterContext);
   const { courses, waitingOrderRes, waitingToEndOrder } = state;
-  const { onlyInstant } = props;
+  const {
+    onlyInstant,
+    // singleCourse,
+    whichCourse
+  } = props;
 
   return (
     <div
       className={classes.menu}
       style={disableUIOnCondition(waitingOrderRes || waitingToEndOrder, true)}
     >
-      {!onlyInstant && (
+      {!onlyInstant && whichCourse === undefined && (
         <Paper className={classes.orderNote} elevation={6}>
           <TextField
             multiline
@@ -63,7 +68,11 @@ const CashRegisterMenu: React.FunctionComponent<ICashRegisterMenuProps> = props 
         </Paper>
       )}
       {storageCourses
-        .filter(({ isInstant }) => !onlyInstant || isInstant)
+        .filter(({ isInstant, courseName }) =>
+          whichCourse === undefined
+            ? !onlyInstant || isInstant
+            : courseName === whichCourse
+        )
         .map(({ courseName, dishes, kitchen }) => (
           <CashRegisterCourse
             key={courseName}

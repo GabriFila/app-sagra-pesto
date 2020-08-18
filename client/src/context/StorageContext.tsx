@@ -36,12 +36,12 @@ const StorageContextProvider: React.FunctionComponent = ({ children }) => {
   );
 };
 
-const withStorageContext = (BaseComponent: React.FunctionComponent) => (
-  props: any
-) => (
-  <StorageContextProvider>
-    <BaseComponent {...props} />
-  </StorageContextProvider>
-);
+// const withStorageContext = (BaseComponent: React.FunctionComponent) => (
+//   props: any
+// ) => (
+//   <StorageContextProvider>
+//     <BaseComponent {...props} />
+//   </StorageContextProvider>
+// );
 
-export default withStorageContext;
+export default StorageContextProvider;

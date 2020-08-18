@@ -2,8 +2,6 @@ import React from 'react';
 import Container from '@material-ui/core/Container';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import createStyles from '@material-ui/core/styles/createStyles';
-
-import withStorageContext from '../../context/StorageContext';
 import CashRegisterMenu from '../cashRegister/CashRegisterMenu';
 import withCashRegisterContext from '../../context/CashRegisterContext';
 import InstantCashRegisterConsole from './InstantCashRegisterConsole';
@@ -35,12 +33,12 @@ const InstantCashRegisterPage = () => {
   return (
     <Container className={classes.cashRegisterPage}>
       <CashRegisterNav onlyInstant={true} />
-      <CashRegisterMenu onlyInstant={true} />
+      <CashRegisterMenu onlyInstant={true} whichCourse={undefined} />
       <InstantCashRegisterConsole />
     </Container>
   );
 };
 
 export default withServiceActive(
-  withStorageContext(withCashRegisterContext(InstantCashRegisterPage))
+  withCashRegisterContext(InstantCashRegisterPage)
 );

@@ -26,9 +26,9 @@ const CashRegisterContextProvider: React.FunctionComponent = ({ children }) => {
   );
 };
 
-const withCashRegisterContext = (BaseComponent: React.FunctionComponent) => (
-  props: any
-) => (
+const withCashRegisterContext = (
+  BaseComponent: React.FunctionComponent<any>
+) => (props: any) => (
   <CashRegisterContextProvider>
     <BaseComponent {...props} />
   </CashRegisterContextProvider>

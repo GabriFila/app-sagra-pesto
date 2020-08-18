@@ -1,44 +1,38 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import TextField from '@material-ui/core/TextField';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import createStyles from '@material-ui/core/styles/createStyles';
 
 interface IWaiterOrderNoteSectionProps {
-  currentNote: string;
   note: string;
-  isEditingNote: boolean;
   serviceRef: firebase.firestore.DocumentReference<
     firebase.firestore.DocumentData
   >;
   orderId: string;
-  setIsEditingNote: React.Dispatch<React.SetStateAction<boolean>>;
-  setCurrentNote: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const useStyle = makeStyles(theme =>
   createStyles({
-    noteSection: { display: 'flex', alignItems: 'center' },
+    noteSection: {
+      display: 'flex',
+      alignItems: 'center',
+      width: '90%'
+    },
     note: {
       padding: theme.spacing(1),
-      width: '100%',
       maxWidth: 500,
-      margin: 5
+      margin: 5,
+      width: '100%'
     }
   })
 );
 
 const WaiterOrderNoteSection: React.FunctionComponent<IWaiterOrderNoteSectionProps> = props => {
   const classes = useStyle();
-  const {
-    currentNote,
-    isEditingNote,
-    setIsEditingNote,
-    setCurrentNote,
-    serviceRef,
-    note,
-    orderId
-  } = props;
+  const { serviceRef, note, orderId } = props;
+  const [isEditingNote, setIsEditingNote] = useState(false);
+  const [currentNote, setCurrentNote] = useState(note);
 
   const changeNoteInDB = () => {
     if (isEditingNote)

@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import WaiterLinkForm from './WaiterLinkForm';
 import { ServiceContext } from '../../context/ServiceContext';
 import { AuthContext } from '../../context/AuthContext';
-import { IDBCourse, IDBOrder } from '../../../../types';
+import { IDBCourse, IDBOrder, CourseStatus } from '../../../../types';
 import WaiterOrder from './WaiterOrder';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import createStyles from '@material-ui/core/styles/createStyles';
@@ -48,9 +48,16 @@ function WaiterPage() {
             err.stack
           )
       );
+    const notDeletedStatus: CourseStatus[] = [
+      'wait',
+      'prep',
+      'ready',
+      'delivered'
+    ];
     const unsubscribeCourses = serviceRef
       .collection('courses')
       .where('waiterId', '==', userId)
+      .where('status', 'in', notDeletedStatus)
       .onSnapshot(
         coursesSnap => {
           setCourses(

@@ -109,7 +109,7 @@ const SearchOrder = () => {
       <IconButton onClick={getOrder} disabled={orderNum === ''}>
         <SearchIcon fontSize="large" />
       </IconButton>
-      <Dialog open={open || isError} onClose={closeDialog}>
+      <Dialog open={open || isError} onClose={closeDialog} fullWidth={true}>
         <DialogTitle>{isError ? '' : `Ordine # ${orderNum}`}</DialogTitle>
         <DialogContent>
           {isError ? (

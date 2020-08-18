@@ -23,7 +23,10 @@ const useStyle = makeStyles(theme =>
       padding: theme.spacing(3),
       width: '100%',
       maxWidth: 500,
-      margin: 10
+      margin: 10,
+      [theme.breakpoints.down('sm')]: {
+        padding: theme.spacing(2)
+      }
     },
     courseName: {
       paddingBottom: 10

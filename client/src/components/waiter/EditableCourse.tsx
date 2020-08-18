@@ -1,15 +1,14 @@
 import React from 'react';
-import { IDish, CourseStatus } from '../../../../types';
+import { IDish } from '../../../../types';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import createStyles from '@material-ui/core/styles/createStyles';
 import Typography from '@material-ui/core/Typography';
 import GeneralDish from '../GeneralDish';
 import WaiterCourseActions from './WaiterCourseActions';
-import { disableUIOnCondition } from '../../helpers/disableUIOnCondition';
-interface IWaiterCourseProps {
+
+interface IEditableCourseProps {
   courseName: string;
   dishes: IDish[];
-  status: CourseStatus;
   courseId: string;
 }
 
@@ -39,38 +38,22 @@ const useStyle = makeStyles(theme =>
   })
 );
 
-const WaiterCourse: React.FunctionComponent<IWaiterCourseProps> = props => {
+const EditableCourse: React.FunctionComponent<IEditableCourseProps> = props => {
   const classes = useStyle();
-  const { courseName, dishes, status, courseId } = props;
+  const { courseName, dishes, courseId } = props;
   return (
-    <div
-      className={`${classes.course} ${
-        status === 'ready' ? classes.ready : ' '
-      }`}
-      style={{
-        ...disableUIOnCondition(status === 'prep', false)
-      }}
-    >
-      <div
-        className={`${classes.courseTopRow} ${
-          status === 'ready' ? classes.ready : ''
-        }`}
-      >
+    <div className={`${classes.course} `} style={{}}>
+      <div className={`${classes.courseTopRow}`}>
         <Typography variant="h6" color="primary">
           {courseName}
         </Typography>
-        <WaiterCourseActions
-          status={status}
-          courseId={courseId}
-          isEditing={false}
-        />
+        <WaiterCourseActions courseId={courseId} isEditing={true} />
       </div>
-      {status !== 'delivered' &&
-        dishes.map(({ shortName, qt }) => (
-          <GeneralDish key={shortName} shortName={shortName} qt={qt} />
-        ))}
+      {dishes.map(({ shortName, qt }) => (
+        <GeneralDish key={shortName} shortName={shortName} qt={qt} />
+      ))}
     </div>
   );
 };
 
-export default React.memo(WaiterCourse);
+export default React.memo(EditableCourse);

@@ -5,7 +5,6 @@ import createStyles from '@material-ui/core/styles/createStyles';
 import useTheme from '@material-ui/core/styles/useTheme';
 import StorageTab from './StorageTab';
 import ServiceTab from './ServiceTab';
-import withStorageContext from '../../context/StorageContext';
 import ViewSelector from '../ViewSelector';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import PollIcon from '@material-ui/icons/Poll';
@@ -51,4 +50,4 @@ const AdminPage = () => {
   );
 };
 
-export default withStorageContext(AdminPage);
+export default AdminPage;

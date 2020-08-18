@@ -1,17 +1,11 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import Paper from '@material-ui/core/Paper';
 import { IDBCourse } from '../../../../types';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import createStyles from '@material-ui/core/styles/createStyles';
-import Typography from '@material-ui/core/Typography';
-import ExpandIcon from '@material-ui/icons/ExpandMore';
-import IconButton from '@material-ui/core/IconButton';
-import WaiterCouse from './WaiterCourse';
-import EditIcon from '@material-ui/icons/Edit';
-import DoneIcon from '@material-ui/icons/Done';
-import CancelIcon from '@material-ui/icons/Cancel';
-import { ServiceContext } from '../../context/ServiceContext';
-import WaiterOrderNoteSection from './WaiterOrderNoteSection';
+import WaiterOrderEditMode from './WaiterOrderEditMode';
+import WaiterOrderNormalMode from './WaiterOrderNormalMode';
+import WaiterOrderTopBar from './WaiterOrderTopBar';
 
 interface IWaiterOrderProps {
   orderNum: number;
@@ -30,7 +24,11 @@ const useStyle = makeStyles(theme =>
     order: {
       padding: theme.spacing(1),
       width: '100%',
-      margin: theme.spacing(2, 0)
+      margin: theme.spacing(2, 0),
+      display: 'flex',
+      flexDirection: 'column',
+      alignContent: 'center',
+      alignItems: 'center'
     },
     topRow: {
       width: '100%',
@@ -53,12 +51,20 @@ const useStyle = makeStyles(theme =>
       '50%': { backgroundColor: theme.palette.warning.light },
       '100%': { backgroundColor: theme.palette.background.paper }
     },
-    noteSection: { display: 'flex', alignItems: 'center' },
+    noteSection: {
+      display: 'flex',
+      alignItems: 'center',
+      width: '100%'
+    },
     note: {
       padding: theme.spacing(1),
       width: '100%',
       maxWidth: 500,
       margin: 5
+    },
+    newCourseSelector: {
+      width: '10%',
+      minWidth: 200
     }
   })
 );
@@ -66,10 +72,7 @@ const WaiterOrder: React.FunctionComponent<IWaiterOrderProps> = props => {
   const classes = useStyle();
   const { orderNum, tableNum, courses, note, orderId } = props;
   const [show, setShow] = useState(true);
-  const [isEditingNote, setIsEditingNote] = useState(false);
   const [isEditingOrder, setIsEditingOrder] = useState(false);
-  const [currentNote, setCurrentNote] = useState(note);
-  const { serviceRef } = useContext(ServiceContext);
 
   return (
     <Paper
@@ -83,64 +86,24 @@ const WaiterOrder: React.FunctionComponent<IWaiterOrderProps> = props => {
         if (!show) setShow(true);
       }}
     >
-      <div className={classes.topRow}>
-        <Typography color="primary" variant="h5">
-          T: {tableNum}
-        </Typography>
-        <Typography color="primary" variant="h5">
-          O: {orderNum}
-        </Typography>
-
-        {show && (
-          <IconButton
-            color="secondary"
-            size="medium"
-            onClick={() => setIsEditingOrder(!isEditingOrder)}
-          >
-            {isEditingOrder ? <CancelIcon /> : <EditIcon />}
-          </IconButton>
-        )}
-        {isEditingOrder && (
-          <IconButton
-            color="secondary"
-            size="medium"
-            onClick={() => setIsEditingOrder(!isEditingOrder)}
-          >
-            <DoneIcon color="secondary" />
-          </IconButton>
-        )}
-        {!isEditingOrder && (
-          <IconButton
-            size="medium"
-            onClick={() => setShow(!show)}
-            className={classes.expandIcon}
-            style={!show ? { transform: 'rotateZ(180deg)' } : {}}
-          >
-            <ExpandIcon fontSize="large" color="secondary" />
-          </IconButton>
-        )}
-      </div>
+      <WaiterOrderTopBar
+        setIsEditingOrder={setIsEditingOrder}
+        setShow={setShow}
+        show={show}
+        isEditingOrder={isEditingOrder}
+        orderNum={orderNum}
+        tableNum={tableNum}
+      />
       {show &&
-        courses.map(({ courseName, dishes, status, courseId }) => (
-          <WaiterCouse
-            key={courseName}
-            courseName={courseName}
-            dishes={dishes}
-            status={status}
-            courseId={courseId}
+        (isEditingOrder ? (
+          <WaiterOrderEditMode courses={courses} />
+        ) : (
+          <WaiterOrderNormalMode
+            courses={courses}
+            note={note}
+            orderId={orderId}
           />
         ))}
-      {!isEditingOrder && (
-        <WaiterOrderNoteSection
-          setCurrentNote={setCurrentNote}
-          setIsEditingNote={setIsEditingNote}
-          orderId={orderId}
-          serviceRef={serviceRef}
-          isEditingNote={isEditingNote}
-          note={note}
-          currentNote={currentNote}
-        />
-      )}
     </Paper>
   );
 };
