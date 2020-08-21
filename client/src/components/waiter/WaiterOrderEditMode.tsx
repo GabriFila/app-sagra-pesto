@@ -4,97 +4,83 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import createStyles from '@material-ui/core/styles/createStyles';
 import CancelIcon from '@material-ui/icons/Cancel';
 import IconButton from '@material-ui/core/IconButton';
-import EditableCourse from './EditableCourse';
 import AddIcon from '@material-ui/icons/AddCircle';
 import CheckIcon from '@material-ui/icons/CheckCircle';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import { StorageContext } from '../../context/StorageContext';
 import CashRegisterMenu from '../cashRegister/CashRegisterMenu';
-import withCashRegisterContext from '../../context/CashRegisterContext';
-
+import withCashRegisterContext, {
+  CashRegisterContext
+} from '../../context/CashRegisterContext';
+import { functions } from '../../fbConfig';
+import { ServiceContext } from '../../context/ServiceContext';
+import WaiterCourse from './WaiterCourse';
+import { ActionType } from '../../reducers/CashRegisterReducer';
+import ErrorDialog from '../ErrorDialog';
 interface IWaiterOrderEditModeProps {
-  //   orderNum: number;
-  //   tableNum: number;
-  courses: IDBCourse[];
-  //   note?: string;
-  //   orderId: string;
-  // status: string; // (pending, active, completed, deleted)
-  // waiterName: string; // display name of waiter
-  // waiterId: string; // id of waiter to link
-  // revenue: number;
+  oldCourses: IDBCourse[];
+  orderId: string;
 }
 
 const useStyle = makeStyles(theme =>
   createStyles({
-    order: {
-      padding: theme.spacing(1),
-      width: '100%',
-      margin: theme.spacing(2, 0),
-      display: 'flex',
-      flexDirection: 'column',
-      alignContent: 'center',
-      alignItems: 'center'
-    },
-    topRow: {
-      width: '100%',
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      paddingLeft: theme.spacing(1)
-    },
-    expandIcon: {
-      transition: '0.2s ease-out'
-    },
-    ready: {
-      animationName: '$blinker',
-      animationDuration: '1.5s',
-      animationTimingFunction: 'ease-out',
-      animationIterationCount: 'infinite'
-    },
-    '@keyframes blinker': {
-      '0%': { backgroundColor: theme.palette.background.paper },
-      '50%': { backgroundColor: theme.palette.warning.light },
-      '100%': { backgroundColor: theme.palette.background.paper }
-    },
-    noteSection: {
-      display: 'flex',
-      alignItems: 'center',
-      width: '100%'
-    },
-    note: {
-      padding: theme.spacing(1),
-      width: '100%',
-      maxWidth: 500,
-      margin: 5
-    },
     newCourseSelector: {
-      width: '10%',
-      minWidth: 200
+      width: '80%',
+      minWidth: 200,
+      margin: theme.spacing(2, 0)
     }
   })
 );
+const addCoursesToOrder = functions.httpsCallable('addCoursesToOrder');
+
 const WaiterOrderEditMode: React.FunctionComponent<IWaiterOrderEditModeProps> = props => {
   const classes = useStyle();
 
-  const { courses } = props;
+  const { oldCourses, orderId } = props;
 
+  const { serviceId } = useContext(ServiceContext);
   const { storageCourses } = useContext(StorageContext);
-
-  console.log(storageCourses);
+  const { state, dispatch } = useContext(CashRegisterContext);
+  const { courses, revenue, isError } = state;
   const [isAddingCourse, setIsAddingCourse] = useState(false);
   const [newCourse, setNewCourse] = useState('');
 
+  const addCourseInDB = () => {
+    dispatch({ type: ActionType.SendOrder });
+    addCoursesToOrder({
+      orderId,
+      courses,
+      revenue,
+      serviceId
+    })
+      .then(() => {
+        dispatch({ type: ActionType.ResetState });
+        setIsAddingCourse(!isAddingCourse);
+        setNewCourse('');
+      })
+      .catch(err => {
+        dispatch({ type: ActionType.TriggerError });
+        console.error(
+          'ERROR IN ADDING COURSES TO ORDER',
+          err.message,
+          err.stack
+        );
+      });
+  };
+
   return (
     <>
-      {courses
+      {oldCourses
         .filter(({ status }) => status === 'wait')
-        .map(({ courseId, courseName, dishes }) => (
-          <EditableCourse
-            key={courseName}
+        .map(({ courseId, courseName, dishes, status }) => (
+          <WaiterCourse
+            key={courseId}
             courseId={courseId}
             courseName={courseName}
             dishes={dishes}
+            status={status}
+            isEditing={true}
           />
         ))}
       {isAddingCourse && (
@@ -117,7 +103,11 @@ const WaiterOrderEditMode: React.FunctionComponent<IWaiterOrderEditModeProps> = 
         </TextField>
       )}
       {newCourse !== '' && (
-        <CashRegisterMenu onlyInstant={false} whichCourse={newCourse} />
+        <CashRegisterMenu
+          onlyInstant={false}
+          whichCourse={newCourse}
+          isWaiter={true}
+        />
       )}
       <div>
         {isAddingCourse && (
@@ -126,21 +116,41 @@ const WaiterOrderEditMode: React.FunctionComponent<IWaiterOrderEditModeProps> = 
             onClick={() => {
               setIsAddingCourse(!isAddingCourse);
               setNewCourse('');
+              dispatch({ type: ActionType.ResetState });
             }}
           >
             <CancelIcon />
           </IconButton>
         )}
-        <IconButton
-          color="secondary"
-          onClick={() => {
-            setIsAddingCourse(!isAddingCourse);
-            setNewCourse('');
-          }}
-        >
-          {isAddingCourse ? <CheckIcon /> : <AddIcon />}
-        </IconButton>
+        {newCourse !== '' && <>€ {revenue}</>}
+        {isAddingCourse ? (
+          <IconButton
+            color="secondary"
+            onClick={addCourseInDB}
+            disabled={courses.length === 0 || revenue === 0}
+          >
+            <CheckIcon />
+          </IconButton>
+        ) : (
+          <IconButton
+            color="secondary"
+            onClick={() => {
+              setIsAddingCourse(true);
+            }}
+          >
+            <AddIcon />
+          </IconButton>
+        )}
       </div>
+      <ErrorDialog
+        open={isError}
+        description="C'è stato un errore nell'aggiungere una portata all'ordine"
+        closeAction={() => {
+          dispatch({ type: ActionType.ResetState });
+          setIsAddingCourse(false);
+          setNewCourse('');
+        }}
+      />
     </>
   );
 };

@@ -6,13 +6,13 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import IconButton from '@material-ui/core/IconButton';
 
-interface ISafetyDialogProps {
-  action: string;
-  func: () => void;
+interface ISafetyIconButtonProps {
+  description: string;
+  onClick: () => void;
 }
 
-const SafetyIconButton: React.FunctionComponent<ISafetyDialogProps> = props => {
-  const { action, func, children } = props;
+const SafetyIconButton: React.FunctionComponent<ISafetyIconButtonProps> = props => {
+  const { description, onClick, children } = props;
   const [open, setOpen] = useState(false);
 
   const changeOpen = () => {
@@ -22,13 +22,9 @@ const SafetyIconButton: React.FunctionComponent<ISafetyDialogProps> = props => {
   return (
     <>
       <IconButton onClick={changeOpen}>{children}</IconButton>
-      <Dialog
-        open={open}
-        onClose={changeOpen}
-        aria-labelledby="form-dialog-title"
-      >
+      <Dialog open={open} onClose={changeOpen}>
         <DialogContent>
-          <DialogContentText>{action}</DialogContentText>
+          <DialogContentText>{description}</DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={changeOpen} color="secondary">
@@ -36,7 +32,7 @@ const SafetyIconButton: React.FunctionComponent<ISafetyDialogProps> = props => {
           </Button>
           <Button
             onClick={() => {
-              func();
+              onClick();
               changeOpen();
             }}
             color="primary"

@@ -1,12 +1,14 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction, useContext } from 'react';
 import Typography from '@material-ui/core/Typography';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import createStyles from '@material-ui/core/styles/createStyles';
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
-import DoneIcon from '@material-ui/icons/Done';
 import CancelIcon from '@material-ui/icons/Cancel';
 import ExpandIcon from '@material-ui/icons/ExpandMore';
+import BreakLinkIcon from '@material-ui/icons/LinkOff';
+import { ServiceContext } from '../../context/ServiceContext';
+import { db } from '../../fbConfig';
 
 interface IWaiterOrderTopBarProps {
   orderNum: number;
@@ -15,19 +17,12 @@ interface IWaiterOrderTopBarProps {
   setIsEditingOrder: Dispatch<SetStateAction<boolean>>;
   show: boolean;
   setShow: Dispatch<SetStateAction<boolean>>;
+  orderId: string;
+  coursesIds: string[];
 }
 
 const useStyle = makeStyles(theme =>
   createStyles({
-    order: {
-      padding: theme.spacing(1),
-      width: '100%',
-      margin: theme.spacing(2, 0),
-      display: 'flex',
-      flexDirection: 'column',
-      alignContent: 'center',
-      alignItems: 'center'
-    },
     topRow: {
       width: '100%',
       display: 'flex',
@@ -37,32 +32,6 @@ const useStyle = makeStyles(theme =>
     },
     expandIcon: {
       transition: '0.2s ease-out'
-    },
-    ready: {
-      animationName: '$blinker',
-      animationDuration: '1.5s',
-      animationTimingFunction: 'ease-out',
-      animationIterationCount: 'infinite'
-    },
-    '@keyframes blinker': {
-      '0%': { backgroundColor: theme.palette.background.paper },
-      '50%': { backgroundColor: theme.palette.warning.light },
-      '100%': { backgroundColor: theme.palette.background.paper }
-    },
-    noteSection: {
-      display: 'flex',
-      alignItems: 'center',
-      width: '100%'
-    },
-    note: {
-      padding: theme.spacing(1),
-      width: '100%',
-      maxWidth: 500,
-      margin: 5
-    },
-    newCourseSelector: {
-      width: '10%',
-      minWidth: 200
     }
   })
 );
@@ -75,8 +44,50 @@ const WaiterOrderTopBar: React.FunctionComponent<IWaiterOrderTopBarProps> = prop
     isEditingOrder,
     setIsEditingOrder,
     show,
-    setShow
+    setShow,
+    orderId,
+    coursesIds
   } = props;
+
+  const { serviceRef } = useContext(ServiceContext);
+
+  const unlinkOrder = () => {
+    const batch = db.batch();
+    batch.set(
+      serviceRef.collection('orders').doc(orderId),
+      {
+        waiterId: null,
+        tableNum: null,
+        waiterName: null,
+        status: 'pending'
+      },
+      { merge: true }
+    );
+
+    coursesIds.forEach(courseId =>
+      batch.set(
+        serviceRef.collection('courses').doc(courseId),
+        {
+          waiterId: null
+        },
+        { merge: true }
+      )
+    );
+
+    batch
+      .commit()
+      .then(() => {
+        console.info('Unlinked order');
+      })
+      .catch(err => {
+        console.error(
+          'ERROR WHEN UNLINKING ORDER FROM WAITER',
+          err.message,
+          err.stack
+        );
+      });
+  };
+
   return (
     <div className={classes.topRow}>
       <Typography color="primary" variant="h5">
@@ -95,16 +106,16 @@ const WaiterOrderTopBar: React.FunctionComponent<IWaiterOrderTopBarProps> = prop
           {isEditingOrder ? <CancelIcon /> : <EditIcon />}
         </IconButton>
       )}
-      {isEditingOrder && (
+      {isEditingOrder ? (
         <IconButton
-          color="secondary"
           size="medium"
-          onClick={() => setIsEditingOrder(!isEditingOrder)}
+          onClick={unlinkOrder}
+          className={classes.expandIcon}
+          style={!show ? { transform: 'rotateZ(180deg)' } : {}}
         >
-          <DoneIcon color="secondary" />
+          <BreakLinkIcon fontSize="large" color="secondary" />
         </IconButton>
-      )}
-      {!isEditingOrder && (
+      ) : (
         <IconButton
           size="medium"
           onClick={() => setShow(!show)}

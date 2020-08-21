@@ -48,7 +48,7 @@ const InstantCashRegisterConsole: React.FunctionComponent = () => {
   const { courses, revenue, waitingToEndOrder } = state;
 
   const resetOrder = () => {
-    dispatch({ type: ActionType.ResetOrder });
+    dispatch({ type: ActionType.ResetState });
   };
 
   const sendOrder = () => {

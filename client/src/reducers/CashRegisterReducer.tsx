@@ -15,12 +15,13 @@ export enum ActionType {
   AddPerson = 'AddPerson',
   RemovePerson = 'RemovePerson',
   SetPeople = 'SetPeople',
-  ResetOrder = 'ResetOrder',
+  ResetState = 'ResetOrder',
   OrderReceived = 'OrderReceived',
   ChangeNote = 'ChangeNotes',
   ChangeOrderNote = 'ChangeOrderNote',
   SendOrder = 'SendOrder',
-  InstantOrderCreated = 'InstantOrderCreated'
+  InstantOrderCreated = 'InstantOrderCreated',
+  TriggerError = 'TriggerError'
 }
 
 export interface ICashRegisterReducerState {
@@ -31,6 +32,7 @@ export interface ICashRegisterReducerState {
   revenue: number;
   waitingOrderRes: boolean;
   waitingToEndOrder: boolean;
+  isError: boolean;
 }
 
 export interface ICashRegisterAction {
@@ -53,7 +55,8 @@ export const initialCashRegsiterState: ICashRegisterReducerState = {
   courses: [],
   revenue: 0,
   waitingOrderRes: false,
-  waitingToEndOrder: false
+  waitingToEndOrder: false,
+  isError: false
 };
 
 const addDish = (
@@ -193,7 +196,12 @@ const CashRegisterReducer: React.Reducer<
         waitingOrderRes: false,
         waitingToEndOrder: true
       };
-    case ActionType.ResetOrder:
+    case ActionType.TriggerError:
+      return {
+        ...state,
+        isError: true
+      };
+    case ActionType.ResetState:
       return {
         orderNum: undefined,
         orderNote: '',
@@ -201,7 +209,8 @@ const CashRegisterReducer: React.Reducer<
         courses: [],
         revenue: 0,
         waitingOrderRes: false,
-        waitingToEndOrder: false
+        waitingToEndOrder: false,
+        isError: false
       };
     default:
       throw new Error();

@@ -8,11 +8,12 @@ import {
   IUserSagraRolesDoc,
   IInstantOrderCourse,
   CourseStatus,
-  IStorageCourse
+  IStorageCourse,
+  IDBOrder
 } from '../../types';
 import rolesToClaims from './helpers/rolesToClaims';
 import {
-  removeDishesFromStorage,
+  removeCoursesFromStorage,
   addDishesToStorage
 } from './helpers/storageHelpers';
 
@@ -105,15 +106,17 @@ export const createOrder = functions
         elm => elm === undefined
       )
     ) {
-      console.error('ERROR IN CREATING ORDER, some fields were undefined');
-      return errorRes;
+      console.error(
+        new Error('ERROR IN CREATING ORDER, some fields were undefined')
+      );
     }
 
-    if (courses.length === 0 || revenue === 0) {
+    if (courses.length === 0 || revenue <= 0) {
       console.error(
-        'ERROR IN CREATING ORDER, incorreect value for some parameters'
+        new Error(
+          'ERROR IN CREATING ORDER, incorreect value for some parameters'
+        )
       );
-      return errorRes;
     }
 
     const currentServiceRef = db
@@ -128,10 +131,8 @@ export const createOrder = functions
       .collection('storage')
       .doc('storage');
 
-    let newOrderNum: number,
-      totalRevenue: number,
-      totalOrders: number,
-      totalPeople: number;
+    let newOrderNum: number;
+
     return db
       .runTransaction(t => {
         return t
@@ -142,25 +143,11 @@ export const createOrder = functions
             const service = serviceSnap.data() as IService;
 
             newOrderNum = service.lastOrderNum + 1;
-            totalRevenue = service.totalRevenue;
-            totalOrders = service.totalOrders;
-            totalPeople = service.totalPeople;
+            const { totalRevenue, totalOrders, totalPeople } = service;
+
             const storage = storageSnap.data() as IStorage;
             const { storageCourses } = storage;
-
-            courses.forEach(course => {
-              course.dishes.forEach(dish => {
-                storageCourses.map(storageCourse => {
-                  if (storageCourse.courseName === course.courseName)
-                    storageCourse.dishes.map(storageDish => {
-                      if (dish.shortName === storageDish.shortName)
-                        storageDish.qt -= dish.qt;
-                      return dish;
-                    });
-                  return course;
-                });
-              });
-            });
+            removeCoursesFromStorage(courses, storageCourses);
 
             t.set(
               currentServiceRef,
@@ -182,6 +169,7 @@ export const createOrder = functions
             kitchen,
             note,
             status: 'wait',
+            waiterId: null,
             dishes: dishes.map(({ qt, shortName }) => ({ qt, shortName }))
           })
         );
@@ -204,7 +192,10 @@ export const createOrder = functions
       })
       .catch((err: Error) => {
         console.error('ERROR IN CREATING ORDER', err.message, err.stack);
-        return { ...errorRes, err: err.message };
+        throw new functions.https.HttpsError(
+          'unknown',
+          'ERROR IN UDPATING STORAGE AND SERVICE AFTER INSTANT ORDER CREATED'
+        );
       });
   });
 
@@ -250,7 +241,7 @@ export const onInstantOrderCreate = functions
 
           const { storageCourses } = storage;
 
-          removeDishesFromStorage(courses, storageCourses);
+          removeCoursesFromStorage(courses, storageCourses);
 
           t.set(currentStroageRef, { storageCourses });
         })
@@ -267,7 +258,10 @@ export const onInstantOrderCreate = functions
           err.message,
           err.stack
         );
-        return;
+        throw new functions.https.HttpsError(
+          'unknown',
+          'ERROR IN UDPATING STORAGE AND SERVICE AFTER INSTANT ORDER CREATED'
+        );
       });
   });
 
@@ -275,7 +269,6 @@ export const onCourseDelete = functions
   .region('europe-west2')
   .firestore.document('sagre/{sagraId}/services/{serviceId}/courses/{courseId}')
   .onUpdate((change, ctx) => {
-    console.log(change.after.data());
     const deletedStatus: CourseStatus = 'deleted';
     if (change.after.data().status !== deletedStatus) return;
     else {
@@ -338,8 +331,128 @@ export const onCourseDelete = functions
             err.message,
             err.stack
           );
-          return;
+          throw new functions.https.HttpsError('unknown', 'An error occured');
         });
     }
   });
+
+// TODO compute revenue in function to keep safety
+export const addCoursesToOrder = functions
+  .region('europe-west2')
+  .https.onCall((data, ctx) => {
+    const errorRes = { outcome: false };
+    if (
+      !ctx.auth?.token.sala ||
+      !ctx.auth?.token.cassa ||
+      !ctx.auth?.token.smazzo
+    ) {
+      console.error(
+        new Error(
+          'ERROR IN ADDING COURSE TO ORDER, call by a non auithorized user'
+        )
+      );
+    }
+
+    const courses = data.courses as IOrderCourse[];
+    const revenue = data.revenue as number;
+    const orderId = data.orderId as string;
+    const waiterId = ctx.auth?.uid;
+    const currentServiceId = data.serviceId;
+    const year = new Date().getFullYear();
+    let orderNum: number = 0;
+
+    if (
+      [courses, revenue, waiterId, currentServiceId, year].some(
+        elm => elm === undefined
+      )
+    ) {
+      console.error('ERROR IN CREATING ORDER, some fields were undefined');
+      return errorRes;
+    }
+
+    if (revenue <= 0) {
+      console.error('ERROR IN CREATING ORDER, revenue is less than 0');
+      return errorRes;
+    }
+
+    const currentServiceRef = db
+      .collection('sagre')
+      .doc(String(year))
+      .collection('services')
+      .doc(currentServiceId);
+
+    const currentStorageRef = db
+      .collection('sagre')
+      .doc(String(year))
+      .collection('storage')
+      .doc('storage');
+
+    return currentServiceRef
+      .collection('orders')
+      .doc(orderId)
+      .get()
+      .then(orderSnap => {
+        if (!orderSnap.exists) throw new Error('No order found');
+        else {
+          const orderWaiterId = (orderSnap.data() as IDBOrder).waiterId;
+          orderNum = (orderSnap.data() as IDBOrder).orderNum;
+          if (
+            waiterId !== orderWaiterId &&
+            !ctx.auth?.token.cassa &&
+            !ctx.auth?.token.smazzo
+          )
+            throw new Error('Different waiter IDs');
+          else
+            return db.runTransaction(t => {
+              return t
+                .getAll(currentServiceRef, currentStorageRef)
+                .then(([serviceSnap, storageSnap]) => {
+                  if ((serviceSnap.data() as IService).end !== null)
+                    throw new Error('No active service');
+                  const service = serviceSnap.data() as IService;
+
+                  const { totalRevenue } = service;
+                  const storage = storageSnap.data() as IStorage;
+                  const { storageCourses } = storage;
+                  removeCoursesFromStorage(courses, storageCourses);
+
+                  t.set(
+                    currentServiceRef,
+                    {
+                      totalRevenue: totalRevenue + revenue
+                    },
+                    { merge: true }
+                  ).set(currentStorageRef, { storageCourses });
+                });
+            });
+        }
+      })
+      .then(() => {
+        const newCourses: IDBCourse[] = courses.map(
+          ({ courseName, kitchen, dishes, note }) => ({
+            orderNum,
+            courseName,
+            kitchen,
+            note,
+            status: 'wait',
+            waiterId,
+            dishes: dishes.map(({ qt, shortName }) => ({ qt, shortName }))
+          })
+        );
+        return Promise.all(
+          newCourses.map(newCourse =>
+            currentServiceRef.collection('courses').add(newCourse)
+          )
+        );
+      })
+      .then(() => {
+        console.info('Added courses to order: ', orderNum);
+        return { outcome: true };
+      })
+      .catch((err: Error) => {
+        console.error('ERROR IN CREATING ORDER', err.message, err.stack);
+        throw new functions.https.HttpsError('unknown', 'An error occured');
+      });
+  });
+
 // TODO create a function to prevent 2 contemporary services

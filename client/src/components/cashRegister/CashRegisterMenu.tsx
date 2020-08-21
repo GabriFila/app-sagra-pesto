@@ -12,6 +12,7 @@ import { disableUIOnCondition } from '../../helpers/disableUIOnCondition';
 interface ICashRegisterMenuProps {
   onlyInstant: boolean;
   whichCourse: string | undefined;
+  isWaiter: boolean;
 }
 
 const useStyle = makeStyles(theme =>
@@ -42,7 +43,8 @@ const CashRegisterMenu: React.FunctionComponent<ICashRegisterMenuProps> = props 
   const {
     onlyInstant,
     // singleCourse,
-    whichCourse
+    whichCourse,
+    isWaiter
   } = props;
 
   return (
@@ -75,6 +77,7 @@ const CashRegisterMenu: React.FunctionComponent<ICashRegisterMenuProps> = props 
         )
         .map(({ courseName, dishes, kitchen }) => (
           <CashRegisterCourse
+            isWaiter={isWaiter}
             key={courseName}
             courseName={courseName}
             kitchen={kitchen}

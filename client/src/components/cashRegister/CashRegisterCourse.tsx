@@ -15,6 +15,7 @@ interface ICashRegisterCourseProps {
   dishes: IStorageDish[];
   orderDishes: IOrderDish[];
   onlyInstant: boolean;
+  isWaiter: boolean;
 }
 
 const useStyle = makeStyles(theme =>
@@ -48,7 +49,16 @@ const useStyle = makeStyles(theme =>
 const CashRegisterCourse: React.FunctionComponent<ICashRegisterCourseProps> = props => {
   const classes = useStyle();
   const { dispatch } = useContext(CashRegisterContext);
-  const { courseName, dishes, kitchen, orderDishes, onlyInstant } = props;
+
+  const {
+    courseName,
+    dishes,
+    kitchen,
+    orderDishes,
+    onlyInstant,
+    isWaiter
+  } = props;
+
   return (
     <Paper elevation={6} className={classes.course}>
       <div id={courseName} className={classes.courseAnchor}></div>
@@ -66,6 +76,7 @@ const CashRegisterCourse: React.FunctionComponent<ICashRegisterCourseProps> = pr
             storageQt={qt}
             shortName={shortName}
             courseName={courseName}
+            isWaiter={isWaiter}
             orderQt={
               orderDishes &&
               orderDishes.find(dish => dish.shortName === shortName)?.qt

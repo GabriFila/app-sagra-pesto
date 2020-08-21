@@ -18,11 +18,12 @@ const WaiterOrderNormalMode: React.FunctionComponent<IWaiterOrderNormalModeProps
     <>
       {courses.map(({ courseName, dishes, status, courseId }) => (
         <WaiterCourse
-          key={courseName}
+          key={courseId}
           courseName={courseName}
           dishes={dishes}
           status={status}
           courseId={courseId}
+          isEditing={false}
         />
       ))}
       <WaiterOrderNoteSection

@@ -90,12 +90,8 @@ export default function WaiterLinkForm() {
 
   return (
     <div>
-      <Dialog
-        open={open}
-        onClose={changeOpen}
-        aria-labelledby="form-dialog-title"
-      >
-        <DialogTitle id="form-dialog-title">Prendi ordine</DialogTitle>
+      <Dialog open={open} onClose={changeOpen}>
+        <DialogTitle>Prendi ordine</DialogTitle>
         <DialogContent>
           <DialogContentText>
             Inserisci l'ordine che vuoi aggiungere e il suo tavolo

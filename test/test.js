@@ -7,7 +7,7 @@ const adminAuth = { uid: 'myId', email: 'test@test.com', admin: true };
 const waiterAuth = {
   uid: 'myWaiterId',
   email: 'test@test.com',
-  cameriere: true
+  sala: true
 };
 
 const firstKitchenAuth = {
@@ -151,15 +151,15 @@ describe('How a service doc should be secured', () => {
     const testDoc = serviceDoc(sagraDoc(db));
     await firebase.assertSucceeds(
       testDoc.set({
-        end: 'foo',
-        lastOrderNum: 'foo',
-        startingCourses: 'foo',
-        start: 'foo',
-        totalInstantOrders: 'foo',
-        totalInstantRevenue: 'foo',
-        totalOrders: 'foo',
-        totalPeople: 'foo',
-        totalRevenue: 'foo'
+        end: null,
+        lastOrderNum: 0,
+        startingCourses: [],
+        start: firebase.firestore.FieldValue.serverTimestamp(),
+        totalInstantOrders: 0,
+        totalInstantRevenue: 0,
+        totalOrders: 0,
+        totalPeople: 0,
+        totalRevenue: 0
       })
     );
   });
@@ -213,7 +213,7 @@ describe('How an order doc should be secured', () => {
       testDoc.set(
         {
           tableNum: 'num',
-          waiterId: 'test',
+          waiterId: 'id',
           waiterName: 'name',
           status: 'active'
         },
@@ -256,7 +256,8 @@ describe('How a course doc should be secured', () => {
       kitchen: 'test',
       note: 'test',
       orderNum: 'test',
-      status: 'test'
+      status: 'test',
+      waiterId: null
     });
     const testDoc = courseDoc(serviceDoc(sagraDoc(db)));
     await firebase.assertSucceeds(

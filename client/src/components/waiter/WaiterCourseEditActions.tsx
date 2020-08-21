@@ -16,9 +16,9 @@ const useStyle = makeStyles(theme =>
       marginLeft: theme.spacing(2)
     },
     topRow: {
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center'
+      // display: 'flex',
+      // justifyContent: 'space-between',
+      // alignItems: 'center'
     }
   })
 );
@@ -43,8 +43,8 @@ const WaiterCourseEditActions: React.FunctionComponent<IWaiterCourseEditActionsP
   return (
     <div className={classes.topRow}>
       <SafetyIconButton
-        func={deleteCourseInDB}
-        action="Vuoi rimuovere la portata?"
+        onClick={deleteCourseInDB}
+        description="Vuoi rimuovere la portata?"
       >
         <DeleteIcon color="secondary" />
       </SafetyIconButton>

@@ -13,10 +13,6 @@ interface IWaiterOrderProps {
   courses: IDBCourse[];
   note?: string;
   orderId: string;
-  // status: string; // (pending, active, completed, deleted)
-  // waiterName: string; // display name of waiter
-  // waiterId: string; // id of waiter to link
-  // revenue: number;
 }
 
 const useStyle = makeStyles(theme =>
@@ -30,16 +26,6 @@ const useStyle = makeStyles(theme =>
       alignContent: 'center',
       alignItems: 'center'
     },
-    topRow: {
-      width: '100%',
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      paddingLeft: theme.spacing(1)
-    },
-    expandIcon: {
-      transition: '0.2s ease-out'
-    },
     ready: {
       animationName: '$blinker',
       animationDuration: '1.5s',
@@ -50,24 +36,10 @@ const useStyle = makeStyles(theme =>
       '0%': { backgroundColor: theme.palette.background.paper },
       '50%': { backgroundColor: theme.palette.warning.light },
       '100%': { backgroundColor: theme.palette.background.paper }
-    },
-    noteSection: {
-      display: 'flex',
-      alignItems: 'center',
-      width: '100%'
-    },
-    note: {
-      padding: theme.spacing(1),
-      width: '100%',
-      maxWidth: 500,
-      margin: 5
-    },
-    newCourseSelector: {
-      width: '10%',
-      minWidth: 200
     }
   })
 );
+
 const WaiterOrder: React.FunctionComponent<IWaiterOrderProps> = props => {
   const classes = useStyle();
   const { orderNum, tableNum, courses, note, orderId } = props;
@@ -93,10 +65,12 @@ const WaiterOrder: React.FunctionComponent<IWaiterOrderProps> = props => {
         isEditingOrder={isEditingOrder}
         orderNum={orderNum}
         tableNum={tableNum}
+        orderId={orderId}
+        coursesIds={courses.map(course => course.courseId)}
       />
       {show &&
         (isEditingOrder ? (
-          <WaiterOrderEditMode courses={courses} />
+          <WaiterOrderEditMode oldCourses={courses} orderId={orderId} />
         ) : (
           <WaiterOrderNormalMode
             courses={courses}

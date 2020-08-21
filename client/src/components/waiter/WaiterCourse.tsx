@@ -4,13 +4,15 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import createStyles from '@material-ui/core/styles/createStyles';
 import Typography from '@material-ui/core/Typography';
 import GeneralDish from '../GeneralDish';
-import WaiterCourseActions from './WaiterCourseActions';
 import { disableUIOnCondition } from '../../helpers/disableUIOnCondition';
+import WaiterCourseEditActions from './WaiterCourseEditActions';
+import WaiterCourseNormalActions from './WaiterCourseNormalActions';
 interface IWaiterCourseProps {
   courseName: string;
   dishes: IDish[];
   status: CourseStatus;
   courseId: string;
+  isEditing: boolean;
 }
 
 const useStyle = makeStyles(theme =>
@@ -41,11 +43,11 @@ const useStyle = makeStyles(theme =>
 
 const WaiterCourse: React.FunctionComponent<IWaiterCourseProps> = props => {
   const classes = useStyle();
-  const { courseName, dishes, status, courseId } = props;
+  const { courseName, dishes, status, courseId, isEditing } = props;
   return (
     <div
       className={`${classes.course} ${
-        status === 'ready' ? classes.ready : ' '
+        !isEditing && status === 'ready' ? classes.ready : ' '
       }`}
       style={{
         ...disableUIOnCondition(status === 'prep', false)
@@ -53,19 +55,19 @@ const WaiterCourse: React.FunctionComponent<IWaiterCourseProps> = props => {
     >
       <div
         className={`${classes.courseTopRow} ${
-          status === 'ready' ? classes.ready : ''
+          !isEditing && status === 'ready' ? classes.ready : ''
         }`}
       >
         <Typography variant="h6" color="primary">
           {courseName}
         </Typography>
-        <WaiterCourseActions
-          status={status}
-          courseId={courseId}
-          isEditing={false}
-        />
+        {isEditing ? (
+          <WaiterCourseEditActions courseId={courseId} />
+        ) : (
+          <WaiterCourseNormalActions courseId={courseId} status={status} />
+        )}
       </div>
-      {status !== 'delivered' &&
+      {(isEditing || status !== 'delivered') &&
         dishes.map(({ shortName, qt }) => (
           <GeneralDish key={shortName} shortName={shortName} qt={qt} />
         ))}

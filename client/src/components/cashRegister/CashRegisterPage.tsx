@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Container from '@material-ui/core/Container';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import createStyles from '@material-ui/core/styles/createStyles';
 import CashRegisterMenu from './CashRegisterMenu';
-import withCashRegisterContext from '../../context/CashRegisterContext';
+import withCashRegisterContext, {
+  CashRegisterContext
+} from '../../context/CashRegisterContext';
 import CashRegisterConsole from './CashRegisterConsole';
 import CashRegisterNav from './CashRegisterNav';
 import withServiceActive from '../ShowWhenServiceIsActive';
+import ErrorDialog from '../ErrorDialog';
+import { ActionType } from '../../reducers/CashRegisterReducer';
 
 const useStyle = makeStyles(theme =>
   createStyles({
@@ -29,11 +33,24 @@ const useStyle = makeStyles(theme =>
 
 const CashRegisterPage = () => {
   const classes = useStyle();
+  const { state, dispatch } = useContext(CashRegisterContext);
+  const { isError } = state;
   return (
     <Container className={classes.cashRegisterPage}>
       <CashRegisterNav onlyInstant={false} />
-      <CashRegisterMenu onlyInstant={false} whichCourse={undefined} />
+      <CashRegisterMenu
+        onlyInstant={false}
+        whichCourse={undefined}
+        isWaiter={false}
+      />
       <CashRegisterConsole />
+      <ErrorDialog
+        open={isError}
+        description="C'è stato un errore nel creare l'ordine"
+        closeAction={() => {
+          dispatch({ type: ActionType.ResetState });
+        }}
+      />
     </Container>
   );
 };

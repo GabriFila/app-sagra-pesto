@@ -12,10 +12,12 @@ interface IServiceStarterProps {
 
 const useStyle = makeStyles(theme => ({
   serviceOn: {
+    color: theme.palette.text.primary,
     backgroundColor: theme.palette.error.main,
     marginBottom: 20
   },
   serviceOff: {
+    color: theme.palette.text.primary,
     backgroundColor: theme.palette.primary.main,
     marginBottom: 20
   }

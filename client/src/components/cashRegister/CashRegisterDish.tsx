@@ -18,6 +18,7 @@ interface ICashRegisterDishProps {
   courseName: string;
   kitchen: string;
   orderQt: number;
+  isWaiter: boolean;
 }
 
 const useStyle = makeStyles(() =>
@@ -41,7 +42,8 @@ const CashRegisterDish: React.FunctionComponent<ICashRegisterDishProps> = props 
     shortName,
     courseName,
     orderQt,
-    kitchen
+    kitchen,
+    isWaiter
   } = props;
 
   const theme = useTheme();
@@ -51,7 +53,7 @@ const CashRegisterDish: React.FunctionComponent<ICashRegisterDishProps> = props 
   return (
     <div className={classes.base}>
       <Typography variant="body1" style={{ flex: 7 }}>
-        {isTablet ? shortName : name}
+        {isTablet || isWaiter ? shortName : name}
       </Typography>
       <Typography
         align="left"

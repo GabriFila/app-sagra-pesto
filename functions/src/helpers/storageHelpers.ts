@@ -1,6 +1,6 @@
 import { IStorageCourse, IInstantOrderCourse, IDish } from '../../../types';
 
-export const removeDishesFromStorage = (
+export const removeCoursesFromStorage = (
   newCourses: IInstantOrderCourse[],
   storageCourses: IStorageCourse[]
 ) => {
@@ -20,6 +20,7 @@ export const removeDishesFromStorage = (
   });
   return newStorageCourses;
 };
+
 export const addDishesToStorage = (
   oldDishes: IDish[],
   storageCourses: IStorageCourse[],

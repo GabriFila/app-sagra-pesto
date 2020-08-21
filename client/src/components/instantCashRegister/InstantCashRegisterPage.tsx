@@ -33,7 +33,11 @@ const InstantCashRegisterPage = () => {
   return (
     <Container className={classes.cashRegisterPage}>
       <CashRegisterNav onlyInstant={true} />
-      <CashRegisterMenu onlyInstant={true} whichCourse={undefined} />
+      <CashRegisterMenu
+        onlyInstant={true}
+        whichCourse={undefined}
+        isWaiter={false}
+      />
       <InstantCashRegisterConsole />
     </Container>
   );

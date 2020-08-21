@@ -7,7 +7,7 @@ import { CourseStatus } from '../../../../types';
 import { ServiceContext } from '../../context/ServiceContext';
 
 interface IWaiterCourseNormalActionsProps {
-  status?: CourseStatus;
+  status: CourseStatus;
   courseId: string;
 }
 
@@ -27,21 +27,21 @@ const WaiterCourseNormalActions: React.FunctionComponent<IWaiterCourseNormalActi
     <>
       {status === 'ready' && (
         <SafetyIconButton
-          func={() => {
+          onClick={() => {
             changeCourseStatus('delivered');
           }}
-          action="Vuoi contrassegnare la portata come consegnata?"
+          description="Vuoi contrassegnare la portata come consegnata?"
         >
           <DoneIcon fontSize="large" color="secondary" />
         </SafetyIconButton>
       )}
       {(status === 'prep' || status === 'delivered') && (
         <SafetyIconButton
-          func={() => {
+          onClick={() => {
             if (status === 'prep') changeCourseStatus('wait');
             if (status === 'delivered') changeCourseStatus('ready');
           }}
-          action={
+          description={
             status === 'prep'
               ? "Vuoi annullare l'invio alla cucina"
               : 'Vuoi annullare la consegna della portata?'
@@ -52,10 +52,10 @@ const WaiterCourseNormalActions: React.FunctionComponent<IWaiterCourseNormalActi
       )}
       {status === 'wait' && (
         <SafetyIconButton
-          func={() => {
+          onClick={() => {
             changeCourseStatus('prep');
           }}
-          action="Vuoi inviare la portata alla cucina?"
+          description="Vuoi inviare la portata alla cucina?"
         >
           <StoreIcon fontSize="large" color="secondary" />
         </SafetyIconButton>

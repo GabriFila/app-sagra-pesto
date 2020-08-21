@@ -98,7 +98,7 @@ const CashRegisterConsole: React.FunctionComponent = () => {
   } = state;
 
   const resetOrder = () => {
-    dispatch({ type: ActionType.ResetOrder });
+    dispatch({ type: ActionType.ResetState });
   };
 
   const sendOrder = () => {
@@ -114,12 +114,14 @@ const CashRegisterConsole: React.FunctionComponent = () => {
             payload: { orderNum: newOrderNum }
           });
         } else {
+          dispatch({ type: ActionType.TriggerError });
           console.error('ERROR WHEN CREATING ORDER: ');
         }
       })
-      .catch(err =>
-        console.error('ERROR WHEN CREATING ORDER: ', err.message, err.stack)
-      );
+      .catch(err => {
+        dispatch({ type: ActionType.TriggerError });
+        console.error('ERROR WHEN CREATING ORDER: ', err.message, err.stack);
+      });
   };
 
   return (
