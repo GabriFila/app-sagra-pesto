@@ -26,7 +26,6 @@ const StorageContextProvider: React.FunctionComponent = ({ children }) => {
     );
     return () => unsubscribe();
   }, []);
-
   return (
     <StorageContext.Provider value={{ storageCourses, storageRef }}>
       {children}

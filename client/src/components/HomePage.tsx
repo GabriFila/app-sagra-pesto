@@ -29,6 +29,7 @@ const useStyle = makeStyles(theme =>
 
 const HomePage = () => {
   const { userRoles } = useContext(AuthContext);
+  console.log('home roles', userRoles);
   const classes = useStyle();
   return (
     <div className={classes.root}>

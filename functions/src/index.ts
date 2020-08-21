@@ -11,11 +11,11 @@ import {
   IStorageCourse,
   IDBOrder
 } from '../../types';
-import rolesToClaims from './helpers/rolesToClaims';
 import {
   removeCoursesFromStorage,
   addDishesToStorage
 } from './helpers/storageHelpers';
+import { hasRoles } from './helpers/hasRoles';
 
 admin.initializeApp();
 const db = admin.firestore();
@@ -24,12 +24,12 @@ export const onUserCreate = functions
   .region('europe-west2')
   .auth.user()
   .onCreate(user => {
-    const { uid, email } = user;
+    const { uid, email, displayName } = user;
     return db
       .collection('userSagraRoles')
       .doc(`sr_${uid}`)
-      .set({ roles: [], email })
-      .then(() => console.info(`User roles of ${email}  created`))
+      .set({ roles: [], email, name: displayName })
+      .then(() => console.info(`User roles document for ${email} created`))
       .then(() => db.collection('users').doc(uid).set({}))
       .catch((err: Error) => {
         console.error(
@@ -74,7 +74,7 @@ export const onUserSagraRolesUpdate = functions
       .setCustomUserClaims(
         uid,
         // from [primi,bar] to {primi:true, bar:true}
-        rolesToClaims(roles)
+        { roles }
       )
       .then(() =>
         console.info(`Roles of ${name} updated to ${roles.toString()}`)
@@ -85,11 +85,27 @@ export const onUserSagraRolesUpdate = functions
       });
   });
 
+export const onUserSagraRolesDelete = functions
+  .region('europe-west2')
+  .firestore.document('userSagraRoles/{docId}')
+  .onDelete((change, ctx) => {
+    const uid = (ctx.params.docId as string).substring(3);
+
+    return admin
+      .auth()
+      .setCustomUserClaims(uid, {})
+      .then(() => console.info(`Roles of ${name} deleted `))
+      .catch((err: Error) => {
+        console.error(err.message, err.stack);
+        return;
+      });
+  });
+
 export const createOrder = functions
   .region('europe-west2')
   .https.onCall((data, ctx) => {
     const errorRes = { outcome: false };
-    if (!ctx.auth?.token.cassa) {
+    if (!hasRoles(ctx.auth?.token.roles, ['cassa'])) {
       console.error('ERROR IN CREATING ORDER, call by a non auithorized user');
       return errorRes;
     }
@@ -341,11 +357,7 @@ export const addCoursesToOrder = functions
   .region('europe-west2')
   .https.onCall((data, ctx) => {
     const errorRes = { outcome: false };
-    if (
-      !ctx.auth?.token.sala ||
-      !ctx.auth?.token.cassa ||
-      !ctx.auth?.token.smazzo
-    ) {
+    if (!hasRoles(ctx.auth?.token.roles, ['sala', 'cassa', 'smazzo'])) {
       console.error(
         new Error(
           'ERROR IN ADDING COURSE TO ORDER, call by a non auithorized user'
@@ -398,8 +410,7 @@ export const addCoursesToOrder = functions
           orderNum = (orderSnap.data() as IDBOrder).orderNum;
           if (
             waiterId !== orderWaiterId &&
-            !ctx.auth?.token.cassa &&
-            !ctx.auth?.token.smazzo
+            !hasRoles(ctx.auth?.token.roles, ['cassa', 'smazzo'])
           )
             throw new Error('Different waiter IDs');
           else

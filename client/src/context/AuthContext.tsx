@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { auth } from '../fbConfig';
 import { IRoleRouteInfo } from '../clientTypes';
-import claimsToRoles from '../helpers/claimsToRoles';
+import { ROUTE_ROLES } from '../Routes';
 
 interface IAuthContext {
   phase: string;
@@ -27,7 +27,9 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
         user.getIdTokenResult().then(idTokenResult => {
           setAuthState({
             phase: 'in',
-            userRoles: claimsToRoles(idTokenResult.claims),
+            userRoles: ROUTE_ROLES.filter(role =>
+              idTokenResult.claims.roles.includes(role.requiredRole)
+            ),
             userName: user.displayName,
             userId: user.uid
           });
@@ -40,7 +42,6 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
     });
     return () => unsubscribe();
   }, []);
-
   return (
     <AuthContext.Provider value={authState}>{children}</AuthContext.Provider>
   );

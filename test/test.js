@@ -3,37 +3,38 @@ const firebase = require('@firebase/testing');
 const myWaiterId = 'myWaiterId';
 
 const PROJECT_ID = 'its-cngei-genova';
-const adminAuth = { uid: 'myId', email: 'test@test.com', admin: true };
+const adminAuth = { uid: 'myId', email: 'test@test.com', roles: ['admin'] };
 const waiterAuth = {
   uid: 'myWaiterId',
   email: 'test@test.com',
-  sala: true
+  roles: ['sala']
 };
 
 const firstKitchenAuth = {
   uid: 'firstCook',
   email: 'test@test.com',
-  'cucina-primi': true
+  roles: ['cucina-primi']
 };
 
 const instantCashRegisterAuth = {
   uid: 'myId',
   email: 'test@test.com',
-  'cassa-istantanea': true
+  roles: ['cassa-istantanea']
 };
 
 const mostAuth = {
   uid: 'myId',
   email: 'test@test.com',
-  admin: true,
-  cassa: true,
-  'cassa-istantanea': true,
-  'cucina-primi': true,
-  'cucina-secondi': true,
-  'cucina-bar': true,
-  cameriere: true
+  roles: [
+    'admin',
+    'cassa',
+    'cassa-istantanea',
+    'cucina-primi',
+    'cucina-secondi',
+    'cucina-bar',
+    'cameriere'
+  ]
 };
-
 const firestore = auth =>
   firebase.initializeTestApp({ projectId: PROJECT_ID, auth }).firestore();
 

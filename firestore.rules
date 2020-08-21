@@ -50,7 +50,7 @@ service cloud.firestore {
 }
 
 function hasRole(reqRole) {
-	return request.auth.token[reqRole] == true;
+	return reqRole in request.auth.token.roles;
 }
 
 function checkFieldsExistence(requiredFields, optionalFields) {
