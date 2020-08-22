@@ -21,17 +21,17 @@ service cloud.firestore {
           allow delete: if false;
           match /orders/{orderId} {
             allow get: if false;
-            allow list: if hasRole('sala');
+            allow list: if hasRole('sala') || hasRole('cassa') || hasRole('smazzo');
             allow create: if false;
             allow update: if orderCanBeUpdatedByWaiter();
             allow delete: if false;
           }
           match /courses/{courseId} {
             allow get: if false;
-            allow list: if hasRole('sala');
+            allow list: if hasRole('sala') || hasRole('cassa') || hasRole('smazzo');
             allow write: if false;
             allow create: if false;
-            allow update: if courseCanBeUpdatedByWaiter() || courseCanBeUpdatedByKitchen();
+            allow update: if courseCanBeUpdatedByWaiter() || courseCanBeUpdatedByKitchen() || courseCanBeUpdatedByCashRegisterAndHub();
             allow delete: if false;
           }
           match /instantOrders/{instantOrderId} {
@@ -67,16 +67,22 @@ function checkServiceStartFields() {
 }
 
 function orderCanBeUpdatedByWaiter() {
-  return hasRole('sala') && (( editOnlyCertainFields(['tableNum','waiterId','waiterName','status']) && resource.data['status'] == 'pending') || (editOnlyCertainFields(['note']) &&  resource.data['status'] != 'pending') ||
-                               (editOnlyCertainFields(['tableNum','waiterId','waiterName','status']) && request.resource.data.waiterId == null && request.resource.data.waiterName == null  && request.resource.data.tableNum == null) );
+  return hasRole('sala') && (( editOnlyCertainFields(['tableNum','waiterId','waiterName','status']) && resource.data.status == 'pending') || (editOnlyCertainFields(['note']) && resource.data.waiterId == request.auth.uid) ||
+                               (editOnlyCertainFields(['tableNum','waiterId','waiterName','status']) && request.resource.data.waiterId == null && request.resource.data.waiterName == null && request.resource.data.tableNum == null) );
 }
 
 function courseCanBeUpdatedByKitchen() {
-  return editOnlyCertainFields(['status']) && resource.data.status == 'prep' && request.resource.data.status == 'ready' && ((hasRole('cucina-primi') && request.resource.data.kitchen == 'Primi') || (hasRole('cucina-secondi') && request.resource.data.kitchen == 'Secondi') || (hasRole('cucina-bar') && request.resource.data.kitchen == 'Bar'));  
+  return editOnlyCertainFields(['status']) && resource.data.status == 'prep' && request.resource.data.status == 'ready' && ((hasRole('cucina-primi') && request.resource.data.kitchen == 'Primi') 
+            || (hasRole('cucina-secondi') && request.resource.data.kitchen == 'Secondi') || (hasRole('cucina-bar') && request.resource.data.kitchen == 'Bar'));  
 }
 
 function courseCanBeUpdatedByWaiter() {
-  return hasRole('sala') && waiterCanTakeACourse() || waiterCanEditStatusOwnCourse() || waiterCanUnLinkOwnCourse();
+  return hasRole('sala') && (waiterCanTakeACourse() || waiterCanEditStatusOwnCourse() || waiterCanUnLinkOwnCourse());
+
+}
+
+function courseCanBeUpdatedByCashRegisterAndHub() {
+  return (hasRole('cassa') || hasRole('smazzo')) && editOnlyCertainFields(['status']);
 }
 
 function waiterCanTakeACourse() {
@@ -84,11 +90,11 @@ function waiterCanTakeACourse() {
 }
 
 function waiterCanEditStatusOwnCourse() {
-  return resource.data['waiterId'] == request.auth.uid && editOnlyCertainFields(['status']);
+  return resource.data.waiterId == request.auth.uid && editOnlyCertainFields(['status']);
 }
 
 function waiterCanUnLinkOwnCourse() {
-  return resource.data['waiterId'] == request.auth.uid && editOnlyCertainFields(['waiterId'])
+  return resource.data.waiterId == request.auth.uid && editOnlyCertainFields(['waiterId'])
 }
 
 function incomingData() {

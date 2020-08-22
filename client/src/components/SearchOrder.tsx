@@ -26,6 +26,7 @@ const useStyle = makeStyles(theme =>
     }
   })
 );
+
 const SearchOrder = () => {
   const classes = useStyle();
   const [orderNum, setOrderNum] = useState('');
@@ -40,7 +41,7 @@ const SearchOrder = () => {
     setOpen(false);
     setOrderNum('');
   };
-
+  // TODO handle delete courses
   const getOrder = () => {
     serviceRef
       .collection('orders')
@@ -74,7 +75,7 @@ const SearchOrder = () => {
       .onSnapshot(
         coursesSnap => {
           if (coursesSnap.size === 0) {
-            console.error('ERROR IN GETTING ORDER', 'There are no courses');
+            console.error('ERROR IN GETTING COURSES', 'There are no courses');
             setIsError(true);
             setOpen(true);
           } else {
@@ -87,7 +88,7 @@ const SearchOrder = () => {
           }
         },
         err => {
-          console.error('ERROR IN GETTING ORDER', err.message, err.stack);
+          console.error('ERROR IN GETTING COURSES', err.message, err.stack);
           setIsError(true);
         }
       );
