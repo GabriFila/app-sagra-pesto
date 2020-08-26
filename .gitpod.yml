@@ -1,8 +1,6 @@
 tasks:
   - init: cd client && npm i
-  - init: cd functions && npm i
-  - init: cd test && npm i
-    command: cd test && npm test
+  - init: cd functions && npm i && exit
 
 vscode:
   extensions:
