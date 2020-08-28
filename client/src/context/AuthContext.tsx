@@ -4,14 +4,14 @@ import { IRoleRouteInfo } from '../clientTypes';
 import { ROUTE_ROLES } from '../Routes';
 
 interface IAuthContext {
-  phase: string;
+  authPhase: 'unknown' | 'in' | 'out';
   userRoles: IRoleRouteInfo[];
   userName: string | null;
   userId: string;
 }
 
 const initialContextValue: IAuthContext = {
-  phase: 'pending',
+  authPhase: 'unknown',
   userRoles: [] as IRoleRouteInfo[],
   userName: '',
   userId: ''
@@ -26,7 +26,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
       if (user) {
         user.getIdTokenResult().then(idTokenResult => {
           setAuthState({
-            phase: 'in',
+            authPhase: 'in',
             userRoles: ROUTE_ROLES.filter(role =>
               idTokenResult.claims.roles.includes(role.requiredRole)
             ),
@@ -36,7 +36,12 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
         });
         console.info(`User is logged in`);
       } else {
-        setAuthState({ phase: 'out', userRoles: [], userName: '', userId: '' });
+        setAuthState({
+          authPhase: 'out',
+          userRoles: [],
+          userName: '',
+          userId: ''
+        });
         console.info('User is logged out');
       }
     });

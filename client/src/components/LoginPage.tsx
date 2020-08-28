@@ -59,8 +59,8 @@ export default function LoginPage() {
         });
     }
   };
-  const { phase } = useContext(AuthContext);
-  if (phase === 'in') return <Redirect to="/" />;
+  const { authPhase } = useContext(AuthContext);
+  if (authPhase === 'in') return <Redirect to="/" />;
 
   return (
     <Container component="main" maxWidth="xs">

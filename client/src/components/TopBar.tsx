@@ -69,7 +69,7 @@ const TopBar: React.FunctionComponent<IMenuProps> = props => {
     setOpen(false);
   };
 
-  const { phase, userRoles, userName } = useContext(AuthContext);
+  const { authPhase, userRoles, userName } = useContext(AuthContext);
   const { location } = useHistory();
   return (
     <div className={classes.topBar}>
@@ -113,7 +113,7 @@ const TopBar: React.FunctionComponent<IMenuProps> = props => {
             isLightTheme={isLightTheme}
             setIsLigthTheme={setIsLigthTheme}
           />
-          {phase === 'in' && <LogoutButton />}
+          {authPhase === 'in' && <LogoutButton />}
         </Toolbar>
       </AppBar>
       <Menu userRoles={userRoles} open={open} closeDrawer={closeDrawer} />

@@ -18,12 +18,12 @@ const PrivateRoute: React.FunctionComponent<IPrivateRouteProps> = ({
   requiredRoles,
   ...rest
 }) => {
-  const { phase, userRoles } = useContext(AuthContext);
+  const { authPhase, userRoles } = useContext(AuthContext);
   return (
     <Route
       {...rest}
       render={routeProps => {
-        switch (phase) {
+        switch (authPhase) {
           case 'in':
             if (
               requiredRoles.some(reqRole =>
