@@ -1,6 +1,7 @@
-import React, { useEffect, useState, createContext } from 'react';
+import React, { useEffect, useState, createContext, useContext } from 'react';
 import getServiceRef from '../helpers/getServiceRef';
 import { IService } from '../../../types';
+import { AuthContext } from './AuthContext';
 
 interface IServiceContext {
   service: IService | undefined;
@@ -26,26 +27,36 @@ const ServiceContextProvider: React.FunctionComponent = ({ children }) => {
   >();
   const [serviceId, setCurrentServiceId] = useState('');
   const [isServiceActive, setIsServiceActive] = useState<boolean>(undefined);
+  const { authPhase } = useContext(AuthContext);
 
   useEffect(() => {
-    const unsubscribeService = getServiceRef().onSnapshot(
-      snaps => {
-        if (snaps.size === 0 || snaps.size > 1) {
-          // TODO add error to tell user
-          setCurrentService(undefined);
-          setIsServiceActive(false);
-        } else
-          snaps.forEach(snap => {
-            setCurrentService(snap.data() as IService);
-            setCurrentServiceRef(snap.ref);
-            setCurrentServiceId(snap.id);
-            setIsServiceActive(true);
-          });
-      },
-      err => console.error('ERROR IN RETRIEVING SERVICE: ', err)
-    );
-    return () => unsubscribeService();
-  }, []);
+    let unsubscribeService = () => {};
+    if (authPhase === 'in') {
+      unsubscribeService = getServiceRef().onSnapshot(
+        snaps => {
+          if (snaps.size === 0 || snaps.size > 1) {
+            // TODO add error to tell user
+            setCurrentService(undefined);
+            setIsServiceActive(false);
+          } else
+            snaps.forEach(snap => {
+              setCurrentService(snap.data() as IService);
+              setCurrentServiceRef(snap.ref);
+              setCurrentServiceId(snap.id);
+              setIsServiceActive(true);
+            });
+        },
+        err => console.error('ERROR IN RETRIEVING SERVICE: ', err)
+      );
+    } else {
+      setCurrentService(undefined);
+      setIsServiceActive(undefined);
+      setCurrentServiceId('');
+    }
+    return () => {
+      unsubscribeService();
+    };
+  }, [authPhase]);
 
   return (
     <ServiceContext.Provider

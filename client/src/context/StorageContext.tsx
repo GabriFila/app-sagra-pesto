@@ -1,6 +1,7 @@
-import React, { useEffect, useState, createContext } from 'react';
+import React, { useEffect, useState, createContext, useContext } from 'react';
 import getStorageRef from '../helpers/getStorageRef';
 import { IStorage, IStorageCourse } from '../../../types';
+import { AuthContext } from './AuthContext';
 
 interface IStorageContext {
   storageCourses: IStorageCourse[];
@@ -14,18 +15,32 @@ export const StorageContext = createContext<IStorageContext>({
 const StorageContextProvider: React.FunctionComponent = ({ children }) => {
   const [storageCourses, setStorageCourses] = useState<IStorageCourse[]>([]);
   const [storageRef, setStroageRef] = useState(getStorageRef);
+  const { authPhase } = useContext(AuthContext);
 
   useEffect(() => {
-    const unsubscribe = getStorageRef().onSnapshot(
-      snap => {
-        setStroageRef(snap.ref);
-        setStorageCourses([...(snap.data() as IStorage)?.storageCourses]);
-      },
-      err =>
-        console.error('ERROR IN GETTINFG STORAGE INFO', err.message, err.stack)
-    );
-    return () => unsubscribe();
-  }, []);
+    let unsubscribe = () => {};
+    if (authPhase === 'in') {
+      unsubscribe = getStorageRef().onSnapshot(
+        snap => {
+          setStroageRef(snap.ref);
+          setStorageCourses([...(snap.data() as IStorage)?.storageCourses]);
+        },
+        err =>
+          console.error(
+            'ERROR IN GETTINFG STORAGE INFO',
+            err.message,
+            err.stack
+          )
+      );
+    } else {
+      setStorageCourses([]);
+      setStroageRef(null);
+    }
+    return () => {
+      unsubscribe();
+    };
+  }, [authPhase]);
+
   return (
     <StorageContext.Provider value={{ storageCourses, storageRef }}>
       {children}

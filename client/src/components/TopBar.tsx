@@ -1,5 +1,4 @@
 import React, { useContext, Dispatch, SetStateAction } from 'react';
-import clsx from 'clsx';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import createStyles from '@material-ui/core/styles/createStyles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -9,7 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import { AuthContext } from '../context/AuthContext';
-import { useHistory } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 import Menu from './Menu';
 import PendingOrders from './hub/PendingOrders';
@@ -70,7 +69,8 @@ const TopBar: React.FunctionComponent<IMenuProps> = props => {
   };
 
   const { authPhase, userRoles, userName } = useContext(AuthContext);
-  const { location } = useHistory();
+  const location = useLocation();
+
   return (
     <div className={classes.topBar}>
       <CssBaseline />
@@ -117,7 +117,7 @@ const TopBar: React.FunctionComponent<IMenuProps> = props => {
         </Toolbar>
       </AppBar>
       <Menu userRoles={userRoles} open={open} closeDrawer={closeDrawer} />
-      <main className={clsx(classes.content)}>{children}</main>
+      <main className={classes.content}>{children}</main>
     </div>
   );
 };
