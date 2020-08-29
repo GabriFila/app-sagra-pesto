@@ -28,7 +28,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
           setAuthState({
             authPhase: 'in',
             userRoles: ROUTE_ROLES.filter(role =>
-              idTokenResult.claims.roles.includes(role.requiredRole)
+              idTokenResult.claims.roles?.includes(role.requiredRole)
             ),
             userName: user.displayName,
             userId: user.uid
