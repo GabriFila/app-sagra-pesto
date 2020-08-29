@@ -24,11 +24,11 @@ export const onUserCreate = functions
   .region('europe-west2')
   .auth.user()
   .onCreate(user => {
-    const { uid, email, displayName } = user;
+    const { uid, email } = user;
     return db
       .collection('userSagraRoles')
       .doc(`sr_${uid}`)
-      .set({ roles: [], email, name: displayName })
+      .set({ roles: [], email })
       .then(() => console.info(`User roles document for ${email} created`))
       .then(() => db.collection('users').doc(uid).set({}))
       .catch((err: Error) => {
