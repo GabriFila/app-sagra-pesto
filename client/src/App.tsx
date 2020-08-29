@@ -4,6 +4,7 @@ import createMuiTheme from '@material-ui/core/styles/createMuiTheme';
 import { ThemeOptions, ThemeProvider } from '@material-ui/core/styles';
 import amber from '@material-ui/core/colors/amber';
 import green from '@material-ui/core/colors/green';
+import blue from '@material-ui/core/colors/blue';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AuthProvider from './context/AuthContext';
 import Menu from './components/TopBar';
@@ -14,7 +15,7 @@ import StorageContextProvider from './context/StorageContext';
 const baseThemeConfig: ThemeOptions = {
   palette: {
     primary: green,
-    secondary: amber
+    secondary: blue
   },
   overrides: {
     MuiCssBaseline: {
@@ -47,6 +48,7 @@ const baseThemeConfig: ThemeOptions = {
 
 const lightTheme = createMuiTheme(baseThemeConfig);
 const darkThemeConfig = { ...baseThemeConfig };
+darkThemeConfig.palette.secondary = amber;
 darkThemeConfig.palette.type = 'dark';
 const darkTheme = createMuiTheme(darkThemeConfig);
 

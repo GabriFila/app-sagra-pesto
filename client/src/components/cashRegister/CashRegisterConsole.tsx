@@ -70,7 +70,9 @@ const useStyle = makeStyles(theme =>
       borderRadius: '50%'
     },
     orderNum: {
-      border: '3px solid green',
+      borderWidth: 3,
+      borderStyle: 'solid',
+      borderColor: theme.palette.primary.main,
       borderRadius: 10,
       cursor: 'default',
       padding: theme.spacing(1)
