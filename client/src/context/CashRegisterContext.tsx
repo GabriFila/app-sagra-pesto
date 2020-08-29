@@ -1,8 +1,9 @@
-import React, { createContext, useReducer } from 'react';
+import React, { createContext, useReducer, useEffect } from 'react';
 import CashRegisterReducer, {
   ICashRegisterReducerState,
   ICashRegisterAction,
-  initialCashRegsiterState
+  initialCashRegsiterState,
+  ActionType
 } from '../reducers/CashRegisterReducer';
 
 interface ICashRegisterContext {
@@ -16,8 +17,14 @@ export const CashRegisterContext = createContext<ICashRegisterContext>({
 });
 
 const CashRegisterContextProvider: React.FunctionComponent = ({ children }) => {
-  const initialState = initialCashRegsiterState;
-  const [state, dispatch] = useReducer(CashRegisterReducer, initialState);
+  const [state, dispatch] = useReducer(
+    CashRegisterReducer,
+    initialCashRegsiterState
+  );
+  useEffect(() => {
+    // to reset courses in state when context is created, don't know why it doesn't do it on its own
+    dispatch({ type: ActionType.ResetState });
+  }, []);
 
   return (
     <CashRegisterContext.Provider value={{ state, dispatch }}>
