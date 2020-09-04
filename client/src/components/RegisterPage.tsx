@@ -9,6 +9,10 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Container from '@material-ui/core/Container';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import IconButton from '@material-ui/core/IconButton';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
 const useStyle = makeStyles(theme => ({
   paper: {
@@ -41,7 +45,7 @@ export default function RegisterPage() {
   const [pswError, setPswError] = useState('');
   const [confirmPsw, setConfirmPsw] = useState('');
   const [confirmPswError, setConfirmPswError] = useState('');
-
+  const [showPsw, setShowPsw] = useState(false);
   // registration error
   const [regOutcome, setRegOutcome] = useState('wait');
 
@@ -123,10 +127,29 @@ export default function RegisterPage() {
             name="password"
             label="Password"
             type="password"
+            autoComplete="off"
             id="password"
             onChange={e => setPsw(e.target.value)}
             error={pswError.length > 0}
             helperText={pswError}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={() => {
+                      setShowPsw(!showPsw);
+                    }}
+                    onMouseDown={() => {
+                      setShowPsw(!showPsw);
+                    }}
+                    edge="end"
+                  >
+                    {showPsw ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              )
+            }}
           />
           <TextField
             variant="outlined"
@@ -137,6 +160,7 @@ export default function RegisterPage() {
             label="Conferma password"
             type="password"
             id="confirmPsw"
+            autoComplete="off"
             onChange={e => setConfirmPsw(e.target.value)}
             error={confirmPswError.length > 0}
             helperText={confirmPswError}

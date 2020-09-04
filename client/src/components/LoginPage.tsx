@@ -8,6 +8,10 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import Container from '@material-ui/core/Container';
 import { auth } from '../fbConfig';
 import { AuthContext } from '../context/AuthContext';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import IconButton from '@material-ui/core/IconButton';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
 const useStyle = makeStyles(theme => ({
   paper: {
@@ -36,6 +40,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
   const [psw, setPsw] = useState('');
+  const [showPsw, setShowPsw] = useState(false);
 
   // login error
   const [loginOutcome, setLoginOutcome] = useState('wait');
@@ -91,10 +96,28 @@ export default function LoginPage() {
             fullWidth
             name="password"
             label="Password"
-            type="password"
+            type={showPsw ? 'text' : 'password'}
             id="password"
             autoComplete="current-password"
             onChange={e => setPsw(e.target.value)}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={() => {
+                      setShowPsw(!showPsw);
+                    }}
+                    onMouseDown={() => {
+                      setShowPsw(!showPsw);
+                    }}
+                    edge="end"
+                  >
+                    {showPsw ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              )
+            }}
           />
           {loginOutcome === 'error' ? (
             <Typography color="error">
