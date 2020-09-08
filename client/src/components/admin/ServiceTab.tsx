@@ -28,13 +28,31 @@ const ServiceTab: React.FunctionComponent = () => {
   const classes = useStyle();
 
   const { service, serviceRef } = useContext(ServiceContext);
+  const {
+    totalInstantOrders,
+    totalInstantRevenue,
+    totalOrders,
+    totalPeople,
+    totalRevenue,
+    start
+  } = service || {};
+  console.log(start);
   return (
     <Container className={classes.inner}>
       <ServiceStarter
         isServiceActive={service !== undefined}
         serviceRef={serviceRef}
       />
-      {service !== undefined ? <ServiceInfo service={service} /> : null}
+      {service !== undefined ? (
+        <ServiceInfo
+          totalInstantOrders={totalInstantOrders}
+          totalInstantRevenue={totalInstantRevenue}
+          totalOrders={totalOrders}
+          totalPeople={totalPeople}
+          totalRevenue={totalRevenue}
+          start={start}
+        />
+      ) : null}
     </Container>
   );
 };
