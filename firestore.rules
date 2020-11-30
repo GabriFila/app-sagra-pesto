@@ -3,6 +3,13 @@ service cloud.firestore {
   match /databases/{database}/documents {
     allow read: if false;
     allow write: if false;
+      match /userSagraRoles/{userSagraRolesId} {
+        allow get: if hasRole('super-admin');
+        allow list: if false;
+        allow create: if false;
+        allow update: if hasRole('super-admin') && checkFieldsExistence(['roles','email'],[]) && !isBecomingSuperAdmin() && isValidRole(request.resource.data.roles);
+        allow delete: if false;
+      }
       match /sagre/{sagraId} {
         allow read: if false;
   			allow write: if false;
@@ -99,4 +106,12 @@ function waiterCanUnLinkOwnCourse() {
 
 function incomingData() {
   return request.resource.data;
+}
+
+function isBecomingSuperAdmin() {
+  return 'super-admin' in  incomingData().roles && !('super-admin' in resource.data.roles);
+}
+
+function isValidRole(roles) {
+  return roles.hasOnly(['admin', 'cassa', 'cassa-istantanea', 'cucina-primi', 'cucina-secondi', 'cucina-bar', 'sala', 'smazzo','super-admin']);
 }
