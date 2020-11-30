@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -33,6 +33,7 @@ const useStyle = makeStyles(theme => ({
   }
 }));
 
+type TLoginOutcome = 'wait' | 'success' | 'error';
 export default function LoginPage() {
   const classes = useStyle();
 
@@ -43,27 +44,34 @@ export default function LoginPage() {
   const [showPsw, setShowPsw] = useState(false);
 
   // login error
-  const [loginOutcome, setLoginOutcome] = useState('wait');
+  const [loginOutcome, setLoginOutcome] = useState<TLoginOutcome>('wait');
 
   const loginUser = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setEmailError('');
     setLoginOutcome('wait');
-    if (!/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email))
-      setEmailError('Email non valida');
-    else {
-      auth
-        .signInWithEmailAndPassword(email, psw)
-        .then(res => {
-          setLoginOutcome('scess');
-          // history.push('/admin');
-        })
-        .catch(err => {
-          console.error(err.message);
-          setLoginOutcome('error');
-        });
-    }
+    // if (!/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email))
+    //   setEmailError('Email non valida');
+    // else {
+    auth
+      .signInWithEmailAndPassword(email, psw)
+      .then(res => {
+        setLoginOutcome('success');
+      })
+      .catch(err => {
+        console.error(err.message);
+        setLoginOutcome('error');
+      });
+    // }
   };
+  useEffect(() => {
+    if (
+      email !== '' &&
+      !/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email)
+    )
+      setEmailError('Email non valida');
+  }, [email]);
+
   const { authPhase } = useContext(AuthContext);
   if (authPhase === 'in') return <Redirect to="/" />;
 
@@ -99,7 +107,10 @@ export default function LoginPage() {
             type={showPsw ? 'text' : 'password'}
             id="password"
             autoComplete="current-password"
-            onChange={e => setPsw(e.target.value)}
+            onChange={e => {
+              setPsw(e.target.value);
+              if (loginOutcome === 'error') setLoginOutcome('wait');
+            }}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -130,6 +141,7 @@ export default function LoginPage() {
             variant="contained"
             color="primary"
             className={classes.submit}
+            disabled={emailError !== '' || email === ''}
             onClick={loginUser}
           >
             Login

@@ -115,7 +115,10 @@ export default function RegisterPage() {
             label="Indirizzo email"
             name="email"
             autoComplete="email"
-            onChange={e => setEmail(e.target.value)}
+            onChange={e => {
+              setEmail(e.target.value);
+              if (emailError.length > 0) setEmailError('');
+            }}
             error={emailError.length > 0}
             helperText={emailError}
           />
@@ -126,10 +129,13 @@ export default function RegisterPage() {
             fullWidth
             name="password"
             label="Password"
-            type="password"
+            type={showPsw ? 'text' : 'password'}
             autoComplete="off"
             id="password"
-            onChange={e => setPsw(e.target.value)}
+            onChange={e => {
+              setPsw(e.target.value);
+              if (pswError.length > 0) setPsw('');
+            }}
             error={pswError.length > 0}
             helperText={pswError}
             InputProps={{
@@ -158,12 +164,33 @@ export default function RegisterPage() {
             fullWidth
             name="confirmPsw"
             label="Conferma password"
-            type="password"
+            type={showPsw ? 'text' : 'password'}
             id="confirmPsw"
             autoComplete="off"
-            onChange={e => setConfirmPsw(e.target.value)}
+            onChange={e => {
+              setConfirmPsw(e.target.value);
+              if (confirmPswError.length > 0) setConfirmPswError('');
+            }}
             error={confirmPswError.length > 0}
             helperText={confirmPswError}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={() => {
+                      setShowPsw(!showPsw);
+                    }}
+                    onMouseDown={() => {
+                      setShowPsw(!showPsw);
+                    }}
+                    edge="end"
+                  >
+                    {showPsw ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              )
+            }}
           />
           {regOutcome === 'error' ? (
             <Typography color="error">
@@ -179,6 +206,15 @@ export default function RegisterPage() {
             color="primary"
             className={classes.submit}
             onClick={registerUser}
+            disabled={
+              emailError.length !== 0 ||
+              pswError.length !== 0 ||
+              confirmPswError.length !== 0 ||
+              name.length === 0 ||
+              psw.length === 0 ||
+              email.length === 0 ||
+              confirmPsw.length === 0
+            }
           >
             Registrati
           </Button>
