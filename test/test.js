@@ -22,7 +22,7 @@ const instantCashRegisterAuth = {
   roles: ['cassa-istantanea']
 };
 
-const mostAuth = {
+const nonSuperAdminAuth = {
   uid: 'myId',
   email: 'test@test.com',
   roles: [
@@ -35,6 +35,21 @@ const mostAuth = {
     'cameriere'
   ]
 };
+
+const mostAuth = {
+  uid: 'myId',
+  email: 'test@test.com',
+  roles: [
+    'admin',
+    'cassa',
+    'cassa-istantanea',
+    'cucina-primi',
+    'cucina-secondi',
+    'cucina-bar',
+    'cameriere',
+    'super-admin'
+  ]
+};
 const firestore = auth =>
   firebase.initializeTestApp({ projectId: PROJECT_ID, auth }).firestore();
 
@@ -44,6 +59,7 @@ const admin = firebase
   })
   .firestore();
 
+const userRolesDoc = db => db.collection('userSagraRoles').doc('testRoles');
 const sagraDoc = db => db.collection('sagre').doc('testSagra');
 const storageDoc = sagraDoc =>
   sagraDoc.collection('storage').doc('testStorage');
@@ -370,5 +386,50 @@ describe('How an instant order doc should be secured', () => {
     const db = firestore(mostAuth);
     const testDoc = instantOrderDoc(serviceDoc(sagraDoc(db)));
     await firebase.assertFails(testDoc.delete());
+  });
+});
+
+describe('How a user role doc should be secured', () => {
+  it("Can't be modified by non super-admin", async () => {
+    const db = firestore(nonSuperAdminAuth);
+    await userRolesDoc(admin).set({
+      email: 'test',
+      roles: ['cassa']
+    });
+    const testDoc = userRolesDoc(db);
+    await firebase.assertFails(
+      testDoc.set({ roles: ['cameriere', 'cassa'] }, { merge: true })
+    );
+  });
+
+  it("Can't be modified with wrong role", async () => {
+    const db = firestore(nonSuperAdminAuth);
+    await userRolesDoc(admin).set({
+      email: 'test',
+      roles: ['cassa']
+    });
+    const testDoc = userRolesDoc(db);
+    await firebase.assertFails(
+      testDoc.set({ roles: ['cameriere', 'blabla'] }, { merge: true })
+    );
+  });
+
+  it("Can't be added a super-admin user", async () => {
+    const db = firestore(mostAuth);
+    await userRolesDoc(admin).set({
+      email: 'test',
+      roles: ['cassa']
+    });
+    const testDoc = userRolesDoc(db);
+    await firebase.assertFails(
+      testDoc.set({ roles: ['super-admin', 'cassa'] }, { merge: true })
+    );
+    await userRolesDoc(admin).set({
+      email: 'test',
+      roles: ['cassa']
+    });
+    await firebase.assertSucceeds(
+      testDoc.set({ roles: ['cassa'] }, { merge: true })
+    );
   });
 });
