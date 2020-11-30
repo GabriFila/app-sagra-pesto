@@ -36,7 +36,7 @@ const ServiceTab: React.FunctionComponent = () => {
     totalRevenue,
     start
   } = service || {};
-  console.log(start);
+
   return (
     <Container className={classes.inner}>
       <ServiceStarter

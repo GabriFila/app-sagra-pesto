@@ -41,7 +41,6 @@ const ServiceInfo: React.FunctionComponent<IServiceInfoProps> = props => {
     start: startSeconds
   } = props;
   const classes = useStyle();
-
   return (
     <>
       <Paper elevation={6}>
@@ -51,7 +50,8 @@ const ServiceInfo: React.FunctionComponent<IServiceInfoProps> = props => {
           color="primary"
         >
           Inizio: &nbsp;&nbsp;&nbsp;
-          {unix(startSeconds.seconds).format('MM:HH --- DD/MM/YYYY')}
+          {startSeconds &&
+            unix(startSeconds.seconds).format('MM:HH   DD/MM/YYYY')}
         </Typography>
         <Table aria-label="simple table" className={classes.serviceInfoTable}>
           <TableHead>
