@@ -72,7 +72,7 @@ L'evoluzione temporale di un ordine è la seguente:
 
 ## Ruoli Utente
 
-- [Super Admin](#super-admin)
+- [Manager ruoli](#manager-ruoli)
 - [Admin](#admin)
 - [Cassiere](#cassiere)
 - [Cameriere](#cameriere)
@@ -85,7 +85,7 @@ L'evoluzione temporale di un ordine è la seguente:
 
 ## Attività dei ruoli
 
-### Super admin
+### Manager ruoli
 
 - modificare i ruoli degli utenti
 
@@ -143,7 +143,7 @@ L'evoluzione temporale di un ordine è la seguente:
 
 ### Modifica ruoli utente
 
-- Super admin
+- Manager ruoli
 
 ### Modifica menu
 

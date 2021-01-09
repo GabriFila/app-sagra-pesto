@@ -5,9 +5,7 @@ import { AuthContext } from './AuthContext';
 
 interface IServiceContext {
   service: IService | undefined;
-  serviceRef: firebase.firestore.DocumentReference<
-    firebase.firestore.DocumentData
-  >;
+  serviceRef: firebase.firestore.DocumentReference<firebase.firestore.DocumentData>;
   serviceId: string;
   isServiceActive: boolean;
 }
@@ -40,7 +38,15 @@ const ServiceContextProvider: React.FunctionComponent = ({ children }) => {
             setIsServiceActive(false);
           } else
             snaps.forEach(snap => {
-              setCurrentService(snap.data() as IService);
+              const startAsDate = (snap.data()
+                .start as firebase.firestore.Timestamp).toDate();
+              const endAsDate = (snap.data()
+                .end as firebase.firestore.Timestamp).toDate();
+              setCurrentService({
+                ...snap.data(),
+                start: startAsDate,
+                end: endAsDate
+              } as IService);
               setCurrentServiceRef(snap.ref);
               setCurrentServiceId(snap.id);
               setIsServiceActive(true);

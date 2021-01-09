@@ -47,7 +47,7 @@ const mostAuth = {
     'cucina-secondi',
     'cucina-bar',
     'cameriere',
-    'super-admin'
+    'manager-ruoli'
   ]
 };
 const firestore = auth =>
@@ -390,7 +390,7 @@ describe('How an instant order doc should be secured', () => {
 });
 
 describe('How a user role doc should be secured', () => {
-  it("Can't be modified by non super-admin", async () => {
+  it("Can't be modified by non role manager", async () => {
     const db = firestore(nonSuperAdminAuth);
     await userRolesDoc(admin).set({
       email: 'test',

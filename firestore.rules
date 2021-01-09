@@ -4,10 +4,10 @@ service cloud.firestore {
     allow read: if false;
     allow write: if false;
       match /userSagraRoles/{userSagraRolesId} {
-        allow get: if hasRole('super-admin');
+        allow get: if hasRole('manager-ruoli');
         allow list: if false;
         allow create: if false;
-        allow update: if hasRole('super-admin') && checkFieldsExistence(['roles','email'],[]) && !isBecomingSuperAdmin() && isValidRole(request.resource.data.roles);
+        allow update: if hasRole('manager-ruoli') && checkFieldsExistence(['roles','email'],[]) && !isBecomingSuperAdmin() && isValidRole(request.resource.data.roles);
         allow delete: if false;
       }
       match /sagre/{sagraId} {
@@ -109,9 +109,9 @@ function incomingData() {
 }
 
 function isBecomingSuperAdmin() {
-  return 'super-admin' in  incomingData().roles && !('super-admin' in resource.data.roles);
+  return 'manager-ruoli' in  incomingData().roles && !('manager-ruoli' in resource.data.roles);
 }
 
 function isValidRole(roles) {
-  return roles.hasOnly(['admin', 'cassa', 'cassa-istantanea', 'cucina-primi', 'cucina-secondi', 'cucina-bar', 'sala', 'smazzo','super-admin']);
+  return roles.hasOnly(['admin', 'cassa', 'cassa-istantanea', 'cucina-primi', 'cucina-secondi', 'cucina-bar', 'sala', 'smazzo','manager-ruoli']);
 }

@@ -20,7 +20,7 @@ const StorageContextProvider: React.FunctionComponent = ({ children }) => {
   useEffect(() => {
     let unsubscribe = () => {};
     if (authPhase === 'in') {
-      unsubscribe = getStorageRef().onSnapshot(
+      unsubscribe = getStorageRef(2021).onSnapshot(
         snap => {
           setStroageRef(snap.ref);
           setStorageCourses([...(snap.data() as IStorage)?.storageCourses]);

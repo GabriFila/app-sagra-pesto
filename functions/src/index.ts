@@ -67,7 +67,7 @@ export const onUserSagraRolesUpdate = functions
   .firestore.document('userSagraRoles/{docId}')
   .onUpdate((change, ctx) => {
     const uid = (ctx.params.docId as string).substring(3);
-    const { roles, name } = change.after.data() as IUserSagraRolesDoc;
+    const { roles } = change.after.data() as IUserSagraRolesDoc;
 
     return admin
       .auth()
@@ -77,10 +77,14 @@ export const onUserSagraRolesUpdate = functions
         { roles }
       )
       .then(() =>
-        console.info(`Roles of ${name} updated to ${roles.toString()}`)
+        console.info(`Roles of ${uid} updated to ${roles.toString()}`)
       )
       .catch((err: Error) => {
-        console.error(err.message, err.stack);
+        console.error(
+          'ERROR WHEN UPDATING USER CUSTOM CLAIMS AFTER DOCUMENT UPDATE',
+          err.message,
+          err.stack
+        );
         return;
       });
   });
@@ -94,7 +98,7 @@ export const onUserSagraRolesDelete = functions
     return admin
       .auth()
       .setCustomUserClaims(uid, {})
-      .then(() => console.info(`Roles of ${name} deleted `))
+      .then(() => console.info(`Roles of ${uid} deleted `))
       .catch((err: Error) => {
         console.error(err.message, err.stack);
         return;
@@ -186,6 +190,7 @@ export const createOrder = functions
             note,
             status: 'wait',
             waiterId: null,
+            tableNum: null,
             dishes: dishes.map(({ qt, shortName }) => ({ qt, shortName }))
           })
         );
@@ -446,7 +451,8 @@ export const addCoursesToOrder = functions
             kitchen,
             note,
             status: 'wait',
-            waiterId,
+            tableNum: null,
+            waiterId: null,
             dishes: dishes.map(({ qt, shortName }) => ({ qt, shortName }))
           })
         );

@@ -8,6 +8,7 @@ import Paper from '@material-ui/core/Paper';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import { Typography } from '@material-ui/core';
 import { unix } from 'moment';
+import { start } from 'repl';
 
 interface IServiceInfoProps {
   totalOrders: number;
@@ -15,7 +16,7 @@ interface IServiceInfoProps {
   totalInstantOrders: number;
   totalInstantRevenue: number;
   totalPeople: number;
-  start: firebase.firestore.Timestamp;
+  start: Date;
 }
 
 const useStyle = makeStyles(theme => ({
@@ -38,9 +39,10 @@ const ServiceInfo: React.FunctionComponent<IServiceInfoProps> = props => {
     totalInstantOrders,
     totalInstantRevenue,
     totalPeople,
-    start: startSeconds
+    start
   } = props;
   const classes = useStyle();
+
   return (
     <>
       <Paper elevation={6}>
@@ -50,8 +52,7 @@ const ServiceInfo: React.FunctionComponent<IServiceInfoProps> = props => {
           color="primary"
         >
           Inizio: &nbsp;&nbsp;&nbsp;
-          {startSeconds &&
-            unix(startSeconds.seconds).format('MM:HH   DD/MM/YYYY')}
+          {start && start.toLocaleString()}
         </Typography>
         <Table aria-label="simple table" className={classes.serviceInfoTable}>
           <TableHead>
